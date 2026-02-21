@@ -4,10 +4,10 @@
 
 The logo uses a very friendly, rounded sans-serif font. To match this vibe while ensuring readability, here is a recommended font pairing:
 
-* **Heading Font: Quicksand or Nunito**  
-  * *Why:* Both of these are Google Fonts that feature the same rounded, soft terminals as your logo text. They feel warm, approachable, and human-centric.  
-* **Body Font: Inter or Open Sans**  
-  * *Why:* While rounded fonts are great for headlines, they can get tiring to read in long paragraphs. Pairing the rounded heading font with a clean, highly legible geometric sans-serif like Inter ensures your mission statements and articles are easy to read.
+* **Heading Font: Poppins Bold**  
+  * *Why:* Poppins offers a bold, modern, and highly legible appearance, providing strong emphasis for headlines.  
+* **Body Font: Figtree**  
+  * *Why:* Figtree is a clean, highly legible font that pairs excellently with Poppins for long paragraphs.
 
 ### **Font Scale & Sizing**
 
@@ -81,8 +81,8 @@ If you are passing this to a web developer, they can use these exact variables:
   \--color-bg-card: \#FFFFFF;
 
   /\* Typography \*/  
-  \--font-heading: 'Quicksand', sans-serif;  
-  \--font-body: 'Inter', sans-serif;
+  \--font-heading: 'Poppins', sans-serif;  
+  \--font-body: 'Figtree', sans-serif;
 
   /\* Border Radius \*/  
   \--radius-card: 16px;  
