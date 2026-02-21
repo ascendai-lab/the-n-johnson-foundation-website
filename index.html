@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The N. Johnson Foundation | Coming Soon</title>
+
+    <!-- Fonts: Quicksand for headings, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Quicksand:wght@600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            /* Brand Colors from JNF Design System */
+            --color-brand-teal: #2EA99B;
+            --color-brand-slate: #668A9F;
+            --color-brand-purple: #7E62A7;
+
+            /* Neutrals */
+            --color-text-main: #334155;
+            --color-text-muted: #64748B;
+            --color-bg-main: #F8FAFC;
+            --color-bg-card: #FFFFFF;
+
+            /* Typography */
+            --font-heading: 'Quicksand', sans-serif;
+            --font-body: 'Inter', sans-serif;
+
+            /* Border Radius */
+            --radius-card: 16px;
+            --radius-button: 9999px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg-main);
+            color: var(--color-text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            /* Hide scrollbars for background blobs, but modern css handles overflow better */
+            position: relative;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Ambient Background Orbs for an organic, healing feel */
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            z-index: 0;
+            animation: float 20s infinite alternate ease-in-out;
+            pointer-events: none;
+        }
+
+        .orb-teal {
+            background-color: var(--color-brand-teal);
+            width: 45vw;
+            height: 45vw;
+            top: -15%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb-purple {
+            background-color: var(--color-brand-purple);
+            width: 40vw;
+            height: 40vw;
+            bottom: -10%;
+            right: -10%;
+            animation-delay: -5s;
+            animation-duration: 25s;
+        }
+
+        .orb-slate {
+            background-color: var(--color-brand-slate);
+            width: 35vw;
+            height: 35vw;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -10s;
+            animation-duration: 22s;
+            opacity: 0.1;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(3%, 5%) scale(1.05);
+            }
+        }
+
+        /* Main Content Container */
+        .main-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            padding: 2rem;
+            text-align: center;
+            animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .brand-logo {
+            max-width: 280px;
+            height: auto;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 4px 10px rgba(46, 169, 155, 0.15));
+        }
+
+        /* Typography */
+        h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(3.5rem, 8vw, 6rem);
+            font-weight: 700;
+            color: var(--color-text-main);
+            margin-bottom: 1rem;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+        }
+
+        p.mission-statement {
+            font-size: clamp(1.1rem, 2vw, 1.25rem);
+            color: var(--color-text-muted);
+            max-width: 600px;
+            margin: 0 auto 3.5rem auto;
+            font-weight: 400;
+            /* Balance text for better readability */
+            text-wrap: balance;
+        }
+
+
+
+        /* Decoration */
+        .accent-line {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-brand-teal), var(--color-brand-slate), var(--color-brand-purple));
+            border-radius: 4px;
+            margin: 0 auto 2.5rem auto;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .ambient-orb {
+                filter: blur(60px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Ambient Background -->
+    <div class="ambient-orb orb-teal"></div>
+    <div class="ambient-orb orb-purple"></div>
+    <div class="ambient-orb orb-slate"></div>
+
+    <main class="main-container">
+        <img src="brand_assets/The N Johnson Foundation.png" alt="The N. Johnson Foundation Logo" class="brand-logo">
+
+        <div class="accent-line"></div>
+
+        <h1>Coming Soon</h1>
+
+        <p class="mission-statement">
+            Easing educational access and promoting mental wellness in Belize. We are building something meaningful.
+            Join us on our journey.
+        </p>
+    </main>
+
+    <footer class="footer">
+        &copy; 2026 The N. Johnson Foundation. All rights reserved.
+    </footer>
+</body>
+
+</html>
