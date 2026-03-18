@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+---
+
+<BaseLayout title="Volunteer — The N Johnson Foundation" description="Volunteer with The N Johnson Foundation and help support education and mental wellness for children.">
+  <PageHero label="Get Involved" title="Volunteer with <em>us.</em>" subtitle="Your time and skills can make a real difference in a child's life." />
+
+  <section class="volunteer-section">
+    <div class="volunteer-inner">
+      <div class="section-label reveal">Opportunities</div>
+      <h2 class="vol-heading reveal reveal-delay-1">Ways you can <em>help.</em></h2>
+      <div class="vol-grid">
+        <div class="vol-card reveal reveal-delay-1">
+          <span class="vol-icon"><i data-lucide="package"></i></span>
+          <h3>Supply Drive Support</h3>
+          <p>Help organize, sort, and distribute school supplies to students. We need hands during our annual back-to-school drives in both Belize and the U.S.</p>
+        </div>
+        <div class="vol-card reveal reveal-delay-2">
+          <span class="vol-icon"><i data-lucide="users"></i></span>
+          <h3>Mentorship</h3>
+          <p>Become a peer mentor or help train the next generation of student leaders. Share your experience and provide guidance to young people who need it.</p>
+        </div>
+        <div class="vol-card reveal reveal-delay-3">
+          <span class="vol-icon"><i data-lucide="calendar"></i></span>
+          <h3>Event Coordination</h3>
+          <p>Help plan and execute fundraisers, community events, and awareness campaigns. Great for people who love logistics and bringing people together.</p>
+        </div>
+        <div class="vol-card reveal reveal-delay-1">
+          <span class="vol-icon"><i data-lucide="megaphone"></i></span>
+          <h3>Community Outreach</h3>
+          <p>Spread the word about our mission. Help us connect with schools, community leaders, and potential partners in Belize and the United States.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="volunteer-cta">
+    <div class="volunteer-cta-inner reveal">
+      <h2>Ready to get <em>started?</em></h2>
+      <p>Fill out our contact form and let us know how you'd like to help. We'll follow up with opportunities that match your skills and availability.</p>
+      <a href="/contact" class="btn-teal"><i data-lucide="send"></i> Contact us</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  [data-lucide] { width: 20px; height: 20px; stroke: var(--teal-deep); flex-shrink: 0; }
+  .vol-icon [data-lucide] { width: 32px; height: 32px; }
+
+  .volunteer-section { padding: 6rem; background: var(--cream); }
+  .volunteer-inner { max-width: 1000px; margin: 0 auto; }
+  .vol-heading { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--bark); line-height: 1.2; margin-bottom: 2.5rem; }
+  .vol-heading em { font-style: italic; color: var(--teal-deep); }
+  .vol-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .vol-card { background: var(--sand); border-radius: 24px; padding: 2rem; transition: transform 0.3s, box-shadow 0.3s; }
+  .vol-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(44, 74, 90, 0.08); }
+  .vol-icon { display: block; margin-bottom: 1rem; }
+  .vol-card h3 { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 700; color: var(--bark); margin-bottom: 0.6rem; }
+  .vol-card p { font-size: 0.9rem; color: var(--bark-mid); line-height: 1.7; }
+
+  .volunteer-cta { padding: 5rem; background: var(--bark); text-align: center; }
+  .volunteer-cta-inner { max-width: 500px; margin: 0 auto; }
+  .volunteer-cta h2 { font-family: var(--font-serif); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--cream); line-height: 1.2; margin-bottom: 0.8rem; }
+  .volunteer-cta h2 em { font-style: italic; color: var(--teal-wash); }
+  .volunteer-cta p { font-size: 0.95rem; color: rgba(253, 250, 246, 0.6); line-height: 1.7; margin-bottom: 1.5rem; }
+
+  @media (max-width: 1024px) { .volunteer-section, .volunteer-cta { padding: 4rem 2.5rem; } }
+  @media (max-width: 640px) { .volunteer-section, .volunteer-cta { padding: 3.5rem 1.5rem; } .vol-grid { grid-template-columns: 1fr; } }
+</style>

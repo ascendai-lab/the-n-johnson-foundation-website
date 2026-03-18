@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+---
+
+<BaseLayout title="Student Scholarships — The N Johnson Foundation">
+  <PageHero label="Programs" title="Student <em>Scholarships</em>" subtitle="Financial assistance so no child has to choose between school and survival." />
+
+  <section class="program-detail">
+    <div class="detail-inner">
+      <div class="detail-content">
+        <h2 class="detail-heading reveal">Removing financial barriers to <em>education.</em></h2>
+        <p class="detail-body reveal reveal-delay-1">For many families in Belize, the cost of education — tuition, fees, uniforms, supplies — can mean the difference between a child attending school or staying home. The N Johnson Foundation's scholarship program directly funds these critical expenses, ensuring that financial hardship never becomes the reason a student's education is interrupted.</p>
+        <p class="detail-body reveal reveal-delay-2">We work closely with schools, families, and community leaders to identify students who need support most. Our scholarships cover tuition, school fees, and essential materials — providing not just financial relief, but the message that <strong>someone believes in their potential.</strong></p>
+
+        <h3 class="detail-subhead reveal reveal-delay-3">What we cover</h3>
+        <div class="detail-list reveal reveal-delay-3">
+          <div class="detail-item"><i data-lucide="check-circle"></i><span>Tuition and school enrollment fees</span></div>
+          <div class="detail-item"><i data-lucide="check-circle"></i><span>Uniforms and required clothing</span></div>
+          <div class="detail-item"><i data-lucide="check-circle"></i><span>Textbooks and learning materials</span></div>
+          <div class="detail-item"><i data-lucide="check-circle"></i><span>School bags and essential supplies</span></div>
+        </div>
+      </div>
+
+      <div class="detail-sidebar">
+        <div class="stat-card reveal">
+          <div class="stat-num">6</div>
+          <div class="stat-label">Scholarships awarded to students in Belize</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-1">
+          <div class="stat-num">100<span>%</span></div>
+          <div class="stat-label">Of funds go directly to student support</div>
+        </div>
+        <div class="impact-quote reveal reveal-delay-2">
+          <p>"Every scholarship represents a family that doesn't have to choose between food and school fees."</p>
+          <span>— Nicole Johnson, Founder</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="program-cta">
+    <div class="program-cta-inner reveal">
+      <h2>Fund a <em>scholarship.</em></h2>
+      <p>$100 helps cover fees so a family isn't forced to pull their child from school.</p>
+      <div class="cta-buttons">
+        <a href="/donate" class="btn-teal"><i data-lucide="heart"></i> Donate now</a>
+        <a href="/programs" class="btn-text-link">← Back to programs</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  [data-lucide] { width: 20px; height: 20px; stroke: var(--teal-deep); flex-shrink: 0; }
+
+  .program-detail { padding: 6rem; background: var(--cream); }
+  .detail-inner { display: grid; grid-template-columns: 1.4fr 1fr; gap: 5rem; max-width: 1100px; margin: 0 auto; align-items: start; }
+  .detail-heading { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--bark); line-height: 1.2; margin-bottom: 1.5rem; }
+  .detail-heading em { font-style: italic; color: var(--teal-deep); }
+  .detail-body { font-size: 1rem; color: var(--bark-mid); line-height: 1.8; margin-bottom: 1.2rem; }
+  .detail-body strong { color: var(--bark); font-weight: 600; }
+  .detail-subhead { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--bark); margin: 2rem 0 1rem; }
+  .detail-list { display: flex; flex-direction: column; gap: 0.8rem; }
+  .detail-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.92rem; color: var(--bark-mid); }
+
+  .detail-sidebar { display: flex; flex-direction: column; gap: 1.2rem; }
+  .stat-card { background: var(--sand); border-radius: 20px; padding: 2rem; text-align: center; }
+  .stat-num { font-family: var(--font-serif); font-size: 3rem; font-weight: 700; color: var(--teal-deep); line-height: 1; margin-bottom: 0.5rem; }
+  .stat-num span { font-size: 1.8rem; color: var(--teal); }
+  .stat-label { font-size: 0.88rem; color: var(--bark-mid); line-height: 1.5; }
+  .impact-quote { background: var(--teal-mist); border-radius: 20px; padding: 2rem; border-left: 4px solid var(--teal); }
+  .impact-quote p { font-family: var(--font-serif); font-style: italic; font-size: 0.95rem; color: var(--bark); line-height: 1.6; margin-bottom: 0.8rem; }
+  .impact-quote span { font-size: 0.82rem; color: var(--bark-mid); font-weight: 500; }
+
+  .program-cta { padding: 5rem; background: var(--bark); text-align: center; }
+  .program-cta-inner { max-width: 500px; margin: 0 auto; }
+  .program-cta h2 { font-family: var(--font-serif); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--cream); line-height: 1.2; margin-bottom: 0.8rem; }
+  .program-cta h2 em { font-style: italic; color: var(--teal-wash); }
+  .program-cta p { font-size: 0.95rem; color: rgba(253, 250, 246, 0.6); line-height: 1.7; margin-bottom: 1.5rem; }
+  .cta-buttons { display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap; align-items: center; }
+
+  @media (max-width: 1024px) {
+    .program-detail, .program-cta { padding: 4rem 2.5rem; }
+    .detail-inner { grid-template-columns: 1fr; gap: 3rem; }
+  }
+  @media (max-width: 640px) {
+    .program-detail, .program-cta { padding: 3.5rem 1.5rem; }
+  }
+</style>

@@ -1,0 +1,748 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="The N Johnson Foundation — Education & Mental Wellness">
+
+  <!-- ══ HERO ══ -->
+  <section class="hero" id="home">
+    <div class="hero-backdrop"></div>
+    <div class="blob-teal"></div>
+    <div class="blob-purple"></div>
+    <div class="hero-dots"></div>
+
+    <div class="hero-left">
+      <div class="hero-kicker rise d1">
+        <span class="kicker-line"></span>
+        Youth Education &amp; Mental Wellness
+      </div>
+
+      <h1 class="hero-heading rise d2">
+        Every child<br />
+        deserves to <em>thrive</em>,<br />
+        not just <span class="hand">survive.</span>
+      </h1>
+
+      <p class="hero-body rise d3">
+        The N Johnson Foundation removes educational and financial barriers for children and families in Belize and the
+        United States — so every student can show up prepared, supported, and ready to grow.
+      </p>
+
+      <div class="hero-ctas rise d4">
+        <a href="/donate" class="btn-bark">Support a student <i data-lucide="arrow-up-right"></i></a>
+        <a href="/programs" class="btn-text-link">See our programs <i data-lucide="arrow-right"></i></a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="spinning-badge rise d3">
+        <svg viewBox="0 0 80 80" width="80" height="80">
+          <defs>
+            <path id="circ" d="M 40,40 m -28,0 a 28,28 0 1,1 56,0 a 28,28 0 1,1 -56,0" />
+          </defs>
+          <text font-size="8.5" fill="#2EA99B" font-family="'DM Sans', sans-serif" font-weight="500" letter-spacing="2">
+            <textPath href="#circ">Belize · USA · Community · Education ·</textPath>
+          </text>
+          <circle cx="40" cy="40" r="5" fill="#2EA99B" />
+        </svg>
+      </div>
+
+      <div class="photo-frame rise d2">
+        <img
+          src="/images/hero-nicole.png"
+          alt="Nicole Johnson, Founder of The N Johnson Foundation"
+          class="hero-real-img"
+        />
+      </div>
+
+      <div class="sticker sticker-1 rise d4">
+        <span class="sticker-icon"><i data-lucide="backpack"></i></span>
+        <div class="sticker-text">
+          <strong>30+ students</strong>
+          supported this school year
+        </div>
+      </div>
+
+      <div class="sticker sticker-2 rise d5">
+        <span class="sticker-icon"><i data-lucide="graduation-cap"></i></span>
+        <div class="sticker-text">
+          <strong>6 scholarships</strong>
+          awarded in Belize
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ RIBBON ══ -->
+  <div class="ribbon">
+    <div class="ribbon-track">
+      <span class="ribbon-item">Youth Education <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">Mental Wellness <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">Belize &amp; United States <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">Scholarships <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">School Supply Drives <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">Community Support <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">Emotional Resilience <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">Self-Love &amp; Boundaries <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">Youth Education <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">Mental Wellness <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">Belize &amp; United States <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">Scholarships <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">School Supply Drives <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">Community Support <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">Emotional Resilience <span class="ribbon-sep">✦</span></span>
+      <span class="ribbon-item">Self-Love &amp; Boundaries <span class="ribbon-sep">✦</span></span>
+    </div>
+  </div>
+
+  <!-- ══ INTRO ══ -->
+  <section class="intro" id="about-intro">
+    <div>
+      <div class="section-label reveal">Our Purpose</div>
+      <h2 class="intro-title reveal reveal-delay-1">
+        Education &amp; <em>healing</em><br />go hand in hand.
+      </h2>
+    </div>
+    <div class="intro-right">
+      <p class="intro-body reveal reveal-delay-1">
+        The N. Johnson Foundation is a community-driven nonprofit built on the belief that <strong>a child cannot learn
+          when they are hungry, afraid, or unseen.</strong> We work to ease financial burdens on families, promote
+        emotional wellness, and make sure every student walks into school prepared — with supplies in hand and support
+        in their corner.
+      </p>
+      <p class="intro-body reveal reveal-delay-2">
+        Our work spans Belize and the United States, rooted in culturally respectful, community-first solutions that
+        address both <strong>practical needs</strong> and <strong>long-term healing.</strong>
+      </p>
+      <div class="intro-values reveal reveal-delay-3">
+        <span class="value-chip">Mental Wellness</span>
+        <span class="value-chip">Educational Equity</span>
+        <span class="value-chip">Self-Love</span>
+        <span class="value-chip">Healthy Boundaries</span>
+        <span class="value-chip">Youth Empowerment</span>
+        <span class="value-chip">Community First</span>
+        <span class="value-chip">Emotional Intelligence</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PROGRAMS ══ -->
+  <section class="programs" id="programs">
+    <div class="programs-bg-blob"></div>
+    <div class="programs-header">
+      <div class="section-label reveal">What We Do</div>
+      <h2 class="reveal reveal-delay-1">
+        Programs rooted in<br />
+        <em>real community needs.</em>
+      </h2>
+    </div>
+
+    <div class="programs-grid">
+      <div class="prog-card prog-card-a prog-card-wash-teal reveal">
+        <span class="prog-icon"><i data-lucide="graduation-cap"></i></span>
+        <div class="prog-title">Student Scholarships</div>
+        <div class="prog-desc">Financial assistance ensuring students continue their education without interruption. We directly fund tuition, fees, and materials so families don't have to choose between bills and school.</div>
+        <a href="/programs/scholarships" class="prog-link">Learn more →</a>
+      </div>
+
+      <div class="prog-card prog-card-b reveal reveal-delay-1">
+        <span class="prog-icon"><i data-lucide="backpack"></i></span>
+        <div class="prog-title">School Supply Drives</div>
+        <div class="prog-desc">Backpacks, uniforms, books, and essentials distributed directly to students in Belize and the U.S.</div>
+        <a href="/programs/supply-drives" class="prog-link">Learn more →</a>
+      </div>
+
+      <div class="prog-card prog-card-c prog-card-wash-purple reveal reveal-delay-2">
+        <span class="prog-icon"><i data-lucide="heart-pulse"></i></span>
+        <div class="prog-title">Mental Wellness Workshops</div>
+        <div class="prog-desc">Upcoming sessions for students and families on emotional resilience, self-love, and healthy boundaries.</div>
+        <a href="/programs/mental-wellness" class="prog-link">Coming soon →</a>
+      </div>
+
+      <div class="prog-card prog-card-d reveal reveal-delay-1">
+        <span class="prog-icon"><i data-lucide="school"></i></span>
+        <div class="prog-title">School Donations</div>
+        <div class="prog-desc">Classroom resources tailored directly to what teachers and students actually need to succeed.</div>
+        <a href="/programs/school-support" class="prog-link">Learn more →</a>
+      </div>
+
+      <div class="prog-card prog-card-e reveal reveal-delay-2">
+        <span class="prog-icon"><i data-lucide="users"></i></span>
+        <div class="prog-title">Peer Mentorship</div>
+        <div class="prog-desc">Trained peer leaders paired with younger students — creating safe, judgment-free spaces for open conversation, guidance, and emotional support.</div>
+        <a href="/programs/peer-mentorship" class="prog-link">Learn more →</a>
+      </div>
+
+      <div class="prog-card prog-card-f prog-card-wash-teal reveal reveal-delay-3">
+        <span class="prog-icon"><i data-lucide="book-open"></i></span>
+        <div class="prog-title">The Book Initiative</div>
+        <div class="prog-desc">Proceeds from Nicole Johnson's published novels — stories of resilience and healing — fund the Foundation's programs directly.</div>
+        <a href="https://www.amazon.com/author/nicoleswasojohnsonwrites" target="_blank" rel="noopener noreferrer" class="prog-link">Shop on Amazon →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ IMPACT ══ -->
+  <section class="impact" id="impact">
+    <div class="impact-blob"></div>
+    <div class="impact-blob-2"></div>
+    <div class="impact-inner">
+      <div>
+        <div class="section-label section-label-dark reveal">Our Impact to Date</div>
+        <h2 class="reveal reveal-delay-1">
+          Small foundation.<br /><em>Real lives changed.</em>
+        </h2>
+        <p class="impact-body reveal reveal-delay-2">
+          Despite being in its early stages, The N. Johnson Foundation has already made <strong>meaningful, measurable
+            contributions</strong> to students and communities in Belize. Every number below represents a child who
+          showed up to school this year because someone believed in them.
+        </p>
+        <a href="/donate" class="btn-teal reveal reveal-delay-3">Be part of the next chapter <i data-lucide="arrow-right"></i></a>
+      </div>
+      <div class="impact-numbers reveal reveal-delay-2">
+        <div class="impact-num-card">
+          <div class="i-num">30<span>+</span></div>
+          <div class="i-label">Students received backpacks &amp; classroom materials this school year</div>
+        </div>
+        <div class="impact-num-card purple-top">
+          <div class="i-num">6</div>
+          <div class="i-label">Scholarships, school bags &amp; essential supplies awarded to students</div>
+        </div>
+        <div class="impact-num-card slate-top">
+          <div class="i-num">2</div>
+          <div class="i-label">Countries actively served — Belize &amp; United States</div>
+        </div>
+        <div class="impact-num-card">
+          <div class="i-num" style="color:var(--teal-wash)">∞</div>
+          <div class="i-label">Potential unlocked when a child feels supported</div>
+        </div>
+        <div class="impact-num-card wide-card">
+          <div style="flex-shrink:0;">
+            <div class="i-num" style="font-size:1.8rem; color:var(--cream)">Muslim<br />Community<br />School</div>
+          </div>
+          <div class="wide-divider"></div>
+          <div class="wide-note">Our primary school partner in Belize — recipient of <strong>direct classroom donations</strong>, scholarship support, and supply drives for both students and teachers.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BELIZE ══ -->
+  <section class="belize" id="belize">
+    <div class="belize-left">
+      <div class="belize-card reveal">
+        <div class="belize-flag-wrap"><i data-lucide="map-pin"></i></div>
+        <div class="belize-card-title">Belize, Central America</div>
+        <div class="belize-card-sub">Our primary home of service</div>
+        <div class="belize-row">
+          <span class="belize-row-icon"><i data-lucide="school"></i></span>
+          <div class="belize-row-text">
+            <strong>Muslim Community School</strong>
+            Primary partner — scholarships, supply drives &amp; direct school donations
+          </div>
+        </div>
+        <div class="belize-row">
+          <span class="belize-row-icon"><i data-lucide="heart-handshake"></i></span>
+          <div class="belize-row-text">
+            <strong>Families in need</strong>
+            Working directly with underserved families to reduce educational barriers
+          </div>
+        </div>
+        <div class="belize-row">
+          <span class="belize-row-icon"><i data-lucide="sprout"></i></span>
+          <div class="belize-row-text">
+            <strong>Mental wellness — coming soon</strong>
+            Workshops for students &amp; families planned for expansion
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="belize-right">
+      <div class="section-label reveal">Where We Serve</div>
+      <h2 class="belize-title reveal reveal-delay-1">
+        Our heart is<br />in <em>Belize</em> —<br />and growing.
+      </h2>
+      <p class="belize-body reveal reveal-delay-2">
+        The Foundation was born from a deep personal connection to Belizean communities where educational access and
+        financial hardship prevent talented, eager children from reaching their potential. We show up with culturally
+        respectful, community-first solutions — not charity, but solidarity.
+      </p>
+      <p class="belize-body reveal reveal-delay-3">
+        From our base in Torrance, California, we raise funds, build partnerships, and coordinate programs that flow
+        directly to the students and schools that need them most.
+      </p>
+      <div class="reveal reveal-delay-4" style="margin-top:1.8rem;">
+        <a href="/donate" class="btn-bark">Support Belize <i data-lucide="arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOUNDERS ══ -->
+  <section class="founder" id="about">
+    <div class="founder-blob"></div>
+    <div class="founder-inner">
+      <div class="founder-portrait-wrap reveal">
+        <div class="founder-portrait">
+          <img
+            src="/images/founder-nicole.jpg"
+            alt="Nicole Johnson, MHA – Founder of The N Johnson Foundation"
+            class="founder-real-img"
+          />
+          <div class="founder-portrait-label" style="position:absolute; bottom:1.5rem; left:0; right:0; background:rgba(248,250,252,0.92); padding:0.75rem 1rem; text-align:center;">
+            Nicole Johnson, MHA
+            <em>Founder &amp; Executive Director</em>
+          </div>
+        </div>
+        <div class="cofounder-pill">
+          <span class="cofounder-icon"><i data-lucide="scale"></i></span>
+          <span><strong>Monica Stuart</strong>, Attorney-at-Law · Co-Founder</span>
+        </div>
+      </div>
+
+      <div class="founder-content">
+        <div class="section-label reveal">Our Founders</div>
+        <h2 class="founder-title reveal reveal-delay-1">
+          Led by <em>lived experience.</em><br />Driven by purpose.
+        </h2>
+        <p class="founder-bio reveal reveal-delay-2">
+          <strong>Nicole Johnson</strong> is a U.S. Veteran, published author, and Medi-Cal Certified Peer Support
+          Specialist with a Master of Healthcare Administration. Her years in behavioral health — combined with her own
+          lived experience — give her a rare ability to bridge systems thinking with deep human compassion.
+        </p>
+        <p class="founder-bio reveal reveal-delay-3">
+          <strong>Monica Stuart</strong>, Attorney-at-Law and Co-Founder, brings governance, compliance, and advocacy
+          expertise — ensuring the Foundation operates with transparency, accountability, and an unwavering ethical
+          foundation.
+        </p>
+        <div class="creds reveal reveal-delay-3">
+          <span class="cred">MHA · Master of Healthcare Administration</span>
+          <span class="cred">CPSS Certified</span>
+          <span class="cred">U.S. Veteran</span>
+          <span class="cred">Published Author</span>
+          <span class="cred">Attorney-at-Law</span>
+        </div>
+        <div class="reveal reveal-delay-4">
+          <a href="/about" class="btn-bark">More about our team <i data-lucide="arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ DONATE ══ -->
+  <section class="donate-section" id="donate">
+    <div class="donate-band">
+      <div class="donate-left">
+        <div class="section-label reveal">Get Involved</div>
+        <h2 class="donate-title reveal reveal-delay-1">
+          Help a child focus on<br />
+          <em>learning, not hardship.</em>
+        </h2>
+        <p class="donate-body reveal reveal-delay-2">
+          Your donation directly funds scholarships, school supplies, and community programs that promote both learning
+          and emotional well-being. Every contribution — large or small — means a child shows up to school with what
+          they need.
+        </p>
+        <div class="donate-actions reveal reveal-delay-3">
+          <a href="/donate" class="btn-teal"><i data-lucide="heart"></i> Donate now</a>
+          <a href="https://www.amazon.com/author/nicoleswasojohnsonwrites" target="_blank" rel="noopener noreferrer" class="btn-text-link"><i data-lucide="book-open"></i> Buy a book →</a>
+        </div>
+      </div>
+      <div class="donate-right">
+        <div class="donate-reason reveal reveal-delay-1">
+          <span class="donate-reason-icon"><i data-lucide="backpack"></i></span>
+          <div class="donate-reason-text">
+            <strong>$25 — School supplies for one child</strong>
+            A backpack, notebook, and pens so a student walks in prepared and proud.
+          </div>
+        </div>
+        <div class="donate-reason reveal reveal-delay-2">
+          <span class="donate-reason-icon"><i data-lucide="graduation-cap"></i></span>
+          <div class="donate-reason-text">
+            <strong>$100 — Scholarship contribution</strong>
+            Helps cover fees so a family isn't forced to pull their child from school.
+          </div>
+        </div>
+        <div class="donate-reason reveal reveal-delay-3">
+          <span class="donate-reason-icon"><i data-lucide="school"></i></span>
+          <div class="donate-reason-text">
+            <strong>$250 — Classroom resource bundle</strong>
+            Books, materials &amp; tools donated directly to a school in Belize.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style is:global>
+  /* ─────────────────────────────────────────
+     HERO IMAGE STYLES
+  ───────────────────────────────────────── */
+  .hero-real-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: inherit;
+    position: relative;
+    z-index: 1;
+  }
+
+  .founder-real-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: inherit;
+    display: block;
+  }
+
+  .founder-portrait-label {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--bark-mid);
+    line-height: 1.5;
+  }
+
+  .founder-portrait-label em {
+    font-size: 0.76rem;
+    color: var(--bark-light);
+    font-style: italic;
+    display: block;
+    margin-top: 0.1rem;
+  }
+
+  /* ─────────────────────────────────────────
+     LUCIDE ICON SIZING (page-specific)
+  ───────────────────────────────────────── */
+  .prog-icon [data-lucide] { width: 32px; height: 32px; stroke: var(--teal-deep); }
+  .prog-card-b .prog-icon [data-lucide],
+  .prog-card-wash-purple .prog-icon [data-lucide] { stroke: var(--purple); }
+  .prog-card-d .prog-icon [data-lucide] { stroke: var(--slate); }
+  .prog-card-f .prog-icon [data-lucide] { stroke: var(--teal-deep); }
+  .sticker-icon [data-lucide] { width: 26px; height: 26px; stroke: var(--teal-deep); }
+  .belize-row-icon [data-lucide] { width: 22px; height: 22px; stroke: var(--teal-deep); }
+  .donate-reason-icon [data-lucide] { width: 24px; height: 24px; stroke: var(--teal-deep); }
+  .donate-reason:nth-child(2) .donate-reason-icon [data-lucide] { stroke: var(--purple); }
+  .donate-reason:nth-child(3) .donate-reason-icon [data-lucide] { stroke: var(--slate); }
+  .belize-flag-wrap [data-lucide] { width: 36px; height: 36px; stroke: var(--teal-deep); margin: auto; }
+  .cofounder-icon [data-lucide] { width: 14px; height: 14px; stroke: var(--purple); flex-shrink: 0; }
+</style>
+
+<style>
+  /* ─────────────────────────────────────────
+     HERO
+  ───────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    padding-top: 80px;
+    display: grid;
+    grid-template-columns: 55% 45%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-backdrop {
+    position: absolute;
+    inset: 0;
+    background: var(--cream);
+    z-index: 0;
+  }
+
+  .hero-backdrop::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 65%; height: 100%;
+    background: var(--sand);
+    clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+
+  .blob-teal {
+    position: absolute; width: 380px; height: 380px;
+    background: radial-gradient(circle, var(--teal-wash) 0%, transparent 70%);
+    border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+    top: 8%; left: -6%; opacity: 0.55;
+    animation: blobMorph 12s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  .blob-purple {
+    position: absolute; width: 260px; height: 260px;
+    background: radial-gradient(circle, var(--purple-mist) 0%, transparent 70%);
+    border-radius: 40% 60% 45% 55% / 55% 40% 60% 45%;
+    bottom: 10%; left: 30%; opacity: 0.5;
+    animation: blobMorph 15s ease-in-out infinite reverse;
+    pointer-events: none;
+  }
+
+  .hero-dots {
+    position: absolute; top: 20%; right: 42%;
+    width: 120px; height: 160px;
+    background-image: radial-gradient(circle, var(--bark-light) 1.5px, transparent 1.5px);
+    background-size: 14px 14px;
+    opacity: 0.18; pointer-events: none;
+  }
+
+  .hero-left {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 5rem 4rem 5rem 6rem;
+  }
+
+  .hero-kicker {
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    font-size: 0.78rem; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--teal-deep); margin-bottom: 1.8rem;
+  }
+
+  .kicker-line { width: 32px; height: 1.5px; background: var(--teal); border-radius: 2px; }
+
+  h1.hero-heading {
+    font-family: var(--font-serif);
+    font-size: clamp(2.8rem, 4.5vw, 4rem);
+    font-weight: 700; line-height: 1.12;
+    color: var(--bark); margin-bottom: 1.6rem; letter-spacing: -0.5px;
+  }
+  h1.hero-heading em { font-style: italic; color: var(--teal-deep); }
+  h1.hero-heading .hand { font-style: italic; color: var(--purple); }
+
+  .hero-body {
+    font-size: 1.05rem; color: var(--bark-mid);
+    max-width: 460px; line-height: 1.75; margin-bottom: 2.8rem;
+  }
+
+  .hero-ctas { display: flex; align-items: center; gap: 1.4rem; flex-wrap: wrap; }
+
+  .hero-right {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    padding: 4rem 4rem 4rem 2rem;
+  }
+
+  .photo-frame {
+    width: 340px; aspect-ratio: 3/4;
+    background: var(--sand-dark);
+    border-radius: 55% 45% 48% 52% / 42% 52% 48% 58%;
+    position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(44, 74, 90, 0.12);
+  }
+
+  .photo-frame::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(160deg, var(--teal-mist) 0%, var(--sand-dark) 50%, var(--purple-mist) 100%);
+    opacity: 0.7;
+  }
+
+  .sticker {
+    position: absolute; background: var(--cream);
+    border-radius: 18px; box-shadow: 0 8px 32px rgba(44, 74, 90, 0.10);
+    padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.8rem;
+  }
+  .sticker-1 { top: 18%; right: -2rem; animation: gentleFloat 7s ease-in-out infinite; }
+  .sticker-2 { bottom: 22%; left: -3rem; animation: gentleFloat 9s ease-in-out infinite 1.5s; }
+  .sticker-text { font-size: 0.78rem; color: var(--bark-mid); line-height: 1.35; }
+  .sticker-text strong { display: block; font-size: 0.88rem; color: var(--bark); font-weight: 600; margin-bottom: 0.1rem; }
+
+  .spinning-badge { position: absolute; top: 12%; left: -2.5rem; width: 80px; height: 80px; }
+  .spinning-badge svg { animation: slowSpin 20s linear infinite; }
+
+  /* ── RIBBON ── */
+  .ribbon { background: var(--bark); color: rgba(253, 250, 246, 0.75); padding: 0.85rem 0; overflow: hidden; white-space: nowrap; }
+  .ribbon-track { display: inline-flex; gap: 0; animation: marquee 28s linear infinite; }
+  .ribbon-item { display: inline-flex; align-items: center; gap: 1rem; padding: 0 2.5rem; font-size: 0.82rem; font-weight: 400; letter-spacing: 0.04em; }
+  .ribbon-sep { color: var(--teal); font-size: 0.7rem; }
+
+  /* ── INTRO ── */
+  .intro { padding: 6rem; background: var(--cream); display: grid; grid-template-columns: 1fr 1.6fr; gap: 6rem; align-items: start; }
+  .intro-title { font-family: var(--font-serif); font-size: clamp(2rem, 3vw, 2.7rem); font-weight: 700; line-height: 1.2; color: var(--bark); letter-spacing: -0.3px; }
+  .intro-title em { font-style: italic; color: var(--teal-deep); }
+  .intro-right { padding-top: 1rem; }
+  .intro-body { font-size: 1.05rem; color: var(--bark-mid); line-height: 1.8; margin-bottom: 1.4rem; }
+  .intro-body strong { color: var(--bark); font-weight: 600; }
+  .intro-values { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 2rem; }
+  .value-chip { background: var(--sand); border: 1px solid var(--sand-dark); border-radius: 100px; padding: 0.4rem 1rem; font-size: 0.8rem; font-weight: 500; color: var(--bark-mid); transition: background 0.2s, border-color 0.2s, color 0.2s; cursor: default; }
+  .value-chip:hover { background: var(--teal-mist); border-color: var(--teal-wash); color: var(--teal-deep); }
+
+  /* ── PROGRAMS ── */
+  .programs { background: var(--sand); padding: 6rem; position: relative; overflow: hidden; }
+  .programs-bg-blob { position: absolute; width: 500px; height: 500px; background: radial-gradient(circle, var(--teal-mist) 0%, transparent 65%); border-radius: 50%; bottom: -150px; right: -100px; pointer-events: none; opacity: 0.7; }
+  .programs-header { margin-bottom: 3.5rem; max-width: 560px; }
+  .programs-header h2 { font-family: var(--font-serif); font-size: clamp(1.9rem, 3vw, 2.6rem); font-weight: 700; color: var(--bark); line-height: 1.2; letter-spacing: -0.3px; }
+  .programs-header h2 em { font-style: italic; color: var(--teal-deep); }
+  .programs-grid { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: auto; gap: 1.4rem; }
+  .prog-card { background: var(--cream); border-radius: 24px; padding: 2rem; position: relative; overflow: hidden; transition: transform 0.3s cubic-bezier(.22, .68, 0, 1.2), box-shadow 0.3s; cursor: pointer; }
+  .prog-card:hover { transform: translateY(-5px) scale(1.01); box-shadow: 0 16px 48px rgba(44, 74, 90, 0.10); }
+  .prog-card-a { grid-column: 1 / 6; grid-row: 1; }
+  .prog-card-b { grid-column: 6 / 9; grid-row: 1; }
+  .prog-card-c { grid-column: 9 / 13; grid-row: 1; }
+  .prog-card-d { grid-column: 1 / 4; grid-row: 2; }
+  .prog-card-e { grid-column: 4 / 8; grid-row: 2; }
+  .prog-card-f { grid-column: 8 / 13; grid-row: 2; }
+  .prog-card-wash-teal { background: var(--teal-mist); }
+  .prog-card-wash-purple { background: var(--purple-mist); }
+  .prog-icon { font-size: 2rem; margin-bottom: 1.2rem; display: block; line-height: 1; }
+  .prog-title { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 700; color: var(--bark); margin-bottom: 0.6rem; line-height: 1.3; }
+  .prog-desc { font-size: 0.86rem; color: var(--bark-mid); line-height: 1.65; }
+  .prog-link { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.8rem; font-weight: 600; color: var(--teal-deep); margin-top: 1rem; transition: gap 0.2s; }
+  .prog-link:hover { gap: 0.55rem; }
+  .prog-card::after { content: ''; position: absolute; width: 120px; height: 120px; border-radius: 50%; bottom: -50px; right: -40px; pointer-events: none; opacity: 0.15; }
+  .prog-card-a::after { background: var(--teal); }
+  .prog-card-b::after { background: var(--purple); }
+  .prog-card-c::after { background: var(--slate); }
+  .prog-card-d::after { background: var(--leaf); }
+  .prog-card-e::after { background: var(--teal); }
+  .prog-card-f::after { background: var(--purple); }
+
+  /* ── IMPACT ── */
+  .impact { background: var(--bark); padding: 7rem 6rem; position: relative; overflow: hidden; }
+  .impact-blob { position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(46, 169, 155, 0.18) 0%, transparent 70%); top: -150px; right: -100px; pointer-events: none; }
+  .impact-blob-2 { position: absolute; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(126, 98, 167, 0.15) 0%, transparent 70%); bottom: -80px; left: 10%; pointer-events: none; }
+  .impact-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .impact h2 { font-family: var(--font-serif); font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 700; color: var(--cream); line-height: 1.18; letter-spacing: -0.3px; margin-bottom: 1.5rem; }
+  .impact h2 em { font-style: italic; color: var(--teal-wash); }
+  .impact-body { color: rgba(253, 250, 246, 0.62); font-size: 1rem; line-height: 1.75; margin-bottom: 2.5rem; }
+  .impact-body strong { color: var(--cream); }
+  .impact-numbers { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .impact-num-card { background: rgba(253, 250, 246, 0.05); border: 1px solid rgba(253, 250, 246, 0.09); border-radius: 20px; padding: 1.8rem 1.5rem; position: relative; overflow: hidden; transition: background 0.3s, border-color 0.3s; }
+  .impact-num-card:hover { background: rgba(46, 169, 155, 0.1); border-color: rgba(46, 169, 155, 0.25); }
+  .impact-num-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--teal), transparent); border-radius: 20px 20px 0 0; }
+  .impact-num-card.purple-top::before { background: linear-gradient(90deg, var(--purple), transparent); }
+  .impact-num-card.slate-top::before { background: linear-gradient(90deg, var(--slate), transparent); }
+  .i-num { font-family: var(--font-serif); font-size: 3rem; font-weight: 700; line-height: 1; color: var(--cream); margin-bottom: 0.4rem; letter-spacing: -1px; }
+  .i-num span { color: var(--teal); font-size: 1.8rem; }
+  .i-label { font-size: 0.82rem; color: rgba(253, 250, 246, 0.5); line-height: 1.45; }
+  .impact-num-card.wide-card { grid-column: span 2; display: flex; gap: 2rem; align-items: center; }
+  .wide-divider { width: 1px; height: 48px; background: rgba(253, 250, 246, 0.1); flex-shrink: 0; }
+  .wide-note { font-size: 0.85rem; color: rgba(253, 250, 246, 0.55); line-height: 1.6; }
+  .wide-note strong { color: var(--cream); }
+
+  /* ── BELIZE ── */
+  .belize { background: var(--cream); padding: 7rem 6rem; display: grid; grid-template-columns: 1.1fr 1fr; gap: 5rem; align-items: center; position: relative; overflow: hidden; }
+  .belize::before { content: ''; position: absolute; top: -80px; right: -120px; width: 500px; height: 500px; background: var(--sand); border-radius: 62% 38% 44% 56% / 50% 40% 60% 50%; z-index: 0; animation: blobMorph 18s ease-in-out infinite; }
+  .belize-left, .belize-right { position: relative; z-index: 1; }
+  .belize-card { background: var(--sand); border-radius: 28px; padding: 2.5rem; position: relative; overflow: hidden; }
+  .belize-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--teal), var(--purple)); }
+  .belize-flag-wrap { display: flex; align-items: center; justify-content: flex-start; width: 72px; height: 72px; background: var(--teal-mist); border-radius: 50%; margin-bottom: 1.2rem; }
+  .belize-card-title { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 700; color: var(--bark); margin-bottom: 0.4rem; }
+  .belize-card-sub { font-size: 0.88rem; color: var(--bark-light); margin-bottom: 2rem; }
+  .belize-row { display: flex; gap: 1rem; align-items: center; padding: 1rem 0; border-top: 1px solid var(--sand-dark); }
+  .belize-row-text { font-size: 0.86rem; color: var(--bark-mid); line-height: 1.45; }
+  .belize-row-text strong { color: var(--bark); font-weight: 600; display: block; }
+  .belize-title { font-family: var(--font-serif); font-size: clamp(1.9rem, 3vw, 2.6rem); font-weight: 700; color: var(--bark); line-height: 1.2; margin-bottom: 1.4rem; letter-spacing: -0.3px; }
+  .belize-title em { font-style: italic; color: var(--teal-deep); }
+  .belize-body { font-size: 0.97rem; color: var(--bark-mid); line-height: 1.8; margin-bottom: 1rem; }
+
+  /* ── FOUNDERS ── */
+  .founder { background: var(--sand); padding: 7rem 6rem; position: relative; overflow: hidden; }
+  .founder-blob { position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, var(--purple-mist) 0%, transparent 70%); bottom: -100px; right: -80px; border-radius: 50%; pointer-events: none; }
+  .founder-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .founder-portrait-wrap { position: relative; display: flex; justify-content: center; }
+  .founder-portrait { width: 300px; aspect-ratio: 1; border-radius: 55% 45% 50% 50% / 46% 54% 46% 54%; background: linear-gradient(145deg, var(--teal-mist), var(--sand-dark), var(--purple-mist)); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem; box-shadow: 0 20px 60px rgba(44, 74, 90, 0.12); position: relative; overflow: hidden; }
+  .cofounder-pill { position: absolute; bottom: -1.5rem; left: 50%; transform: translateX(-50%); background: var(--cream); border-radius: 100px; padding: 0.7rem 1.4rem; display: flex; align-items: center; gap: 0.7rem; box-shadow: 0 8px 28px rgba(44, 74, 90, 0.10); white-space: nowrap; font-size: 0.8rem; color: var(--bark-mid); animation: gentleFloat 8s ease-in-out infinite 2s; }
+  .cofounder-pill strong { color: var(--bark); font-weight: 600; }
+  .founder-content { padding-top: 1rem; }
+  .founder-title { font-family: var(--font-serif); font-size: clamp(1.9rem, 3vw, 2.5rem); font-weight: 700; color: var(--bark); line-height: 1.2; margin-bottom: 1.4rem; letter-spacing: -0.3px; }
+  .founder-title em { font-style: italic; color: var(--teal-deep); }
+  .founder-bio { font-size: 0.97rem; color: var(--bark-mid); line-height: 1.8; margin-bottom: 1rem; }
+  .creds { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0 2rem; }
+  .cred { background: var(--cream); border: 1px solid var(--sand-dark); border-radius: 8px; padding: 0.35rem 0.8rem; font-size: 0.76rem; font-weight: 500; color: var(--bark-mid); }
+
+  /* ── DONATE CTA ── */
+  .donate-section { background: var(--cream); padding: 6rem; }
+  .donate-band { background: var(--sand); border-radius: 32px; padding: 5rem; display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: center; position: relative; overflow: hidden; }
+  .donate-band::before { content: ''; position: absolute; bottom: -80px; right: -80px; width: 360px; height: 360px; background: radial-gradient(circle, var(--teal-wash) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+  .donate-band::after { content: ''; position: absolute; top: -60px; left: 30%; width: 240px; height: 240px; background: radial-gradient(circle, var(--purple-mist) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+  .donate-left { position: relative; z-index: 1; }
+  .donate-title { font-family: var(--font-serif); font-size: clamp(1.9rem, 3vw, 2.6rem); font-weight: 700; color: var(--bark); line-height: 1.2; margin-bottom: 1.2rem; letter-spacing: -0.3px; }
+  .donate-title em { font-style: italic; color: var(--teal-deep); }
+  .donate-body { font-size: 0.97rem; color: var(--bark-mid); line-height: 1.75; margin-bottom: 2.2rem; }
+  .donate-actions { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+  .donate-right { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1rem; }
+  .donate-reason { background: var(--cream); border-radius: 16px; padding: 1.2rem 1.4rem; display: flex; align-items: flex-start; gap: 1rem; transition: transform 0.25s; }
+  .donate-reason:hover { transform: translateX(4px); }
+  .donate-reason-text { font-size: 0.86rem; color: var(--bark-mid); line-height: 1.55; }
+  .donate-reason-text strong { color: var(--bark); display: block; font-weight: 600; margin-bottom: 0.2rem; }
+
+  /* ── RESPONSIVE TABLET ── */
+  @media (max-width: 1024px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-backdrop::after { display: none; }
+    .hero-left { padding: 5rem 2.5rem 2rem; text-align: center; align-items: center; }
+    .hero-body { max-width: 100%; }
+    .hero-ctas { justify-content: center; }
+    .hero-right { padding: 1rem 2.5rem 5rem; justify-content: center; }
+    .blob-teal { left: -15%; top: 0; width: 250px; height: 250px; }
+    .blob-purple { display: none; }
+    .hero-dots { display: none; }
+    .sticker-1 { right: 0; top: 5%; }
+    .sticker-2 { left: 0; bottom: 10%; }
+    .spinning-badge { left: 0; top: 5%; }
+    .intro { grid-template-columns: 1fr; gap: 2rem; padding: 4rem 2.5rem; }
+    .programs { padding: 4rem 2.5rem; }
+    .programs-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .prog-card-a, .prog-card-b, .prog-card-c, .prog-card-d, .prog-card-e, .prog-card-f { grid-column: auto; grid-row: auto; }
+    .impact { padding: 5rem 2.5rem; }
+    .impact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .belize { grid-template-columns: 1fr; padding: 5rem 2.5rem; gap: 3rem; }
+    .belize::before { display: none; }
+    .founder { padding: 5rem 2.5rem; }
+    .founder-inner { grid-template-columns: 1fr; gap: 4rem; text-align: center; }
+    .founder-portrait-wrap { justify-content: center; flex-direction: column; align-items: center; }
+    .cofounder-pill { position: relative; bottom: auto; left: auto; transform: none; margin: 1.5rem auto 0; display: inline-flex; }
+    .creds { justify-content: center; flex-direction: column; align-items: center; }
+    .donate-section { padding: 4rem 2.5rem; }
+    .donate-band { grid-template-columns: 1fr; padding: 3.5rem 2.5rem; gap: 3rem; }
+  }
+
+  /* ── RESPONSIVE MOBILE ── */
+  @media (max-width: 640px) {
+    .hero { padding-top: 68px; }
+    .hero-left { padding: 3rem 1.5rem 1.5rem; }
+    h1.hero-heading { font-size: clamp(2.2rem, 9vw, 2.8rem); }
+    .hero-body { font-size: 0.97rem; }
+    .hero-right { padding: 0 1.5rem 4rem; }
+    .photo-frame { width: 240px; }
+    .sticker { padding: 0.7rem 0.9rem; gap: 0.5rem; }
+    .sticker-text { font-size: 0.72rem; }
+    .sticker-text strong { font-size: 0.8rem; }
+    .sticker-1 { right: -0.5rem; top: 2%; }
+    .sticker-2 { left: -0.5rem; bottom: 8%; }
+    .spinning-badge { display: none; }
+    .ribbon-item { padding: 0 1.5rem; font-size: 0.75rem; }
+    .intro { padding: 3.5rem 1.5rem; gap: 2rem; }
+    .intro-title { font-size: clamp(1.7rem, 7vw, 2.2rem); }
+    .intro-body { font-size: 0.97rem; }
+    .programs { padding: 3.5rem 1.5rem; }
+    .programs-grid { grid-template-columns: 1fr; }
+    .prog-card { padding: 1.5rem; }
+    .prog-icon { font-size: 1.6rem; margin-bottom: 0.9rem; }
+    .impact { padding: 4rem 1.5rem; }
+    .impact h2 { font-size: clamp(1.7rem, 7vw, 2.2rem); }
+    .impact-numbers { grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+    .impact-num-card { padding: 1.3rem 1rem; }
+    .i-num { font-size: 2.2rem; }
+    .impact-num-card.wide-card { grid-column: span 2; flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .wide-divider { width: 40px; height: 1px; }
+    .belize { padding: 4rem 1.5rem; gap: 2.5rem; }
+    .belize-card { padding: 1.75rem; }
+    .belize-title { font-size: clamp(1.7rem, 7vw, 2.2rem); }
+    .founder { padding: 4rem 1.5rem; }
+    .founder-portrait { width: 240px; }
+    .founder-title { font-size: clamp(1.7rem, 7vw, 2.2rem); }
+    .founder-bio { font-size: 0.93rem; }
+    .cofounder-pill { font-size: 0.74rem; padding: 0.4rem 0.8rem; white-space: normal; text-align: center; }
+    .cred { font-size: 0.7rem; padding: 0.25rem 0.5rem; white-space: normal; text-align: center; }
+    .donate-section { padding: 3rem 1.5rem; }
+    .donate-band { padding: 2.5rem 1.5rem; border-radius: 24px; }
+    .donate-title { font-size: clamp(1.7rem, 7vw, 2.2rem); }
+    .donate-body { font-size: 0.93rem; }
+    .donate-reason { padding: 1rem; }
+    .donate-actions { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  }
+</style>

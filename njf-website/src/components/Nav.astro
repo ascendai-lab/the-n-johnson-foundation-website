@@ -1,0 +1,237 @@
+---
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+
+const navLinks = [
+  { label: 'About', href: '/about' },
+  { label: 'Programs', href: '/programs' },
+  { label: 'Get Involved', href: '/donate' },
+  { label: 'Contact', href: '/contact' },
+];
+---
+
+<nav id="nav">
+  <a href="/" class="nav-identity">
+    <img src="/images/logo.jpg" alt="The N Johnson Foundation" class="nav-logo-img" />
+  </a>
+
+  <!-- Mobile hamburger -->
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+
+  <ul class="nav-links" id="nav-links">
+    {navLinks.map(link => (
+      <li>
+        <a href={link.href} class:list={[{ active: currentPath.startsWith(link.href) }]}>
+          {link.label}
+        </a>
+      </li>
+    ))}
+    <li>
+      <a href="/donate" class="nav-donate"><i data-lucide="heart"></i> Give Today</a>
+    </li>
+  </ul>
+</nav>
+
+<style>
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 4rem;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(160, 139, 120, 0.12);
+    transition: box-shadow 0.3s;
+  }
+
+  nav:global(.inked) {
+    box-shadow: 0 2px 24px rgba(44, 74, 90, 0.07);
+  }
+
+  .nav-identity {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .nav-logo-img {
+    height: 52px;
+    width: auto;
+    display: block;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2.2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: var(--bark-mid);
+    position: relative;
+    transition: color 0.25s;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background: var(--teal);
+    transition: width 0.25s;
+    border-radius: 2px;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--bark);
+  }
+
+  .nav-links a:hover::after,
+  .nav-links a.active::after {
+    width: 100%;
+  }
+
+  .nav-donate {
+    background: var(--bark);
+    color: var(--cream) !important;
+    padding: 0.55rem 1.4rem;
+    border-radius: 100px;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    transition: background 0.2s !important;
+    letter-spacing: 0.01em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .nav-donate::after {
+    display: none !important;
+  }
+
+  .nav-donate:hover {
+    background: var(--teal-deep) !important;
+    color: var(--cream) !important;
+  }
+
+  .nav-donate [data-lucide] {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+  }
+
+  /* Hamburger button */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 201;
+  }
+
+  .hamburger-line {
+    width: 24px;
+    height: 2px;
+    background: var(--bark);
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+
+  .nav-hamburger[aria-expanded="true"] .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .nav-hamburger[aria-expanded="true"] .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-hamburger[aria-expanded="true"] .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
+  /* Tablet */
+  @media (max-width: 1024px) {
+    nav {
+      padding: 1rem 2rem;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    nav {
+      padding: 0.85rem 1.25rem;
+    }
+
+    .nav-hamburger {
+      display: flex;
+    }
+
+    .nav-links {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 280px;
+      height: 100vh;
+      background: var(--cream);
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 5rem 2rem 2rem;
+      gap: 1.5rem;
+      box-shadow: -4px 0 24px rgba(44, 74, 90, 0.1);
+      transition: right 0.3s ease;
+    }
+
+    .nav-links.open {
+      right: 0;
+    }
+
+    .nav-links a {
+      font-size: 1rem;
+    }
+
+    .nav-logo-img {
+      height: 40px;
+    }
+  }
+</style>
+
+<script is:inline>
+  const hamburger = document.getElementById('nav-hamburger');
+  const navLinks = document.getElementById('nav-links');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
+    hamburger.setAttribute('aria-expanded', !isOpen);
+    navLinks.classList.toggle('open');
+  });
+
+  // Close on link click
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.setAttribute('aria-expanded', 'false');
+      navLinks.classList.remove('open');
+    });
+  });
+</script>

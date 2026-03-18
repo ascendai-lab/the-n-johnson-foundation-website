@@ -1,0 +1,97 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  label?: string;
+}
+
+const { title, subtitle, label } = Astro.props;
+---
+
+<section class="page-hero">
+  <div class="page-hero-blob-1"></div>
+  <div class="page-hero-blob-2"></div>
+  <div class="page-hero-inner">
+    {label && <div class="section-label rise d1">{label}</div>}
+    <h1 class="page-hero-title rise d2" set:html={title} />
+    {subtitle && <p class="page-hero-subtitle rise d3">{subtitle}</p>}
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    background: var(--sand);
+    padding: 10rem 6rem 5rem;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .page-hero-blob-1 {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--teal-mist) 0%, transparent 65%);
+    border-radius: 50%;
+    top: -100px;
+    left: -80px;
+    pointer-events: none;
+    opacity: 0.6;
+    animation: blobMorph 15s ease-in-out infinite;
+  }
+
+  .page-hero-blob-2 {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--purple-mist) 0%, transparent 65%);
+    border-radius: 50%;
+    bottom: -80px;
+    right: -60px;
+    pointer-events: none;
+    opacity: 0.5;
+    animation: blobMorph 18s ease-in-out infinite reverse;
+  }
+
+  .page-hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .page-hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--bark);
+    letter-spacing: -0.5px;
+    margin-bottom: 1.2rem;
+  }
+
+  .page-hero-title :global(em) {
+    font-style: italic;
+    color: var(--teal-deep);
+  }
+
+  .page-hero-subtitle {
+    font-size: 1.05rem;
+    color: var(--bark-mid);
+    line-height: 1.75;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 1024px) {
+    .page-hero {
+      padding: 8rem 2.5rem 4rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .page-hero {
+      padding: 7rem 1.5rem 3rem;
+    }
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+---
+
+<BaseLayout title="Partner With Us — The N Johnson Foundation" description="Partner with The N Johnson Foundation to support education and mental wellness for children.">
+  <PageHero label="Work With Us" title="Partner with <em>The N Johnson Foundation.</em>" subtitle="Together, we can expand our reach and deepen our impact for students and families." />
+
+  <section class="partner-section">
+    <div class="partner-inner">
+      <div class="section-label reveal">Partnership Types</div>
+      <h2 class="partner-heading reveal reveal-delay-1">There are many ways to <em>partner.</em></h2>
+      <div class="partner-grid">
+        <div class="partner-card reveal reveal-delay-1">
+          <span class="partner-icon"><i data-lucide="building-2"></i></span>
+          <h3>Corporate Partners</h3>
+          <p>Align your brand with a mission that matters. Corporate partners can sponsor programs, match employee donations, or provide in-kind support for supply drives and events.</p>
+        </div>
+        <div class="partner-card reveal reveal-delay-2">
+          <span class="partner-icon"><i data-lucide="school"></i></span>
+          <h3>School Partners</h3>
+          <p>We work directly with schools in Belize and the U.S. to understand needs and deliver support. If your school or district would benefit from our programs, let's connect.</p>
+        </div>
+        <div class="partner-card reveal reveal-delay-3">
+          <span class="partner-icon"><i data-lucide="heart-handshake"></i></span>
+          <h3>Community Organizations</h3>
+          <p>Nonprofits, faith-based groups, and community organizations that share our values can co-create programs, share resources, and amplify impact together.</p>
+        </div>
+        <div class="partner-card reveal reveal-delay-1">
+          <span class="partner-icon"><i data-lucide="user-check"></i></span>
+          <h3>Individual Sponsors</h3>
+          <p>Sponsor a student's scholarship, fund a classroom supply bundle, or underwrite an upcoming mental wellness workshop. Your name, your impact.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="partner-benefits">
+    <div class="benefits-inner">
+      <div class="benefits-left">
+        <h2 class="benefits-heading reveal">Why partner with <em>us?</em></h2>
+        <div class="benefits-list reveal reveal-delay-1">
+          <div class="benefit-item"><i data-lucide="check-circle"></i><span>Direct, measurable impact on students' lives</span></div>
+          <div class="benefit-item"><i data-lucide="check-circle"></i><span>Transparent reporting on fund usage</span></div>
+          <div class="benefit-item"><i data-lucide="check-circle"></i><span>Community-first approach that respects local culture</span></div>
+          <div class="benefit-item"><i data-lucide="check-circle"></i><span>Flexible partnership structures</span></div>
+          <div class="benefit-item"><i data-lucide="check-circle"></i><span>Co-branding and recognition opportunities</span></div>
+        </div>
+      </div>
+      <div class="benefits-right reveal reveal-delay-2">
+        <div class="partner-cta-card">
+          <h3>Let's build something together.</h3>
+          <p>We'd love to learn about your organization and explore how we can work together to support students and families.</p>
+          <a href="/contact" class="btn-teal"><i data-lucide="send"></i> Get in touch</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  [data-lucide] { width: 20px; height: 20px; stroke: var(--teal-deep); flex-shrink: 0; }
+  .partner-icon [data-lucide] { width: 32px; height: 32px; }
+
+  .partner-section { padding: 6rem; background: var(--cream); }
+  .partner-inner { max-width: 1000px; margin: 0 auto; }
+  .partner-heading { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--bark); line-height: 1.2; margin-bottom: 2.5rem; }
+  .partner-heading em { font-style: italic; color: var(--teal-deep); }
+  .partner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .partner-card { background: var(--sand); border-radius: 24px; padding: 2rem; transition: transform 0.3s, box-shadow 0.3s; }
+  .partner-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(44, 74, 90, 0.08); }
+  .partner-icon { display: block; margin-bottom: 1rem; }
+  .partner-card h3 { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 700; color: var(--bark); margin-bottom: 0.6rem; }
+  .partner-card p { font-size: 0.9rem; color: var(--bark-mid); line-height: 1.7; }
+
+  .partner-benefits { padding: 6rem; background: var(--sand); }
+  .benefits-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 1000px; margin: 0 auto; align-items: center; }
+  .benefits-heading { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--bark); line-height: 1.2; margin-bottom: 2rem; }
+  .benefits-heading em { font-style: italic; color: var(--teal-deep); }
+  .benefits-list { display: flex; flex-direction: column; gap: 1rem; }
+  .benefit-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.95rem; color: var(--bark-mid); }
+
+  .partner-cta-card { background: var(--cream); border-radius: 24px; padding: 2.5rem; }
+  .partner-cta-card h3 { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 700; color: var(--bark); margin-bottom: 1rem; }
+  .partner-cta-card p { font-size: 0.92rem; color: var(--bark-mid); line-height: 1.7; margin-bottom: 1.5rem; }
+
+  @media (max-width: 1024px) {
+    .partner-section, .partner-benefits { padding: 4rem 2.5rem; }
+    .benefits-inner { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .partner-section, .partner-benefits { padding: 3.5rem 1.5rem; }
+    .partner-grid { grid-template-columns: 1fr; }
+  }
+</style>

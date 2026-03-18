@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+---
+
+<BaseLayout title="School Donations — The N Johnson Foundation">
+  <PageHero label="Programs" title="School <em>Donations</em>" subtitle="Classroom resources tailored to what teachers and students actually need." />
+
+  <section class="program-detail">
+    <div class="detail-inner">
+      <div class="detail-content">
+        <h2 class="detail-heading reveal">Supporting schools from the <em>inside out.</em></h2>
+        <p class="detail-body reveal reveal-delay-1">Individual student support is critical — but schools themselves also need resources. Many schools in Belize operate with limited budgets and outdated materials. Teachers often spend their own money to keep classrooms functional.</p>
+        <p class="detail-body reveal reveal-delay-2">The N Johnson Foundation works directly with partner schools to understand what they need — <strong>not what we assume they need.</strong> We provide classroom resources, teaching materials, and institutional support tailored to each school's specific situation.</p>
+
+        <h3 class="detail-subhead reveal reveal-delay-3">How we support schools</h3>
+        <div class="detail-list reveal reveal-delay-3">
+          <div class="detail-item"><i data-lucide="check-circle"></i><span>Classroom supplies and teaching materials</span></div>
+          <div class="detail-item"><i data-lucide="check-circle"></i><span>Books for school libraries</span></div>
+          <div class="detail-item"><i data-lucide="check-circle"></i><span>Technology and learning tools</span></div>
+          <div class="detail-item"><i data-lucide="check-circle"></i><span>Direct coordination with school administrators</span></div>
+        </div>
+      </div>
+
+      <div class="detail-sidebar">
+        <div class="partner-card reveal">
+          <span class="partner-icon"><i data-lucide="school"></i></span>
+          <h3>Muslim Community School</h3>
+          <span class="partner-role">Primary School Partner — Belize</span>
+          <p>Our primary partner school and recipient of direct classroom donations, scholarship support, and supply drives for both students and teachers.</p>
+        </div>
+        <div class="impact-quote reveal reveal-delay-1">
+          <p>"We don't bring solutions from the outside. We listen, learn, and deliver what each school actually needs."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="program-cta">
+    <div class="program-cta-inner reveal">
+      <h2>Equip a <em>classroom.</em></h2>
+      <p>$250 provides a classroom resource bundle — books, materials, and tools donated directly to a school in Belize.</p>
+      <div class="cta-buttons">
+        <a href="/donate" class="btn-teal"><i data-lucide="heart"></i> Donate now</a>
+        <a href="/programs" class="btn-text-link">← Back to programs</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  [data-lucide] { width: 20px; height: 20px; stroke: var(--teal-deep); flex-shrink: 0; }
+  .program-detail { padding: 6rem; background: var(--cream); }
+  .detail-inner { display: grid; grid-template-columns: 1.4fr 1fr; gap: 5rem; max-width: 1100px; margin: 0 auto; align-items: start; }
+  .detail-heading { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--bark); line-height: 1.2; margin-bottom: 1.5rem; }
+  .detail-heading em { font-style: italic; color: var(--teal-deep); }
+  .detail-body { font-size: 1rem; color: var(--bark-mid); line-height: 1.8; margin-bottom: 1.2rem; }
+  .detail-body strong { color: var(--bark); font-weight: 600; }
+  .detail-subhead { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--bark); margin: 2rem 0 1rem; }
+  .detail-list { display: flex; flex-direction: column; gap: 0.8rem; }
+  .detail-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.92rem; color: var(--bark-mid); }
+  .detail-sidebar { display: flex; flex-direction: column; gap: 1.2rem; }
+  .partner-card { background: var(--sand); border-radius: 20px; padding: 2rem; }
+  .partner-icon { display: block; margin-bottom: 1rem; }
+  .partner-icon [data-lucide] { width: 32px; height: 32px; stroke: var(--teal-deep); }
+  .partner-card h3 { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--bark); margin-bottom: 0.3rem; }
+  .partner-role { font-size: 0.82rem; color: var(--teal-deep); font-weight: 500; display: block; margin-bottom: 0.8rem; }
+  .partner-card p { font-size: 0.9rem; color: var(--bark-mid); line-height: 1.7; }
+  .impact-quote { background: var(--teal-mist); border-radius: 20px; padding: 2rem; border-left: 4px solid var(--teal); }
+  .impact-quote p { font-family: var(--font-serif); font-style: italic; font-size: 0.95rem; color: var(--bark); line-height: 1.6; }
+  .program-cta { padding: 5rem; background: var(--bark); text-align: center; }
+  .program-cta-inner { max-width: 500px; margin: 0 auto; }
+  .program-cta h2 { font-family: var(--font-serif); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--cream); line-height: 1.2; margin-bottom: 0.8rem; }
+  .program-cta h2 em { font-style: italic; color: var(--teal-wash); }
+  .program-cta p { font-size: 0.95rem; color: rgba(253, 250, 246, 0.6); line-height: 1.7; margin-bottom: 1.5rem; }
+  .cta-buttons { display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap; align-items: center; }
+  @media (max-width: 1024px) { .program-detail, .program-cta { padding: 4rem 2.5rem; } .detail-inner { grid-template-columns: 1fr; gap: 3rem; } }
+  @media (max-width: 640px) { .program-detail, .program-cta { padding: 3.5rem 1.5rem; } }
+</style>

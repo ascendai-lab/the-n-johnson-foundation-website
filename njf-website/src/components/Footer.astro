@@ -1,0 +1,190 @@
+---
+const programLinks = [
+  { label: 'Scholarships', href: '/programs/scholarships' },
+  { label: 'Supply Drives', href: '/programs/supply-drives' },
+  { label: 'Mental Wellness', href: '/programs/mental-wellness' },
+  { label: 'School Support', href: '/programs/school-support' },
+  { label: 'Peer Mentorship', href: '/programs/peer-mentorship' },
+];
+
+const foundationLinks = [
+  { label: 'About Us', href: '/about' },
+  { label: 'Our Impact', href: '/about#impact' },
+  { label: 'Founders', href: '/about#founders' },
+  { label: 'Belize', href: '/about#belize' },
+];
+
+const involvedLinks = [
+  { label: 'Donate', href: '/donate' },
+  { label: 'Volunteer', href: '/volunteer' },
+  { label: 'Partner With Us', href: '/partner' },
+  { label: "Nicole's Books", href: 'https://www.amazon.com/author/nicoleswasojohnsonwrites', external: true },
+  { label: 'Contact', href: '/contact' },
+];
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-identity">
+      <img src="/images/logo-footer.jpg" alt="The N Johnson Foundation" class="footer-logo-img" />
+      <p class="footer-desc">A community-driven nonprofit supporting children and families through education, emotional wellness, and direct community support in Belize and the United States.</p>
+      <div class="footer-contact">
+        24325 Crenshaw Blvd, Unit #1031<br />
+        Torrance, CA 90505<br />
+        <a href="tel:3236785427">323-678-5427</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Programs</h4>
+      <ul>
+        {programLinks.map(link => (
+          <li><a href={link.href}>{link.label}</a></li>
+        ))}
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Foundation</h4>
+      <ul>
+        {foundationLinks.map(link => (
+          <li><a href={link.href}>{link.label}</a></li>
+        ))}
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Get Involved</h4>
+      <ul>
+        {involvedLinks.map(link => (
+          <li>
+            <a href={link.href} {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; {currentYear} The N Johnson Foundation. All rights reserved.</span>
+    <span><a href="/privacy">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="/terms">Terms</a></span>
+  </div>
+</footer>
+
+<style>
+  footer {
+    background: var(--bark);
+    color: rgba(253, 250, 246, 0.55);
+    padding: 5rem 6rem 2.5rem;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    padding-bottom: 3.5rem;
+    border-bottom: 1px solid rgba(253, 250, 246, 0.07);
+    margin-bottom: 2rem;
+  }
+
+  .footer-logo-img {
+    height: 56px;
+    width: auto;
+    display: block;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+    border-radius: 8px;
+  }
+
+  .footer-desc {
+    font-size: 0.84rem;
+    line-height: 1.7;
+    max-width: 270px;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-contact {
+    font-size: 0.82rem;
+    line-height: 1.8;
+    color: rgba(253, 250, 246, 0.4);
+  }
+
+  .footer-contact a {
+    color: var(--teal-wash);
+  }
+
+  .footer-col h4 {
+    font-family: var(--font-serif);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.02em;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .footer-col a {
+    font-size: 0.84rem;
+    color: rgba(253, 250, 246, 0.45);
+    transition: color 0.2s;
+  }
+
+  .footer-col a:hover {
+    color: var(--teal-wash);
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    color: rgba(253, 250, 246, 0.28);
+  }
+
+  .footer-bottom a {
+    color: rgba(46, 169, 155, 0.7);
+  }
+
+  @media (max-width: 1024px) {
+    footer {
+      padding: 4rem 2.5rem 2rem;
+    }
+
+    .footer-top {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .footer-identity {
+      grid-column: span 2;
+    }
+  }
+
+  @media (max-width: 640px) {
+    footer {
+      padding: 3.5rem 1.5rem 2rem;
+    }
+
+    .footer-top {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-identity {
+      grid-column: span 1;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+</style>

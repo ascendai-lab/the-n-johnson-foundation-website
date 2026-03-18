@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+---
+
+<BaseLayout title="Donate — The N Johnson Foundation" description="Support education and mental wellness for children in Belize and the United States through your donation.">
+  <PageHero label="Support Our Mission" title="Help a child focus on <em>learning, not hardship.</em>" subtitle="Every contribution — large or small — means a child shows up to school with what they need." />
+
+  <section class="donate-tiers">
+    <div class="tiers-inner">
+      <div class="tier-card reveal">
+        <span class="tier-icon"><i data-lucide="backpack"></i></span>
+        <div class="tier-amount">$25</div>
+        <h3>School supplies for one child</h3>
+        <p>A backpack, notebook, and pens so a student walks in prepared and proud.</p>
+        <a href="#donate-placeholder" class="btn-teal">Donate $25 <i data-lucide="arrow-right"></i></a>
+      </div>
+      <div class="tier-card featured reveal reveal-delay-1">
+        <span class="tier-badge">Most Impact</span>
+        <span class="tier-icon"><i data-lucide="graduation-cap"></i></span>
+        <div class="tier-amount">$100</div>
+        <h3>Scholarship contribution</h3>
+        <p>Helps cover fees so a family isn't forced to pull their child from school.</p>
+        <a href="#donate-placeholder" class="btn-teal">Donate $100 <i data-lucide="arrow-right"></i></a>
+      </div>
+      <div class="tier-card reveal reveal-delay-2">
+        <span class="tier-icon"><i data-lucide="school"></i></span>
+        <div class="tier-amount">$250</div>
+        <h3>Classroom resource bundle</h3>
+        <p>Books, materials, and tools donated directly to a school in Belize.</p>
+        <a href="#donate-placeholder" class="btn-teal">Donate $250 <i data-lucide="arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-it-helps">
+    <div class="helps-inner">
+      <div class="helps-left">
+        <div class="section-label reveal">How Your Donation Helps</div>
+        <h2 class="helps-heading reveal reveal-delay-1">100% of donations go to <em>programs.</em></h2>
+        <p class="helps-body reveal reveal-delay-2">Your donation directly funds scholarships, school supplies, classroom resources, and community programs. We operate with minimal overhead — because every dollar matters when a child's education is at stake.</p>
+        <div class="helps-list reveal reveal-delay-3">
+          <div class="helps-item"><i data-lucide="check-circle"></i><span>Scholarships covering tuition and school fees</span></div>
+          <div class="helps-item"><i data-lucide="check-circle"></i><span>Backpacks and classroom materials for 30+ students</span></div>
+          <div class="helps-item"><i data-lucide="check-circle"></i><span>Direct donations to partner schools</span></div>
+          <div class="helps-item"><i data-lucide="check-circle"></i><span>Future mental wellness workshops</span></div>
+        </div>
+      </div>
+      <div class="helps-right">
+        <div class="book-card reveal reveal-delay-2">
+          <span class="book-icon"><i data-lucide="book-open"></i></span>
+          <h3>Support through reading</h3>
+          <p>Proceeds from Nicole Johnson's published novels — stories of resilience and healing — fund the Foundation's programs directly. Every book purchased is a contribution to a child's education.</p>
+          <a href="https://www.amazon.com/author/nicoleswasojohnsonwrites" target="_blank" rel="noopener noreferrer" class="btn-bark" style="margin-top:1.2rem;"><i data-lucide="book-open"></i> Shop on Amazon</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="donate-contact">
+    <div class="donate-contact-inner reveal">
+      <h2>Prefer to donate by <em>other means?</em></h2>
+      <p>Contact us to discuss corporate sponsorships, in-kind donations, or other ways to support our mission.</p>
+      <a href="/contact" class="btn-bark">Get in touch <i data-lucide="arrow-right"></i></a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  [data-lucide] { width: 20px; height: 20px; stroke: var(--teal-deep); flex-shrink: 0; }
+
+  .donate-tiers { padding: 6rem; background: var(--cream); }
+  .tiers-inner { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
+
+  .tier-card { background: var(--sand); border-radius: 24px; padding: 2.5rem 2rem; text-align: center; position: relative; transition: transform 0.3s, box-shadow 0.3s; }
+  .tier-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(44, 74, 90, 0.08); }
+  .tier-card.featured { background: var(--bark); color: var(--cream); }
+  .tier-card.featured h3 { color: var(--cream); }
+  .tier-card.featured p { color: rgba(253, 250, 246, 0.6); }
+  .tier-card.featured .tier-amount { color: var(--teal-wash); }
+  .tier-card.featured .tier-icon [data-lucide] { stroke: var(--teal-wash); }
+  .tier-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--teal); color: var(--cream); font-size: 0.72rem; font-weight: 600; padding: 0.35rem 1rem; border-radius: 100px; white-space: nowrap; }
+
+  .tier-icon { display: block; margin-bottom: 1.2rem; }
+  .tier-icon [data-lucide] { width: 36px; height: 36px; stroke: var(--teal-deep); margin: 0 auto; }
+  .tier-amount { font-family: var(--font-serif); font-size: 2.5rem; font-weight: 700; color: var(--teal-deep); margin-bottom: 0.6rem; }
+  .tier-card h3 { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 700; color: var(--bark); margin-bottom: 0.6rem; }
+  .tier-card p { font-size: 0.88rem; color: var(--bark-mid); line-height: 1.6; margin-bottom: 1.5rem; }
+
+  .how-it-helps { padding: 6rem; background: var(--sand); }
+  .helps-inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; max-width: 1000px; margin: 0 auto; align-items: start; }
+  .helps-heading { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--bark); line-height: 1.2; margin-bottom: 1.4rem; }
+  .helps-heading em { font-style: italic; color: var(--teal-deep); }
+  .helps-body { font-size: 1rem; color: var(--bark-mid); line-height: 1.8; margin-bottom: 1.5rem; }
+  .helps-list { display: flex; flex-direction: column; gap: 0.8rem; }
+  .helps-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.92rem; color: var(--bark-mid); }
+
+  .book-card { background: var(--cream); border-radius: 24px; padding: 2.5rem; }
+  .book-icon { display: block; margin-bottom: 1rem; }
+  .book-icon [data-lucide] { width: 32px; height: 32px; stroke: var(--teal-deep); }
+  .book-card h3 { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--bark); margin-bottom: 0.8rem; }
+  .book-card p { font-size: 0.92rem; color: var(--bark-mid); line-height: 1.7; }
+
+  .donate-contact { padding: 5rem; background: var(--bark); text-align: center; }
+  .donate-contact-inner { max-width: 500px; margin: 0 auto; }
+  .donate-contact h2 { font-family: var(--font-serif); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--cream); line-height: 1.2; margin-bottom: 0.8rem; }
+  .donate-contact h2 em { font-style: italic; color: var(--teal-wash); }
+  .donate-contact p { font-size: 0.95rem; color: rgba(253, 250, 246, 0.6); line-height: 1.7; margin-bottom: 1.5rem; }
+
+  @media (max-width: 1024px) {
+    .donate-tiers, .how-it-helps, .donate-contact { padding: 4rem 2.5rem; }
+    .tiers-inner { grid-template-columns: 1fr; max-width: 400px; }
+    .helps-inner { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .donate-tiers, .how-it-helps, .donate-contact { padding: 3.5rem 1.5rem; }
+  }
+</style>

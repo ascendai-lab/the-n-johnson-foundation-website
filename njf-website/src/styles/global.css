@@ -1,0 +1,295 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────
+   TAILWIND 4 THEME TOKENS
+───────────────────────────────────────── */
+@theme {
+  --color-teal: #2EA99B;
+  --color-teal-deep: #1F8579;
+  --color-teal-mist: #E8F5F3;
+  --color-teal-wash: #C8EAE6;
+  --color-purple: #7E62A7;
+  --color-purple-mist: #F0EBF8;
+  --color-slate: #668A9F;
+  --color-slate-mist: #EEF3F6;
+  --color-sand: #EEF3F6;
+  --color-sand-dark: #DDE8EF;
+  --color-cream: #F8FAFC;
+  --color-bark: #2C4A5A;
+  --color-bark-mid: #4A6978;
+  --color-bark-light: #668A9F;
+  --color-leaf: #2EA99B;
+
+  --font-serif: 'Lora', Georgia, serif;
+  --font-sans: 'DM Sans', sans-serif;
+}
+
+/* ─────────────────────────────────────────
+   CSS CUSTOM PROPERTIES (for non-Tailwind usage)
+───────────────────────────────────────── */
+:root {
+  --teal: #2EA99B;
+  --teal-deep: #1F8579;
+  --teal-mist: #E8F5F3;
+  --teal-wash: #C8EAE6;
+  --purple: #7E62A7;
+  --purple-mist: #F0EBF8;
+  --slate: #668A9F;
+  --slate-mist: #EEF3F6;
+  --sand: #EEF3F6;
+  --sand-dark: #DDE8EF;
+  --cream: #F8FAFC;
+  --bark: #2C4A5A;
+  --bark-mid: #4A6978;
+  --bark-light: #668A9F;
+  --leaf: #2EA99B;
+  --font-serif: 'Lora', Georgia, serif;
+  --font-sans: 'DM Sans', sans-serif;
+}
+
+/* ─────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--cream);
+  color: var(--bark);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ─────────────────────────────────────────
+   GRAIN OVERLAY
+───────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.028;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ─────────────────────────────────────────
+   ANIMATIONS
+───────────────────────────────────────── */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(36px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes driftLeft {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-12px) rotate(1deg); }
+}
+
+@keyframes blobMorph {
+  0%, 100% { border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%; }
+  33% { border-radius: 50% 50% 40% 60% / 60% 40% 60% 40%; }
+  66% { border-radius: 40% 60% 60% 40% / 40% 55% 45% 60%; }
+}
+
+@keyframes slowSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.rise {
+  opacity: 0;
+  animation: riseIn 0.8s cubic-bezier(.22, .68, 0, 1.2) both;
+}
+
+.drift {
+  opacity: 0;
+  animation: driftLeft 0.7s cubic-bezier(.22, .68, 0, 1.2) both;
+}
+
+.d1 { animation-delay: 0.05s; }
+.d2 { animation-delay: 0.18s; }
+.d3 { animation-delay: 0.32s; }
+.d4 { animation-delay: 0.46s; }
+.d5 { animation-delay: 0.60s; }
+
+/* ─────────────────────────────────────────
+   SCROLL REVEAL
+───────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s cubic-bezier(.22, .68, 0, 1.2), transform 0.75s cubic-bezier(.22, .68, 0, 1.2);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.18s; }
+.reveal-delay-3 { transition-delay: 0.28s; }
+.reveal-delay-4 { transition-delay: 0.38s; }
+
+/* ─────────────────────────────────────────
+   LUCIDE ICONS
+───────────────────────────────────────── */
+[data-lucide] {
+  display: inline-block;
+  vertical-align: middle;
+  stroke-width: 1.75;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────
+   BUTTONS
+───────────────────────────────────────── */
+.btn-bark {
+  background: var(--bark);
+  color: var(--cream);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.9rem 2rem;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s, transform 0.2s;
+  letter-spacing: 0.01em;
+}
+
+.btn-bark:hover {
+  background: var(--teal-deep);
+  transform: translateY(-2px);
+}
+
+.btn-bark:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.btn-teal {
+  background: var(--teal);
+  color: var(--cream);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.9rem 2.2rem;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 4px 20px rgba(46, 169, 155, 0.3);
+}
+
+.btn-teal:hover {
+  background: var(--teal-deep);
+  transform: translateY(-2px);
+}
+
+.btn-teal:focus-visible {
+  outline: 2px solid var(--bark);
+  outline-offset: 2px;
+}
+
+.btn-text-link {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--bark-mid);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.2s, gap 0.2s;
+}
+
+.btn-text-link:hover {
+  color: var(--teal-deep);
+  gap: 0.7rem;
+}
+
+.btn-text-link:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.btn-bark [data-lucide],
+.btn-teal [data-lucide],
+.btn-text-link [data-lucide] {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
+/* ─────────────────────────────────────────
+   SECTION LABELS (shared)
+───────────────────────────────────────── */
+.section-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bark-light);
+  font-weight: 500;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--bark-light);
+}
+
+/* Dark variant for impact section */
+.section-label-dark {
+  color: rgba(253, 250, 246, 0.4);
+}
+
+.section-label-dark::before {
+  background: var(--teal);
+}
