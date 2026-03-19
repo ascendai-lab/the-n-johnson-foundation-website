@@ -55,6 +55,21 @@ const currentPath = Astro.url.pathname;
 
   <Footer />
 
+  <!-- Zeffy Donation Modal -->
+  <div id="zeffy-modal" class="zeffy-overlay" aria-hidden="true">
+    <div class="zeffy-modal-content">
+      <button id="zeffy-close" class="zeffy-close" aria-label="Close donation form">&times;</button>
+      <iframe
+        id="zeffy-iframe"
+        title="Donation form powered by Zeffy"
+        src="about:blank"
+        data-base-src="https://www.zeffy.com/embed/donation-form/donate-to-change-lives-8784"
+        allowpaymentrequest
+        allowTransparency="true"
+      ></iframe>
+    </div>
+  </div>
+
   <script is:inline>
     // Initialise Lucide icons
     lucide.createIcons();
@@ -76,6 +91,43 @@ const currentPath = Astro.url.pathname;
       });
     }, { threshold: 0.12 });
     revealEls.forEach(el => revealObserver.observe(el));
+
+    // Zeffy donation popup
+    const zeffyModal = document.getElementById('zeffy-modal');
+    const zeffyIframe = document.getElementById('zeffy-iframe');
+    const zeffyClose = document.getElementById('zeffy-close');
+    const baseSrc = zeffyIframe.getAttribute('data-base-src');
+
+    function openZeffy(amount) {
+      const src = amount ? baseSrc + '?amount=' + amount : baseSrc;
+      zeffyIframe.src = src;
+      zeffyModal.classList.add('active');
+      zeffyModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeZeffy() {
+      zeffyModal.classList.remove('active');
+      zeffyModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      setTimeout(function() { zeffyIframe.src = 'about:blank'; }, 300);
+    }
+
+    zeffyClose.addEventListener('click', closeZeffy);
+    zeffyModal.addEventListener('click', function(e) {
+      if (e.target === zeffyModal) closeZeffy();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && zeffyModal.classList.contains('active')) closeZeffy();
+    });
+
+    // Any link/button with data-zeffy opens the popup
+    document.querySelectorAll('[data-zeffy]').forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        openZeffy(el.getAttribute('data-zeffy'));
+      });
+    });
   </script>
 </body>
 </html>
