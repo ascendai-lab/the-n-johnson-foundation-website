@@ -1,0 +1,330 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+
+const photos = [
+  { src: '/images/gallery/community-meeting.jpg', alt: 'Nicole Johnson meeting with school staff at Muslim Community Primary School in Belize City', caption: 'Building relationships with school leaders in Belize City' },
+  { src: '/images/gallery/students-backpacks.jpg', alt: 'Students receiving new backpacks and school supplies during a Foundation supply drive', caption: 'Students pick up their new backpacks during a supply drive' },
+  { src: '/images/gallery/classroom-visit.jpg', alt: 'Foundation team visiting a classroom with students at Muslim Community Primary School', caption: 'Visiting classrooms and connecting with students firsthand' },
+  { src: '/images/gallery/teacher-with-students.jpg', alt: 'School staff member speaking with students as they receive supplies', caption: 'A teacher guides students through the supply distribution' },
+  { src: '/images/gallery/students-lineup.jpg', alt: 'Students lined up in classroom waiting to receive school supplies and backpacks', caption: 'Students eagerly await their new supplies' },
+  { src: '/images/gallery/book-donation.jpg', alt: 'Nicole Johnson and school staff holding donated books including IMANI and A Belizean Girl', caption: 'Donating copies of Nicole\'s novels to the school library' },
+  { src: '/images/gallery/supplies-barrel.jpg', alt: 'Barrel and boxes packed with school supplies ready for distribution in Belize', caption: 'A barrel full of supplies shipped from the U.S. to Belize' },
+  { src: '/images/gallery/unpacking-supplies.jpg', alt: 'Foundation team and school staff unpacking boxes of donated school supplies', caption: 'Unpacking supplies with the school administration team' },
+  { src: '/images/gallery/reviewing-journals.jpg', alt: 'Team reviewing donated journals and educational materials for students', caption: 'Reviewing journals and educational materials before distribution' },
+  { src: '/images/gallery/holding-books.jpg', alt: 'Three women smiling and holding copies of IMANI and A Belizean Girl with backpacks in foreground', caption: 'Smiles all around — books and backpacks ready to change lives' },
+];
+---
+
+<BaseLayout title="Gallery — The N Johnson Foundation" description="Photos from The N Johnson Foundation's supply drives, school visits, and community programs in Belize.">
+
+  <PageHero
+    label="Photo Gallery"
+    title="See the <em>impact</em> in action."
+    subtitle="Moments from our supply drives, school visits, and community programs in Belize."
+  />
+
+  <!-- ══ GALLERY GRID ══ -->
+  <section class="gallery-section">
+    <div class="gallery-inner">
+      {photos.map((photo, i) => (
+        <div class={`gallery-item ${i === 0 || i === 5 ? 'featured' : ''} reveal ${i > 0 ? `reveal-delay-${((i % 4) || 1)}` : ''}`}>
+          <div class="gallery-img-wrap" data-lightbox={i}>
+            <img src={photo.src} alt={photo.alt} loading={i < 4 ? 'eager' : 'lazy'} />
+            <div class="gallery-overlay">
+              <span class="gallery-zoom"><i data-lucide="maximize-2"></i></span>
+            </div>
+          </div>
+          <p class="gallery-caption">{photo.caption}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ══ LIGHTBOX ══ -->
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <button class="lightbox-close" aria-label="Close lightbox"><i data-lucide="x"></i></button>
+    <button class="lightbox-prev" aria-label="Previous photo"><i data-lucide="chevron-left"></i></button>
+    <button class="lightbox-next" aria-label="Next photo"><i data-lucide="chevron-right"></i></button>
+    <div class="lightbox-img-wrap">
+      <img id="lightbox-img" src="" alt="" />
+    </div>
+    <p id="lightbox-caption" class="lightbox-caption"></p>
+    <span id="lightbox-counter" class="lightbox-counter"></span>
+  </div>
+
+  <!-- ══ CTA ══ -->
+  <section class="gallery-cta">
+    <div class="gallery-cta-inner reveal">
+      <h2>Help us fill more <em>backpacks.</em></h2>
+      <p>Every photo here represents a child whose day just got a little brighter. Your support makes the next supply drive possible.</p>
+      <div class="gallery-cta-buttons">
+        <a href="/donate" class="btn-teal" data-zeffy=""><i data-lucide="heart"></i> Donate now</a>
+        <a href="/volunteer" class="btn-bark">Volunteer <i data-lucide="arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  [data-lucide] { width: 20px; height: 20px; stroke: currentColor; }
+
+  /* ── Gallery Grid ── */
+  .gallery-section { padding: 5rem 4rem; background: var(--cream); }
+  .gallery-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .gallery-item.featured {
+    grid-column: span 2;
+  }
+
+  .gallery-img-wrap {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 4 / 3;
+  }
+
+  .gallery-item.featured .gallery-img-wrap {
+    aspect-ratio: 16 / 10;
+  }
+
+  .gallery-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .gallery-img-wrap:hover img {
+    transform: scale(1.04);
+  }
+
+  .gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(44, 74, 90, 0.45) 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .gallery-img-wrap:hover .gallery-overlay {
+    opacity: 1;
+  }
+
+  .gallery-zoom {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bark);
+  }
+
+  .gallery-zoom [data-lucide] {
+    width: 16px;
+    height: 16px;
+  }
+
+  .gallery-caption {
+    font-size: 0.85rem;
+    color: var(--bark-mid);
+    line-height: 1.5;
+    margin-top: 0.65rem;
+    padding: 0 0.25rem;
+  }
+
+  /* ── Lightbox ── */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(10, 20, 28, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .lightbox.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .lightbox-img-wrap {
+    max-width: 85vw;
+    max-height: 72vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox-img-wrap img {
+    max-width: 100%;
+    max-height: 72vh;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+    transform: scale(0.95);
+    transition: transform 0.3s;
+  }
+
+  .lightbox.active .lightbox-img-wrap img {
+    transform: scale(1);
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .lightbox-close:hover { background: rgba(255, 255, 255, 0.2); }
+  .lightbox-close:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+  .lightbox-prev, .lightbox-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.75);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .lightbox-prev { left: 1.5rem; }
+  .lightbox-next { right: 1.5rem; }
+  .lightbox-prev:hover, .lightbox-next:hover { background: rgba(255, 255, 255, 0.18); }
+  .lightbox-prev:focus-visible, .lightbox-next:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+  .lightbox-caption {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 1.2rem;
+    max-width: 500px;
+    line-height: 1.5;
+  }
+
+  .lightbox-counter {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.78rem;
+    margin-top: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── CTA ── */
+  .gallery-cta { padding: 5rem; background: var(--bark); text-align: center; }
+  .gallery-cta-inner { max-width: 550px; margin: 0 auto; }
+  .gallery-cta h2 { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--cream); line-height: 1.2; margin-bottom: 1rem; }
+  .gallery-cta h2 em { font-style: italic; color: var(--teal-wash); }
+  .gallery-cta p { font-size: 0.95rem; color: rgba(253, 250, 246, 0.6); line-height: 1.7; margin-bottom: 2rem; }
+  .gallery-cta-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .gallery-section { padding: 4rem 2.5rem; }
+    .gallery-inner { grid-template-columns: repeat(2, 1fr); }
+    .gallery-item.featured { grid-column: span 2; }
+    .gallery-cta { padding: 4rem 2.5rem; }
+  }
+
+  @media (max-width: 640px) {
+    .gallery-section { padding: 3rem 1.25rem; }
+    .gallery-inner { grid-template-columns: 1fr; gap: 1.25rem; }
+    .gallery-item.featured { grid-column: span 1; }
+    .gallery-item.featured .gallery-img-wrap { aspect-ratio: 4 / 3; }
+    .gallery-cta { padding: 3.5rem 1.5rem; }
+    .lightbox-prev, .lightbox-next { width: 40px; height: 40px; }
+    .lightbox-prev { left: 0.75rem; }
+    .lightbox-next { right: 0.75rem; }
+  }
+</style>
+
+<script is:inline>
+(function() {
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  const lbCaption = document.getElementById('lightbox-caption');
+  const lbCounter = document.getElementById('lightbox-counter');
+  const items = document.querySelectorAll('[data-lightbox]');
+  let current = 0;
+  const total = items.length;
+
+  const photos = Array.from(items).map(function(el) {
+    const img = el.querySelector('img');
+    const caption = el.closest('.gallery-item').querySelector('.gallery-caption');
+    return { src: img.src, alt: img.alt, caption: caption ? caption.textContent : '' };
+  });
+
+  function show(idx) {
+    current = (idx + total) % total;
+    lbImg.src = photos[current].src;
+    lbImg.alt = photos[current].alt;
+    lbCaption.textContent = photos[current].caption;
+    lbCounter.textContent = (current + 1) + ' / ' + total;
+    lightbox.classList.add('active');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hide() {
+    lightbox.classList.remove('active');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  items.forEach(function(el) {
+    el.addEventListener('click', function() { show(parseInt(el.getAttribute('data-lightbox'))); });
+  });
+
+  lightbox.querySelector('.lightbox-close').addEventListener('click', hide);
+  lightbox.querySelector('.lightbox-prev').addEventListener('click', function() { show(current - 1); });
+  lightbox.querySelector('.lightbox-next').addEventListener('click', function() { show(current + 1); });
+
+  lightbox.addEventListener('click', function(e) { if (e.target === lightbox) hide(); });
+
+  document.addEventListener('keydown', function(e) {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') hide();
+    if (e.key === 'ArrowLeft') show(current - 1);
+    if (e.key === 'ArrowRight') show(current + 1);
+  });
+})();
+</script>
