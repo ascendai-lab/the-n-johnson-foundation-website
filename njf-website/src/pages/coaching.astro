@@ -115,22 +115,22 @@ import PageHero from '../components/PageHero.astro';
       <h2 class="section-heading reveal reveal-delay-1">If any of this sounds like you — <em>let's talk.</em></h2>
       <div class="who-grid">
         <div class="who-card reveal reveal-delay-1">
-          <span class="who-emoji">🎖️</span>
+          <div class="who-icon"><i data-lucide="shield"></i></div>
           <h3>Veterans</h3>
           <p>Transitioning to civilian life, processing service experiences, or simply needing someone who understands.</p>
         </div>
         <div class="who-card reveal reveal-delay-2">
-          <span class="who-emoji">👩‍👧‍👦</span>
+          <div class="who-icon"><i data-lucide="users"></i></div>
           <h3>Parents & Caregivers</h3>
           <p>Carrying the weight of caring for others while neglecting your own emotional wellness and boundaries.</p>
         </div>
         <div class="who-card reveal reveal-delay-3">
-          <span class="who-emoji">🌱</span>
+          <div class="who-icon"><i data-lucide="sprout"></i></div>
           <h3>Young Adults</h3>
           <p>Navigating identity, career uncertainty, relationships, and the pressure of "figuring it all out."</p>
         </div>
         <div class="who-card reveal reveal-delay-4">
-          <span class="who-emoji">🤝</span>
+          <div class="who-icon"><i data-lucide="hand-heart"></i></div>
           <h3>Anyone Seeking Support</h3>
           <p>You don't need a diagnosis or a crisis. If you want a thoughtful conversation with someone who cares — that's enough.</p>
         </div>
@@ -325,7 +325,14 @@ import PageHero from '../components/PageHero.astro';
     transition: transform 0.3s, box-shadow 0.3s;
   }
   .who-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(44, 74, 90, 0.08); }
-  .who-emoji { font-size: 1.8rem; display: block; margin-bottom: 0.8rem; }
+  .who-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 0.8rem;
+  }
+  .who-icon i { width: 22px; height: 22px; stroke: white; }
   .who-card h3 { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 700; color: var(--bark); margin-bottom: 0.5rem; }
   .who-card p { font-size: 0.88rem; color: var(--bark-mid); line-height: 1.65; }
 
