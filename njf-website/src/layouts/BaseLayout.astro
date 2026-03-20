@@ -54,8 +54,8 @@ const currentPath = Astro.url.pathname;
     rel="stylesheet"
   />
 
-  <!-- Lucide Icons -->
-  <script is:inline src="https://unpkg.com/lucide@latest"></script>
+  <!-- Lucide Icons (deferred to avoid blocking render) -->
+  <script defer src="https://unpkg.com/lucide@0.460.0"></script>
 </head>
 
 <body>
@@ -83,8 +83,10 @@ const currentPath = Astro.url.pathname;
   </div>
 
   <script is:inline>
-    // Initialise Lucide icons
-    lucide.createIcons();
+    // Initialise Lucide icons (wait for deferred script)
+    document.addEventListener('DOMContentLoaded', function() { if (window.lucide) lucide.createIcons(); });
+    // Fallback in case DOMContentLoaded already fired
+    if (document.readyState !== 'loading' && window.lucide) lucide.createIcons();
 
     // Nav ink on scroll
     const nav = document.getElementById('nav');

@@ -104,6 +104,9 @@ const defaultIntroBody = '<p class="intro-body reveal reveal-delay-1">The N. Joh
           src={page?.heroImage ? urlFor(page.heroImage).width(680).url() : '/images/hero-nicole.png'}
           alt={page?.heroImageAlt || 'Nicole Johnson, Founder of The N Johnson Foundation'}
           class="hero-real-img"
+          width="680"
+          height="850"
+          fetchpriority="high"
         />
       </div>
 

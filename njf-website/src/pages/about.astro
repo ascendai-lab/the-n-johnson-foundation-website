@@ -106,6 +106,9 @@ const teamMembers = await sanityFetch<any[]>(`*[_type == "teamMember"] | order(o
               src={member.photo ? urlFor(member.photo).width(480).height(480).url() : '/images/founder-nicole.jpg'}
               alt={`${member.name || 'Team member'}${member.credentials ? `, ${member.credentials}` : ''}`}
               class="founder-img"
+              width="480"
+              height="480"
+              loading="lazy"
             />
           </div>
           <div class="founder-info">
