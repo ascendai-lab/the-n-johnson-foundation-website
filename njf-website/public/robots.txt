@@ -1,0 +1,11 @@
+# The N Johnson Foundation
+# https://thenjohnsonfoundation.org
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://thenjohnsonfoundation.org/sitemap.xml
+
+# LLMs.txt - AI discovery
+# https://thenjohnsonfoundation.org/llms.txt
