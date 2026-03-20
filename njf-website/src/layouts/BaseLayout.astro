@@ -20,6 +20,15 @@ const currentPath = Astro.url.pathname;
   <title>{title}</title>
   <meta name="description" content={description} />
 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6H8PXCLNT"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G6H8PXCLNT');
+  </script>
+
   <!-- Favicons -->
   <link rel="icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
