@@ -3,11 +3,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 
 const photos = [
-  { src: '/images/gallery/community-meeting.jpg', alt: 'Nicole Johnson meeting with school staff at Muslim Community Primary School in Belize City', caption: 'Building relationships with school leaders in Belize City' },
+  { src: '/images/gallery/community-meeting.jpg', alt: 'Nicole Johnson meeting with school staff at Muslim Community Primary School in Belize City', caption: 'Building relationships with school leaders in Belize City', position: 'center center' },
   { src: '/images/gallery/students-backpacks.jpg', alt: 'Students receiving new backpacks and school supplies during a Foundation supply drive', caption: 'Students pick up their new backpacks during a supply drive' },
   { src: '/images/gallery/classroom-visit.jpg', alt: 'Foundation team visiting a classroom with students at Muslim Community Primary School', caption: 'Visiting classrooms and connecting with students firsthand' },
   { src: '/images/gallery/teacher-with-students.jpg', alt: 'School staff member speaking with students as they receive supplies', caption: 'A teacher guides students through the supply distribution' },
-  { src: '/images/gallery/students-lineup.jpg', alt: 'Students lined up in classroom waiting to receive school supplies and backpacks', caption: 'Students eagerly await their new supplies' },
+  { src: '/images/gallery/students-lineup.jpg', alt: 'Students lined up in classroom waiting to receive school supplies and backpacks', caption: 'Students eagerly await their new supplies', position: 'center center' },
   { src: '/images/gallery/book-donation.jpg', alt: 'Nicole Johnson and school staff holding donated books including IMANI and A Belizean Girl', caption: 'Donating copies of Nicole\'s novels to the school library' },
   { src: '/images/gallery/unpacking-supplies.jpg', alt: 'Foundation team and school staff unpacking boxes of donated school supplies', caption: 'Unpacking supplies with the school administration team' },
   { src: '/images/gallery/reviewing-journals.jpg', alt: 'Team reviewing donated journals and educational materials for students', caption: 'Reviewing journals and educational materials before distribution' },
@@ -29,7 +29,7 @@ const photos = [
       {photos.map((photo, i) => (
         <div class={`gallery-item ${i === 0 || i === 5 ? 'featured' : ''} reveal ${i > 0 ? `reveal-delay-${((i % 4) || 1)}` : ''}`}>
           <div class="gallery-img-wrap" data-lightbox={i}>
-            <img src={photo.src} alt={photo.alt} loading={i < 4 ? 'eager' : 'lazy'} />
+            <img src={photo.src} alt={photo.alt} loading={i < 4 ? 'eager' : 'lazy'} style={photo.position ? `object-position: ${photo.position}` : ''} />
             <div class="gallery-overlay">
               <span class="gallery-zoom"><i data-lucide="maximize-2"></i></span>
             </div>
