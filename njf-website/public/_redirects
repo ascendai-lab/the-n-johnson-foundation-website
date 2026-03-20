@@ -1,0 +1,2 @@
+# Redirect old gallery URL to events
+/gallery  /events  301
