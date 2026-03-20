@@ -1,0 +1,445 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { sanityFetch, urlFor } from '../../lib/sanity';
+
+export async function getStaticPaths() {
+  const events = await sanityFetch<any[]>(`
+    *[_type == "event" && defined(slug.current)] {
+      "slug": slug.current
+    }
+  `);
+  return events.map((e) => ({ params: { slug: e.slug } }));
+}
+
+const { slug } = Astro.params;
+
+const event = await sanityFetch<any>(`
+  *[_type == "event" && slug.current == $slug][0] {
+    eventName,
+    slug,
+    date,
+    description,
+    coverPhoto,
+    photos[]{ image, alt, caption }
+  }
+`, { slug });
+
+if (!event) {
+  return Astro.redirect('/events');
+}
+
+function formatDate(dateStr: string) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+const photos = event.photos || [];
+const coverSrc = event.coverPhoto
+  ? urlFor(event.coverPhoto).width(1400).url()
+  : (photos[0]?.image ? urlFor(photos[0].image).width(1400).url() : null);
+const coverAlt = event.coverPhoto?.alt || event.eventName || '';
+---
+
+<BaseLayout
+  title={`${event.eventName} | N Johnson Foundation Events`}
+  description={event.description || `Photos and highlights from ${event.eventName}.`}
+>
+
+  <!-- ── Breadcrumb ── -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="breadcrumb-inner">
+      <a href="/events"><i data-lucide="arrow-left"></i> Back to Events</a>
+      <span class="breadcrumb-sep" aria-hidden="true">/</span>
+      <span class="breadcrumb-current">{event.eventName}</span>
+    </div>
+  </nav>
+
+  <!-- ── Event Hero ── -->
+  <section class="event-hero">
+    {coverSrc && (
+      <div class="event-hero-img-wrap">
+        <img src={coverSrc} alt={coverAlt} loading="eager" />
+        <div class="event-hero-gradient"></div>
+      </div>
+    )}
+    <div class="event-hero-content">
+      {event.date && (
+        <span class="event-date-badge"><i data-lucide="calendar"></i> {formatDate(event.date)}</span>
+      )}
+      <h1 class="event-hero-title">{event.eventName}</h1>
+      {event.description && (
+        <p class="event-hero-desc">{event.description}</p>
+      )}
+      {photos.length > 0 && (
+        <span class="event-photo-count-badge"><i data-lucide="images"></i> {photos.length} photos</span>
+      )}
+    </div>
+  </section>
+
+  <!-- ── Photo Gallery ── -->
+  {photos.length > 0 && (
+    <section class="event-gallery">
+      <div class="gallery-grid">
+        {photos.map((photo: any, i: number) => {
+          const src = photo.image ? urlFor(photo.image).width(900).url() : '';
+          return (
+            <div class={`gallery-item ${i === 0 ? 'featured' : ''} reveal`} data-lightbox={i}>
+              <div class="gallery-img-wrap">
+                <img src={src} alt={photo.alt || ''} loading={i < 3 ? 'eager' : 'lazy'} />
+                <div class="gallery-overlay">
+                  <span class="gallery-zoom"><i data-lucide="maximize-2"></i></span>
+                </div>
+              </div>
+              {photo.caption && <p class="gallery-caption">{photo.caption}</p>}
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  )}
+
+  <!-- ── Lightbox ── -->
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <button class="lightbox-close" aria-label="Close"><i data-lucide="x"></i></button>
+    <button class="lightbox-prev" aria-label="Previous"><i data-lucide="chevron-left"></i></button>
+    <button class="lightbox-next" aria-label="Next"><i data-lucide="chevron-right"></i></button>
+    <div class="lightbox-img-wrap">
+      <img id="lightbox-img" src="" alt="" />
+    </div>
+    <p id="lightbox-caption" class="lightbox-caption"></p>
+    <span id="lightbox-counter" class="lightbox-counter"></span>
+  </div>
+
+  <!-- ── Bottom Nav ── -->
+  <section class="event-bottom-nav">
+    <div class="event-bottom-inner">
+      <a href="/events" class="back-link"><i data-lucide="arrow-left"></i> All Events</a>
+      <a href="/donate" class="btn-teal"><i data-lucide="heart"></i> Support our work</a>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  [data-lucide] { width: 18px; height: 18px; stroke: currentColor; display: inline-block; vertical-align: middle; }
+
+  /* ── Breadcrumb ── */
+  .breadcrumb {
+    background: var(--cream);
+    border-bottom: 1px solid var(--sand);
+    padding: 0.9rem 2rem;
+  }
+
+  .breadcrumb-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .breadcrumb-inner a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--teal-deep);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+
+  .breadcrumb-inner a:hover { opacity: 0.7; }
+  .breadcrumb-inner a [data-lucide] { width: 15px; height: 15px; }
+
+  .breadcrumb-sep { color: var(--bark-light, #b0a090); }
+  .breadcrumb-current { color: var(--bark-mid); font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 320px; }
+
+  /* ── Hero ── */
+  .event-hero {
+    position: relative;
+    background: var(--bark);
+    overflow: hidden;
+  }
+
+  .event-hero-img-wrap {
+    position: relative;
+    aspect-ratio: 21 / 8;
+    overflow: hidden;
+  }
+
+  .event-hero-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .event-hero-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10,25,35,0.15) 0%, rgba(10,25,35,0.7) 100%);
+  }
+
+  .event-hero-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2.5rem 3rem;
+    max-width: 800px;
+  }
+
+  .event-date-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 0.35rem 0.85rem;
+    border-radius: 100px;
+    margin-bottom: 0.75rem;
+  }
+
+  .event-date-badge [data-lucide] { width: 14px; height: 14px; }
+
+  .event-hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+
+  .event-hero-desc {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.65;
+    max-width: 600px;
+    margin-bottom: 1rem;
+  }
+
+  .event-photo-count-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.75);
+    background: rgba(0,0,0,0.25);
+    padding: 0.3rem 0.75rem;
+    border-radius: 100px;
+  }
+
+  .event-photo-count-badge [data-lucide] { width: 14px; height: 14px; }
+
+  /* No cover photo fallback */
+  .event-hero:not(:has(.event-hero-img-wrap)) .event-hero-content {
+    position: static;
+    padding: 3rem 3rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* ── Gallery ── */
+  .event-gallery {
+    padding: 3rem 2rem 4rem;
+    background: var(--cream);
+  }
+
+  .gallery-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+  }
+
+  .gallery-item {
+    cursor: pointer;
+  }
+
+  .gallery-item.featured {
+    grid-column: span 2;
+  }
+
+  .gallery-img-wrap {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+
+  .gallery-item.featured .gallery-img-wrap {
+    aspect-ratio: 16 / 9;
+  }
+
+  .gallery-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .gallery-img-wrap:hover img { transform: scale(1.04); }
+
+  .gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(44, 74, 90, 0.45) 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .gallery-img-wrap:hover .gallery-overlay { opacity: 1; }
+
+  .gallery-zoom {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bark);
+  }
+
+  .gallery-zoom [data-lucide] { width: 15px; height: 15px; }
+
+  .gallery-caption {
+    font-size: 0.82rem;
+    color: var(--bark-mid);
+    line-height: 1.5;
+    margin-top: 0.55rem;
+    padding: 0 0.2rem;
+  }
+
+  /* ── Lightbox ── */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(10, 20, 28, 0.93);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .lightbox.active { opacity: 1; pointer-events: auto; }
+
+  .lightbox-img-wrap { max-width: 85vw; max-height: 72vh; display: flex; align-items: center; justify-content: center; }
+  .lightbox-img-wrap img { max-width: 100%; max-height: 72vh; object-fit: contain; border-radius: 12px; box-shadow: 0 24px 80px rgba(0,0,0,0.5); transform: scale(0.95); transition: transform 0.3s; }
+  .lightbox.active .lightbox-img-wrap img { transform: scale(1); }
+
+  .lightbox-close { position: absolute; top: 1.5rem; right: 1.5rem; width: 44px; height: 44px; border-radius: 50%; border: none; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .lightbox-close:hover { background: rgba(255,255,255,0.2); }
+
+  .lightbox-prev, .lightbox-next { position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; border: none; background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.75); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .lightbox-prev { left: 1.5rem; }
+  .lightbox-next { right: 1.5rem; }
+  .lightbox-prev:hover, .lightbox-next:hover { background: rgba(255,255,255,0.18); }
+
+  .lightbox-caption { color: rgba(255,255,255,0.7); font-size: 0.9rem; text-align: center; margin-top: 1.2rem; max-width: 500px; line-height: 1.5; }
+  .lightbox-counter { color: rgba(255,255,255,0.35); font-size: 0.78rem; margin-top: 0.5rem; letter-spacing: 0.05em; }
+
+  /* ── Bottom Nav ── */
+  .event-bottom-nav { padding: 2.5rem 2rem; background: var(--cream); border-top: 1px solid var(--sand); }
+  .event-bottom-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; font-weight: 500; color: var(--teal-deep); text-decoration: none; transition: opacity 0.2s; }
+  .back-link:hover { opacity: 0.7; }
+  .back-link [data-lucide] { width: 16px; height: 16px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-item.featured { grid-column: span 2; }
+    .event-hero-content { padding: 2rem; }
+  }
+
+  @media (max-width: 640px) {
+    .breadcrumb { padding: 0.75rem 1.25rem; }
+    .event-hero-img-wrap { aspect-ratio: 4 / 3; }
+    .event-hero-content { padding: 1.25rem; }
+    .event-hero-title { font-size: 1.6rem; }
+    .event-gallery { padding: 2rem 1.25rem 3rem; }
+    .gallery-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .gallery-item.featured { grid-column: span 1; }
+    .gallery-item.featured .gallery-img-wrap { aspect-ratio: 4 / 3; }
+    .event-bottom-nav { padding: 2rem 1.25rem; }
+    .lightbox-prev { left: 0.75rem; }
+    .lightbox-next { right: 0.75rem; }
+  }
+</style>
+
+<script is:inline>
+(function() {
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  const lbCaption = document.getElementById('lightbox-caption');
+  const lbCounter = document.getElementById('lightbox-counter');
+  const items = document.querySelectorAll('[data-lightbox]');
+  const total = items.length;
+
+  const photos = Array.from(items).map(function(el) {
+    const img = el.querySelector('img');
+    const cap = el.querySelector('.gallery-caption');
+    return { src: img ? img.src : '', alt: img ? img.alt : '', caption: cap ? cap.textContent : '' };
+  });
+
+  let current = 0;
+
+  function show(idx) {
+    current = (idx + total) % total;
+    lbImg.src = photos[current].src;
+    lbImg.alt = photos[current].alt;
+    lbCaption.textContent = photos[current].caption;
+    lbCounter.textContent = (current + 1) + ' / ' + total;
+    lightbox.classList.add('active');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hide() {
+    lightbox.classList.remove('active');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  items.forEach(function(el) {
+    el.addEventListener('click', function() { show(parseInt(el.getAttribute('data-lightbox'))); });
+  });
+
+  if (lightbox) {
+    lightbox.querySelector('.lightbox-close').addEventListener('click', hide);
+    lightbox.querySelector('.lightbox-prev').addEventListener('click', function() { show(current - 1); });
+    lightbox.querySelector('.lightbox-next').addEventListener('click', function() { show(current + 1); });
+    lightbox.addEventListener('click', function(e) { if (e.target === lightbox) hide(); });
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (!lightbox || !lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') hide();
+    if (e.key === 'ArrowLeft') show(current - 1);
+    if (e.key === 'ArrowRight') show(current + 1);
+  });
+})();
+</script>

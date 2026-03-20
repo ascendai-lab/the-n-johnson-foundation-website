@@ -1,0 +1,307 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import { sanityFetch, urlFor } from '../../lib/sanity';
+
+const events = await sanityFetch<any[]>(`
+  *[_type == "event"] | order(order asc, date desc) {
+    eventName,
+    slug,
+    date,
+    description,
+    coverPhoto,
+    "photoCount": count(photos)
+  }
+`);
+
+function formatDate(dateStr: string) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+// Pad to a multiple of 3 with "coming soon" placeholders
+const displayEvents = events || [];
+const remainder = displayEvents.length % 3;
+const placeholders = remainder === 0 ? 0 : 3 - remainder;
+---
+
+<BaseLayout
+  title="Nonprofit Community Events | N Johnson Foundation"
+  description="Photos and highlights from The N Johnson Foundation's supply drives, school visits, and community programs in Belize and the United States."
+>
+  <PageHero
+    label="Events"
+    title="See the <em>impact</em> in action."
+    subtitle="Moments from our supply drives, school visits, and community programs in Belize."
+  />
+
+  <section class="events-overview">
+    <div class="events-grid">
+
+      {displayEvents.map((event) => {
+        const slug = event.slug?.current;
+        const coverSrc = event.coverPhoto
+          ? urlFor(event.coverPhoto).width(800).height(520).fit('crop').url()
+          : null;
+        const coverAlt = event.coverPhoto?.alt || event.eventName || '';
+        return (
+          <a href={slug ? `/events/${slug}` : '#'} class="event-card reveal">
+            <div class="event-card-img-wrap">
+              {coverSrc
+                ? <img src={coverSrc} alt={coverAlt} loading="lazy" />
+                : <div class="event-card-placeholder"><i data-lucide="image"></i></div>
+              }
+              <div class="event-card-overlay">
+                {event.photoCount > 0 && (
+                  <span class="photo-badge"><i data-lucide="images"></i> {event.photoCount} photos</span>
+                )}
+              </div>
+            </div>
+            <div class="event-card-body">
+              {event.date && (
+                <span class="event-card-date"><i data-lucide="calendar"></i> {formatDate(event.date)}</span>
+              )}
+              <h2 class="event-card-title">{event.eventName}</h2>
+              {event.description && (
+                <p class="event-card-desc">{event.description.length > 120 ? event.description.slice(0, 120) + '…' : event.description}</p>
+              )}
+              <span class="event-card-cta">View event <i data-lucide="arrow-right"></i></span>
+            </div>
+          </a>
+        );
+      })}
+
+      {Array.from({ length: placeholders }).map(() => (
+        <div class="event-card event-card--coming-soon reveal">
+          <div class="event-card-img-wrap">
+            <div class="event-card-placeholder">
+              <i data-lucide="calendar-plus"></i>
+            </div>
+          </div>
+          <div class="event-card-body">
+            <span class="event-card-date coming-soon-label">Coming soon</span>
+            <h2 class="event-card-title">Another Event Coming Soon</h2>
+            <p class="event-card-desc">Stay connected — we're planning our next supply drive and community visit.</p>
+            <a href="/contact" class="event-card-cta">Get notified <i data-lucide="arrow-right"></i></a>
+          </div>
+        </div>
+      ))}
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="events-cta">
+    <div class="events-cta-inner reveal">
+      <h2>Help us fill more <em>backpacks.</em></h2>
+      <p>Every photo here represents a child whose day just got a little brighter. Your support makes the next supply drive possible.</p>
+      <div class="events-cta-buttons">
+        <a href="/donate" class="btn-teal"><i data-lucide="heart"></i> Donate now</a>
+        <a href="/volunteer" class="btn-bark">Volunteer <i data-lucide="arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  [data-lucide] { width: 18px; height: 18px; stroke: currentColor; display: inline-block; vertical-align: middle; }
+
+  /* ── Grid ── */
+  .events-overview {
+    padding: 4rem 2rem 5rem;
+    background: var(--cream);
+  }
+
+  .events-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  /* ── Card ── */
+  .event-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(44, 74, 90, 0.07), 0 8px 32px rgba(44, 74, 90, 0.05);
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s;
+  }
+
+  .event-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 4px 20px rgba(44, 74, 90, 0.12), 0 16px 48px rgba(44, 74, 90, 0.1);
+  }
+
+  .event-card:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 3px;
+  }
+
+  /* ── Card Image ── */
+  .event-card-img-wrap {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  .event-card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .event-card:hover .event-card-img-wrap img {
+    transform: scale(1.05);
+  }
+
+  .event-card-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--teal-mist) 0%, var(--sand) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--teal-deep);
+  }
+
+  .event-card-placeholder [data-lucide] {
+    width: 48px;
+    height: 48px;
+    opacity: 0.4;
+  }
+
+  .event-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 55%, rgba(10, 25, 35, 0.5) 100%);
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+  }
+
+  .photo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.92);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 0.3rem 0.75rem;
+    border-radius: 100px;
+  }
+
+  .photo-badge [data-lucide] { width: 14px; height: 14px; }
+
+  /* ── Card Body ── */
+  .event-card-body {
+    padding: 1.5rem 1.5rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .event-card-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--teal-deep);
+    background: var(--teal-mist);
+    padding: 0.28rem 0.75rem;
+    border-radius: 100px;
+    width: fit-content;
+    letter-spacing: 0.01em;
+  }
+
+  .event-card-date [data-lucide] { width: 13px; height: 13px; }
+
+  .coming-soon-label {
+    background: var(--sand);
+    color: var(--bark-mid);
+  }
+
+  .event-card-title {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--bark);
+    line-height: 1.3;
+    margin: 0.25rem 0 0;
+  }
+
+  .event-card-desc {
+    font-size: 0.875rem;
+    color: var(--bark-mid);
+    line-height: 1.65;
+    flex: 1;
+  }
+
+  .event-card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--teal-deep);
+    margin-top: 0.5rem;
+    text-decoration: none;
+    transition: gap 0.2s;
+  }
+
+  .event-card:hover .event-card-cta,
+  .event-card-cta:hover { gap: 0.6rem; }
+
+  .event-card-cta [data-lucide] { width: 14px; height: 14px; }
+
+  /* Coming soon card */
+  .event-card--coming-soon {
+    border: 2px dashed var(--sand-dark);
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.6);
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .event-card--coming-soon .event-card-cta {
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  .event-card--coming-soon:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* ── CTA Section ── */
+  .events-cta { padding: 5rem 2rem; background: var(--bark); text-align: center; }
+  .events-cta-inner { max-width: 550px; margin: 0 auto; }
+  .events-cta h2 { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--cream); line-height: 1.2; margin-bottom: 1rem; }
+  .events-cta h2 em { font-style: italic; color: var(--teal-wash); }
+  .events-cta p { font-size: 0.95rem; color: rgba(253, 250, 246, 0.6); line-height: 1.7; margin-bottom: 2rem; }
+  .events-cta-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .events-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  }
+
+  @media (max-width: 640px) {
+    .events-overview { padding: 2.5rem 1.25rem 3.5rem; }
+    .events-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+    .events-cta { padding: 3.5rem 1.5rem; }
+  }
+</style>
