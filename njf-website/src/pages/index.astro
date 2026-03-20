@@ -143,7 +143,7 @@ const defaultIntroBody = '<p class="intro-body reveal reveal-delay-1">The N. Joh
       <div class="section-label reveal">{page?.introLabel || 'Our Purpose'}</div>
       <h2 class="intro-title reveal reveal-delay-1" set:html={page?.introHeading || 'Education &amp; <em>healing</em><br />go hand in hand.'} />
     </div>
-    <div class="intro-right">
+    <div class="intro-right body-text">
       {page?.introBody ? <Fragment set:html={toHtml(page.introBody)} /> : <Fragment set:html={defaultIntroBody} />}
       <div class="intro-values reveal reveal-delay-3">
         {introValues.map((val) => (

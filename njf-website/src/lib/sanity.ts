@@ -27,16 +27,21 @@ export function toHtml(blocks: any[]): string {
   return blocks
     .filter((b) => b._type === 'block')
     .map((b) => {
-      const text = (b.children || [])
+      const rawText = (b.children || [])
         .map((child: any) => {
-          let t = child.text || '';
+          // Convert soft line breaks (\n) to <br> tags
+          let t = (child.text || '').replace(/\n/g, '<br>');
           if (child.marks?.includes('strong')) t = `<strong>${t}</strong>`;
           if (child.marks?.includes('em')) t = `<em>${t}</em>`;
           return t;
         })
         .join('');
+
+      // Empty block = blank line spacer — render as non-breaking space paragraph
+      if (!rawText.trim()) return '<p>&nbsp;</p>';
+
       const tag = b.style === 'h2' ? 'h2' : b.style === 'h3' ? 'h3' : b.style === 'h4' ? 'h4' : 'p';
-      return `<${tag}>${text}</${tag}>`;
+      return `<${tag}>${rawText}</${tag}>`;
     })
     .join('\n');
 }
