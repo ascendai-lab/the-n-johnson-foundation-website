@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
 import { sanityFetch, urlFor } from '../../lib/sanity';
 
 export async function getStaticPaths() {
@@ -55,21 +56,18 @@ const coverAlt = event.coverPhoto?.alt || event.eventName || '';
     </div>
   </nav>
 
-  <!-- ── Event Hero ── -->
-  <section class="event-hero">
-    {coverSrc && (
-      <div class="event-hero-img-wrap">
-        <img src={coverSrc} alt={coverAlt} loading="eager" />
-        <div class="event-hero-gradient"></div>
-      </div>
-    )}
-    <div class="event-hero-content">
+  <!-- ── Page Hero (matches other pages) ── -->
+  <PageHero
+    label="Events"
+    title={event.eventName}
+    subtitle={event.description || ''}
+  />
+
+  <!-- ── Event Meta ── -->
+  <section class="event-meta-bar">
+    <div class="event-meta-inner">
       {event.date && (
         <span class="event-date-badge"><i data-lucide="calendar"></i> {formatDate(event.date)}</span>
-      )}
-      <h1 class="event-hero-title">{event.eventName}</h1>
-      {event.description && (
-        <p class="event-hero-desc">{event.description}</p>
       )}
       {photos.length > 0 && (
         <span class="event-photo-count-badge"><i data-lucide="images"></i> {photos.length} photos</span>
@@ -156,39 +154,20 @@ const coverAlt = event.coverPhoto?.alt || event.eventName || '';
   .breadcrumb-sep { color: var(--bark-light, #b0a090); }
   .breadcrumb-current { color: var(--bark-mid); font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 320px; }
 
-  /* ── Hero ── */
-  .event-hero {
-    position: relative;
-    background: var(--bark);
-    overflow: hidden;
+  /* ── Event Meta Bar ── */
+  .event-meta-bar {
+    background: var(--cream);
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid var(--sand);
   }
 
-  .event-hero-img-wrap {
-    position: relative;
-    aspect-ratio: 21 / 8;
-    overflow: hidden;
-  }
-
-  .event-hero-img-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top center;
-  }
-
-  .event-hero-gradient {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(10,25,35,0.15) 0%, rgba(10,25,35,0.7) 100%);
-  }
-
-  .event-hero-content {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 2.5rem 3rem;
-    max-width: 800px;
+  .event-meta-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
   }
 
   .event-date-badge {
@@ -197,35 +176,13 @@ const coverAlt = event.coverPhoto?.alt || event.eventName || '';
     gap: 0.4rem;
     font-size: 0.8rem;
     font-weight: 600;
-    color: rgba(255,255,255,0.9);
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--teal-deep);
+    background: var(--teal-mist);
     padding: 0.35rem 0.85rem;
     border-radius: 100px;
-    margin-bottom: 0.75rem;
   }
 
   .event-date-badge [data-lucide] { width: 14px; height: 14px; }
-
-  .event-hero-title {
-    font-family: var(--font-serif);
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    font-weight: 700;
-    color: #fff;
-    line-height: 1.15;
-    margin-bottom: 0.75rem;
-    text-shadow: 0 2px 12px rgba(0,0,0,0.3);
-  }
-
-  .event-hero-desc {
-    font-size: 1rem;
-    color: rgba(255,255,255,0.8);
-    line-height: 1.65;
-    max-width: 600px;
-    margin-bottom: 1rem;
-  }
 
   .event-photo-count-badge {
     display: inline-flex;
@@ -233,21 +190,13 @@ const coverAlt = event.coverPhoto?.alt || event.eventName || '';
     gap: 0.4rem;
     font-size: 0.8rem;
     font-weight: 500;
-    color: rgba(255,255,255,0.75);
-    background: rgba(0,0,0,0.25);
+    color: var(--bark-mid);
+    background: var(--sand);
     padding: 0.3rem 0.75rem;
     border-radius: 100px;
   }
 
   .event-photo-count-badge [data-lucide] { width: 14px; height: 14px; }
-
-  /* No cover photo fallback */
-  .event-hero:not(:has(.event-hero-img-wrap)) .event-hero-content {
-    position: static;
-    padding: 3rem 3rem 2rem;
-    max-width: 900px;
-    margin: 0 auto;
-  }
 
   /* ── Gallery ── */
   .event-gallery {
@@ -372,14 +321,11 @@ const coverAlt = event.coverPhoto?.alt || event.eventName || '';
   @media (max-width: 1024px) {
     .gallery-grid { grid-template-columns: repeat(2, 1fr); }
     .gallery-item.featured { grid-column: span 2; }
-    .event-hero-content { padding: 2rem; }
   }
 
   @media (max-width: 640px) {
     .breadcrumb { padding: 0.75rem 1.25rem; }
-    .event-hero-img-wrap { aspect-ratio: 4 / 3; }
-    .event-hero-content { padding: 1.25rem; }
-    .event-hero-title { font-size: 1.6rem; }
+    .event-meta-bar { padding: 1rem 1.25rem; }
     .event-gallery { padding: 2rem 1.25rem 3rem; }
     .gallery-grid { grid-template-columns: 1fr; gap: 1rem; }
     .gallery-item.featured { grid-column: span 1; }
