@@ -1,15 +1,20 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
+import { sanityFetch } from '../../lib/sanity';
 
-const programs = [
-  { title: 'Student Scholarships', icon: 'graduation-cap', desc: 'Financial assistance ensuring students continue their education without interruption. We directly fund tuition, fees, and materials so families don\'t have to choose between bills and school.', href: '/programs/scholarships', link: 'Learn more →', wash: 'teal' },
-  { title: 'School Supply Drives', icon: 'backpack', desc: 'Backpacks, uniforms, books, and essentials distributed directly to students in Belize and the U.S.', href: '/programs/supply-drives', link: 'Learn more →', wash: '' },
-  { title: 'Mental Wellness Workshops', icon: 'heart-pulse', desc: 'Upcoming sessions for students and families on emotional resilience, self-love, and healthy boundaries.', href: '/programs/mental-wellness', link: 'Coming soon →', wash: 'purple' },
-  { title: 'School Donations', icon: 'school', desc: 'Classroom resources tailored directly to what teachers and students actually need to succeed.', href: '/programs/school-support', link: 'Learn more →', wash: '' },
-  { title: 'Peer Mentorship', icon: 'users', desc: 'Trained peer leaders paired with younger students — creating safe, judgment-free spaces for open conversation, guidance, and emotional support.', href: '/programs/peer-mentorship', link: 'Learn more →', wash: '' },
-  { title: 'The Book Initiative', icon: 'book-open', desc: 'Proceeds from Nicole Johnson\'s published novels — stories of resilience and healing — fund the Foundation\'s programs directly.', href: 'https://www.amazon.com/author/nicoleswasojohnsonwrites', link: 'Shop on Amazon →', wash: 'teal', external: true },
+const programs = await sanityFetch<any[]>(`*[_type == "program"] | order(order asc) {title, slug, shortDescription, icon, linkLabel, externalUrl, isComingSoon, wash}`);
+
+const fallbackPrograms = [
+  { title: 'Student Scholarships', icon: 'graduation-cap', shortDescription: 'Financial assistance ensuring students continue their education without interruption. We directly fund tuition, fees, and materials so families don\'t have to choose between bills and school.', slug: { current: 'scholarships' }, linkLabel: 'Learn more →', wash: 'teal' },
+  { title: 'School Supply Drives', icon: 'backpack', shortDescription: 'Backpacks, uniforms, books, and essentials distributed directly to students in Belize and the U.S.', slug: { current: 'supply-drives' }, linkLabel: 'Learn more →', wash: '' },
+  { title: 'Mental Wellness Workshops', icon: 'heart-pulse', shortDescription: 'Upcoming sessions for students and families on emotional resilience, self-love, and healthy boundaries.', slug: { current: 'mental-wellness' }, linkLabel: 'Coming soon →', wash: 'purple', isComingSoon: true },
+  { title: 'School Donations', icon: 'school', shortDescription: 'Classroom resources tailored directly to what teachers and students actually need to succeed.', slug: { current: 'school-support' }, linkLabel: 'Learn more →', wash: '' },
+  { title: 'Peer Mentorship', icon: 'users', shortDescription: 'Trained peer leaders paired with younger students — creating safe, judgment-free spaces for open conversation, guidance, and emotional support.', slug: { current: 'peer-mentorship' }, linkLabel: 'Learn more →', wash: '' },
+  { title: 'The Book Initiative', icon: 'book-open', shortDescription: 'Proceeds from Nicole Johnson\'s published novels — stories of resilience and healing — fund the Foundation\'s programs directly.', externalUrl: 'https://www.amazon.com/author/nicoleswasojohnsonwrites', linkLabel: 'Shop on Amazon →', wash: 'teal' },
 ];
+
+const items = programs?.length ? programs : fallbackPrograms;
 ---
 
 <BaseLayout title="Our Programs — The N Johnson Foundation" description="Explore The N Johnson Foundation's programs: scholarships, supply drives, mental wellness workshops, school donations, and peer mentorship.">
@@ -22,14 +27,19 @@ const programs = [
 
   <section class="programs-landing">
     <div class="programs-grid">
-      {programs.map((prog, i) => (
-        <a href={prog.href} class={`prog-card reveal reveal-delay-${(i % 3) + 1} ${prog.wash ? `wash-${prog.wash}` : ''}`} {...(prog.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
-          <span class="prog-icon"><i data-lucide={prog.icon}></i></span>
-          <h3 class="prog-title">{prog.title}</h3>
-          <p class="prog-desc">{prog.desc}</p>
-          <span class="prog-link">{prog.link}</span>
-        </a>
-      ))}
+      {items.map((prog, i) => {
+        const isExternal = !!prog.externalUrl;
+        const href = isExternal ? prog.externalUrl : `/programs/${prog.slug?.current || ''}`;
+        const washClass = prog.wash ? `wash-${prog.wash}` : '';
+        return (
+          <a href={href} class={`prog-card reveal reveal-delay-${(i % 3) + 1} ${washClass}`} {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+            <span class="prog-icon"><i data-lucide={prog.icon || 'circle'}></i></span>
+            <h3 class="prog-title">{prog.title || 'Program'}</h3>
+            <p class="prog-desc">{prog.shortDescription || ''}</p>
+            <span class="prog-link">{prog.linkLabel || 'Learn more →'}</span>
+          </a>
+        );
+      })}
     </div>
   </section>
 

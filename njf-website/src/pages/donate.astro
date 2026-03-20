@@ -1,57 +1,90 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import { sanityFetch, urlFor, toHtml } from '../lib/sanity';
+
+const page = await sanityFetch<any>(`*[_type == "donatePage"][0]`);
+const settings = await sanityFetch<any>(`*[_type == "siteSettings"][0]{amazonBookLink, zeffyDonationUrl}`);
+const amazonLink = settings?.amazonBookLink || "https://www.amazon.com/author/nicoleswasojohnsonwrites";
+const zeffyUrl = settings?.zeffyDonationUrl;
 ---
 
-<BaseLayout title="Donate — The N Johnson Foundation" description="Support education and mental wellness for children in Belize and the United States through your donation.">
-  <PageHero label="Support Our Mission" title="Help a child focus on <em>learning, not hardship.</em>" subtitle="Every contribution — large or small — means a child shows up to school with what they need." />
+<BaseLayout
+  title={page?.metaTitle || "Donate — The N Johnson Foundation"}
+  description={page?.metaDescription || "Support education and mental wellness for children in Belize and the United States through your donation."}
+  noindex={page?.noindex}
+>
+  <PageHero
+    label={page?.heroLabel || "Support Our Mission"}
+    title={page?.heroTitle || "Help a child focus on <em>learning, not hardship.</em>"}
+    subtitle={page?.heroSubtitle || "Every contribution — large or small — means a child shows up to school with what they need."}
+  />
 
   <section class="donate-tiers">
     <div class="tiers-inner">
-      <div class="tier-card reveal">
-        <span class="tier-icon"><i data-lucide="backpack"></i></span>
-        <div class="tier-amount">$25</div>
-        <h3>School supplies for one child</h3>
-        <p>A backpack, notebook, and pens so a student walks in prepared and proud.</p>
-        <button data-zeffy="25" class="btn-teal">Donate $25 <i data-lucide="arrow-right"></i></button>
-      </div>
-      <div class="tier-card featured reveal reveal-delay-1">
-        <span class="tier-badge">Most Impact</span>
-        <span class="tier-icon"><i data-lucide="graduation-cap"></i></span>
-        <div class="tier-amount">$100</div>
-        <h3>Scholarship contribution</h3>
-        <p>Helps cover fees so a family isn't forced to pull their child from school.</p>
-        <button data-zeffy="100" class="btn-teal">Donate $100 <i data-lucide="arrow-right"></i></button>
-      </div>
-      <div class="tier-card reveal reveal-delay-2">
-        <span class="tier-icon"><i data-lucide="school"></i></span>
-        <div class="tier-amount">$250</div>
-        <h3>Classroom resource bundle</h3>
-        <p>Books, materials, and tools donated directly to a school in Belize.</p>
-        <button data-zeffy="250" class="btn-teal">Donate $250 <i data-lucide="arrow-right"></i></button>
-      </div>
+      {page?.donationTiers?.length ? page.donationTiers.map((tier: any, i: number) => (
+        <div class={`tier-card${tier.isFeatured ? ' featured' : ''} reveal${i > 0 ? ` reveal-delay-${Math.min(i, 3)}` : ''}`}>
+          {tier.isFeatured && <span class="tier-badge">Most Impact</span>}
+          <span class="tier-icon"><i data-lucide={tier.icon}></i></span>
+          <div class="tier-amount">${tier.amount}</div>
+          <h3>{tier.title}</h3>
+          <p>{tier.description}</p>
+          <button data-zeffy={tier.amount} class="btn-teal">Donate ${tier.amount} <i data-lucide="arrow-right"></i></button>
+        </div>
+      )) : (
+        <>
+          <div class="tier-card reveal">
+            <span class="tier-icon"><i data-lucide="backpack"></i></span>
+            <div class="tier-amount">$25</div>
+            <h3>School supplies for one child</h3>
+            <p>A backpack, notebook, and pens so a student walks in prepared and proud.</p>
+            <button data-zeffy="25" class="btn-teal">Donate $25 <i data-lucide="arrow-right"></i></button>
+          </div>
+          <div class="tier-card featured reveal reveal-delay-1">
+            <span class="tier-badge">Most Impact</span>
+            <span class="tier-icon"><i data-lucide="graduation-cap"></i></span>
+            <div class="tier-amount">$100</div>
+            <h3>Scholarship contribution</h3>
+            <p>Helps cover fees so a family isn't forced to pull their child from school.</p>
+            <button data-zeffy="100" class="btn-teal">Donate $100 <i data-lucide="arrow-right"></i></button>
+          </div>
+          <div class="tier-card reveal reveal-delay-2">
+            <span class="tier-icon"><i data-lucide="school"></i></span>
+            <div class="tier-amount">$250</div>
+            <h3>Classroom resource bundle</h3>
+            <p>Books, materials, and tools donated directly to a school in Belize.</p>
+            <button data-zeffy="250" class="btn-teal">Donate $250 <i data-lucide="arrow-right"></i></button>
+          </div>
+        </>
+      )}
     </div>
   </section>
 
   <section class="how-it-helps">
     <div class="helps-inner">
       <div class="helps-left">
-        <div class="section-label reveal">How Your Donation Helps</div>
-        <h2 class="helps-heading reveal reveal-delay-1">100% of donations go to <em>programs.</em></h2>
-        <p class="helps-body reveal reveal-delay-2">Your donation directly funds scholarships, school supplies, classroom resources, and community programs. We operate with minimal overhead — because every dollar matters when a child's education is at stake.</p>
+        <div class="section-label reveal">{page?.howItHelpsLabel || "How Your Donation Helps"}</div>
+        <h2 class="helps-heading reveal reveal-delay-1" set:html={page?.howItHelpsTitle || '100% of donations go to <em>programs.</em>'} />
+        <p class="helps-body reveal reveal-delay-2">{page?.howItHelpsBody || "Your donation directly funds scholarships, school supplies, classroom resources, and community programs. We operate with minimal overhead — because every dollar matters when a child's education is at stake."}</p>
         <div class="helps-list reveal reveal-delay-3">
-          <div class="helps-item"><i data-lucide="check-circle"></i><span>Scholarships covering tuition and school fees</span></div>
-          <div class="helps-item"><i data-lucide="check-circle"></i><span>Backpacks and classroom materials for 30+ students</span></div>
-          <div class="helps-item"><i data-lucide="check-circle"></i><span>Direct donations to partner schools</span></div>
-          <div class="helps-item"><i data-lucide="check-circle"></i><span>Future mental wellness workshops</span></div>
+          {page?.howItHelpsList?.length ? page.howItHelpsList.map((item: any) => (
+            <div class="helps-item"><i data-lucide="check-circle"></i><span>{item}</span></div>
+          )) : (
+            <>
+              <div class="helps-item"><i data-lucide="check-circle"></i><span>Scholarships covering tuition and school fees</span></div>
+              <div class="helps-item"><i data-lucide="check-circle"></i><span>Backpacks and classroom materials for 30+ students</span></div>
+              <div class="helps-item"><i data-lucide="check-circle"></i><span>Direct donations to partner schools</span></div>
+              <div class="helps-item"><i data-lucide="check-circle"></i><span>Future mental wellness workshops</span></div>
+            </>
+          )}
         </div>
       </div>
       <div class="helps-right">
         <div class="book-card reveal reveal-delay-2">
           <span class="book-icon"><i data-lucide="book-open"></i></span>
-          <h3>Support through reading</h3>
-          <p>Proceeds from Nicole Johnson's published novels — stories of resilience and healing — fund the Foundation's programs directly. Every book purchased is a contribution to a child's education.</p>
-          <a href="https://www.amazon.com/author/nicoleswasojohnsonwrites" target="_blank" rel="noopener noreferrer" class="btn-bark" style="margin-top:1.2rem;"><i data-lucide="book-open"></i> Shop on Amazon</a>
+          <h3>{page?.bookCardTitle || "Support through reading"}</h3>
+          <p>{page?.bookCardBody || "Proceeds from Nicole Johnson's published novels — stories of resilience and healing — fund the Foundation's programs directly. Every book purchased is a contribution to a child's education."}</p>
+          <a href={amazonLink} target="_blank" rel="noopener noreferrer" class="btn-bark" style="margin-top:1.2rem;"><i data-lucide="book-open"></i> Shop on Amazon</a>
         </div>
       </div>
     </div>
@@ -59,8 +92,8 @@ import PageHero from '../components/PageHero.astro';
 
   <section class="donate-contact">
     <div class="donate-contact-inner reveal">
-      <h2>Prefer to donate by <em>other means?</em></h2>
-      <p>Contact us to discuss corporate sponsorships, in-kind donations, or other ways to support our mission.</p>
+      <h2 set:html={page?.ctaTitle || 'Prefer to donate by <em>other means?</em>'} />
+      <p>{page?.ctaBody || "Contact us to discuss corporate sponsorships, in-kind donations, or other ways to support our mission."}</p>
       <a href="/contact" class="btn-bark">Get in touch <i data-lucide="arrow-right"></i></a>
     </div>
   </section>

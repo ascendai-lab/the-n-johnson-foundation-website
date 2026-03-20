@@ -1,18 +1,29 @@
 ---
+import { sanityFetch } from '../lib/sanity';
+
 interface Props {
   currentPath: string;
 }
 
 const { currentPath } = Astro.props;
 
-const navLinks = [
+const nav = await sanityFetch<any>(`*[_type == "navConfig"][0]{
+  navLinks[]{label, href, children[]{label, href}},
+  donateButtonLabel,
+  donateButtonHref
+}`);
+
+const navLinks = nav?.navLinks || [
   { label: 'About', href: '/about' },
   { label: 'Programs', href: '/programs' },
-  { label: 'Gallery', href: '/gallery' },
+  { label: 'Events', href: '/events' },
   { label: 'Coaching', href: '/coaching' },
   { label: 'Get Involved', href: '/donate' },
   { label: 'Contact', href: '/contact' },
 ];
+
+const donateLabel = nav?.donateButtonLabel || 'Give Today';
+const donateHref = nav?.donateButtonHref || '/donate';
 ---
 
 <nav id="nav">
@@ -36,7 +47,7 @@ const navLinks = [
       </li>
     ))}
     <li>
-      <a href="/donate" class="nav-donate" data-zeffy=""><i data-lucide="heart"></i> Give Today</a>
+      <a href={donateHref} class="nav-donate" data-zeffy=""><i data-lucide="heart"></i> {donateLabel}</a>
     </li>
   </ul>
 </nav>

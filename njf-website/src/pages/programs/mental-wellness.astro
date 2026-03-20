@@ -1,47 +1,71 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
+import { sanityFetch, toHtml } from '../../lib/sanity';
+
+const prog = await sanityFetch<any>(`*[_type == "program" && slug.current == "mental-wellness"][0]`);
 ---
 
-<BaseLayout title="Mental Wellness Workshops — The N Johnson Foundation">
-  <PageHero label="Programs" title="Mental <em>Wellness</em> Workshops" subtitle="Building emotional resilience, self-love, and healthy boundaries — coming soon." />
+<BaseLayout title={prog?.metaTitle || "Mental Wellness Workshops — The N Johnson Foundation"} description={prog?.metaDescription || "Building emotional resilience, self-love, and healthy boundaries."}>
+  <PageHero label={prog?.heroLabel || "Programs"} title={prog?.heroTitle || 'Mental <em>Wellness</em> Workshops'} subtitle={prog?.heroSubtitle || "Building emotional resilience, self-love, and healthy boundaries — coming soon."} />
 
   <section class="program-detail">
     <div class="detail-inner">
       <div class="detail-content">
         <div class="coming-soon-badge reveal"><i data-lucide="clock"></i> Coming Soon</div>
-        <h2 class="detail-heading reveal reveal-delay-1">A child's mind matters as much as their <em>education.</em></h2>
-        <p class="detail-body reveal reveal-delay-2">The N Johnson Foundation recognizes that academic success and emotional well-being are deeply connected. A child who is anxious, stressed, or struggling with their sense of self cannot fully engage in learning — no matter how many supplies or scholarships we provide.</p>
-        <p class="detail-body reveal reveal-delay-3">That's why we're developing <strong>mental wellness workshops</strong> designed specifically for students and families in Belize. These sessions will focus on emotional resilience, self-love, healthy boundaries, and emotional intelligence — equipping young people with the inner tools they need to thrive, not just survive.</p>
+        <h2 class="detail-heading reveal reveal-delay-1" set:html={prog?.detailHeading?.[0]?.children?.map(c => c.text).join('') || "A child's mind matters as much as their <em>education.</em>"} />
+        <div class="detail-body-wrap reveal reveal-delay-2" set:html={toHtml(prog?.detailBody) || '<p>The N Johnson Foundation recognizes that academic success and emotional well-being are deeply connected. A child who is anxious, stressed, or struggling with their sense of self cannot fully engage in learning — no matter how many supplies or scholarships we provide.</p><p>That\'s why we\'re developing <strong>mental wellness workshops</strong> designed specifically for students and families in Belize. These sessions will focus on emotional resilience, self-love, healthy boundaries, and emotional intelligence — equipping young people with the inner tools they need to thrive, not just survive.</p>'} />
 
-        <h3 class="detail-subhead reveal reveal-delay-3">Planned workshop topics</h3>
+        <h3 class="detail-subhead reveal reveal-delay-3">{prog?.detailSubhead || "Planned workshop topics"}</h3>
         <div class="detail-list reveal reveal-delay-4">
-          <div class="detail-item"><i data-lucide="heart"></i><span>Self-love and positive self-image</span></div>
-          <div class="detail-item"><i data-lucide="shield"></i><span>Setting and maintaining healthy boundaries</span></div>
-          <div class="detail-item"><i data-lucide="brain"></i><span>Emotional intelligence and regulation</span></div>
-          <div class="detail-item"><i data-lucide="sparkles"></i><span>Building resilience through adversity</span></div>
-          <div class="detail-item"><i data-lucide="users"></i><span>Family communication and support skills</span></div>
+          {prog?.detailItems?.length ? (
+            prog.detailItems.map(item => (
+              <div class="detail-item"><i data-lucide={item.icon || "check-circle"}></i><span>{item.text}</span></div>
+            ))
+          ) : (
+            <>
+              <div class="detail-item"><i data-lucide="heart"></i><span>Self-love and positive self-image</span></div>
+              <div class="detail-item"><i data-lucide="shield"></i><span>Setting and maintaining healthy boundaries</span></div>
+              <div class="detail-item"><i data-lucide="brain"></i><span>Emotional intelligence and regulation</span></div>
+              <div class="detail-item"><i data-lucide="sparkles"></i><span>Building resilience through adversity</span></div>
+              <div class="detail-item"><i data-lucide="users"></i><span>Family communication and support skills</span></div>
+            </>
+          )}
         </div>
       </div>
 
       <div class="detail-sidebar">
-        <div class="info-card reveal">
-          <h3>Get involved early</h3>
-          <p>We're looking for mental health professionals, educators, and community leaders to help shape this program. If you have expertise in youth mental wellness, we'd love to hear from you.</p>
-          <a href="/contact" class="btn-bark" style="margin-top:1rem;">Contact us <i data-lucide="arrow-right"></i></a>
-        </div>
-        <div class="info-card purple reveal reveal-delay-1">
-          <h3>Why mental wellness?</h3>
-          <p>Our founder Nicole Johnson's background as a Medi-Cal Certified Peer Support Specialist and her work in behavioral health inform our belief that healing and learning go hand in hand.</p>
-        </div>
+        {prog?.sidebarInfoCards?.length ? (
+          prog.sidebarInfoCards.map((card, i) => (
+            <div class={`info-card ${card.variant || ''} reveal ${i > 0 ? 'reveal-delay-' + i : ''}`}>
+              <h3>{card.title}</h3>
+              <p>{card.body}</p>
+              {card.linkUrl && (
+                <a href={card.linkUrl} class="btn-bark" style="margin-top:1rem;">{card.linkLabel || 'Learn more'} <i data-lucide="arrow-right"></i></a>
+              )}
+            </div>
+          ))
+        ) : (
+          <>
+            <div class="info-card reveal">
+              <h3>Get involved early</h3>
+              <p>We're looking for mental health professionals, educators, and community leaders to help shape this program. If you have expertise in youth mental wellness, we'd love to hear from you.</p>
+              <a href="/contact" class="btn-bark" style="margin-top:1rem;">Contact us <i data-lucide="arrow-right"></i></a>
+            </div>
+            <div class="info-card purple reveal reveal-delay-1">
+              <h3>Why mental wellness?</h3>
+              <p>Our founder Nicole Johnson's background as a Medi-Cal Certified Peer Support Specialist and her work in behavioral health inform our belief that healing and learning go hand in hand.</p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   </section>
 
   <section class="program-cta">
     <div class="program-cta-inner reveal">
-      <h2>Help us bring this program to <em>life.</em></h2>
-      <p>Your support will help fund the development and delivery of mental wellness workshops across Belize.</p>
+      <h2 set:html={prog?.ctaTitle || 'Help us bring this program to <em>life.</em>'} />
+      <p>{prog?.ctaBody || "Your support will help fund the development and delivery of mental wellness workshops across Belize."}</p>
       <div class="cta-buttons">
         <a href="/donate" class="btn-teal" data-zeffy=""><i data-lucide="heart"></i> Donate now</a>
         <a href="/volunteer" class="btn-bark">Volunteer <i data-lucide="arrow-right"></i></a>
@@ -60,6 +84,8 @@ import PageHero from '../../components/PageHero.astro';
   .detail-heading { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--bark); line-height: 1.2; margin-bottom: 1.5rem; }
   .detail-heading em { font-style: italic; color: var(--teal-deep); }
   .detail-body { font-size: 1rem; color: var(--bark-mid); line-height: 1.8; margin-bottom: 1.2rem; }
+  .detail-body-wrap :global(p) { font-size: 1rem; color: var(--bark-mid); line-height: 1.8; margin-bottom: 1.2rem; }
+  .detail-body-wrap :global(strong) { color: var(--bark); font-weight: 600; }
   .detail-body strong { color: var(--bark); font-weight: 600; }
   .detail-subhead { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--bark); margin: 2rem 0 1rem; }
   .detail-list { display: flex; flex-direction: column; gap: 0.8rem; }

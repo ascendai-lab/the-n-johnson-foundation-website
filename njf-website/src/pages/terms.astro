@@ -1,50 +1,59 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import { sanityFetch, toHtml } from '../lib/sanity';
+
+const page = await sanityFetch<any>(`*[_type == "legalPage" && slug.current == "terms"][0]`);
 ---
 
-<BaseLayout title="Terms of Use — The N Johnson Foundation">
-  <PageHero label="Legal" title="Terms of <em>Use</em>" />
+<BaseLayout title={page?.metaTitle || "Terms of Use — The N Johnson Foundation"} description={page?.metaDescription}>
+  <PageHero label={page?.heroLabel || "Legal"} title={page?.heroTitle || 'Terms of <em>Use</em>'} />
 
   <section class="legal-section">
     <div class="legal-inner">
-      <p class="legal-updated">Last updated: March 2026</p>
+      <p class="legal-updated">Last updated: {page?.lastUpdated || "March 2026"}</p>
 
-      <h2>Acceptance of Terms</h2>
-      <p>By accessing and using the website of The N Johnson Foundation, you agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use our website.</p>
+      {page?.body ? (
+        <div class="legal-body-wrap" set:html={toHtml(page.body)} />
+      ) : (
+        <>
+          <h2>Acceptance of Terms</h2>
+          <p>By accessing and using the website of The N Johnson Foundation, you agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use our website.</p>
 
-      <h2>Use of Website</h2>
-      <p>This website is provided for informational purposes about The N Johnson Foundation's programs, mission, and how to support our work. You may use this website for lawful purposes only. You agree not to use the website in any way that could damage, disable, or impair our services.</p>
+          <h2>Use of Website</h2>
+          <p>This website is provided for informational purposes about The N Johnson Foundation's programs, mission, and how to support our work. You may use this website for lawful purposes only. You agree not to use the website in any way that could damage, disable, or impair our services.</p>
 
-      <h2>Intellectual Property</h2>
-      <p>All content on this website — including text, images, logos, graphics, and design — is the property of The N Johnson Foundation or its content providers and is protected by copyright and other intellectual property laws. You may not reproduce, distribute, or create derivative works without prior written permission.</p>
+          <h2>Intellectual Property</h2>
+          <p>All content on this website — including text, images, logos, graphics, and design — is the property of The N Johnson Foundation or its content providers and is protected by copyright and other intellectual property laws. You may not reproduce, distribute, or create derivative works without prior written permission.</p>
 
-      <h2>Donations</h2>
-      <p>All donations made through our website are voluntary and non-refundable unless otherwise required by law. The N Johnson Foundation is a nonprofit organization and donations may be tax-deductible. Please consult your tax advisor for specific guidance regarding the deductibility of your contribution.</p>
+          <h2>Donations</h2>
+          <p>All donations made through our website are voluntary and non-refundable unless otherwise required by law. The N Johnson Foundation is a nonprofit organization and donations may be tax-deductible. Please consult your tax advisor for specific guidance regarding the deductibility of your contribution.</p>
 
-      <h2>Third-Party Links</h2>
-      <p>Our website may contain links to third-party websites (such as Amazon for book purchases). We are not responsible for the content, privacy policies, or practices of these external sites. Visiting linked sites is at your own risk.</p>
+          <h2>Third-Party Links</h2>
+          <p>Our website may contain links to third-party websites (such as Amazon for book purchases). We are not responsible for the content, privacy policies, or practices of these external sites. Visiting linked sites is at your own risk.</p>
 
-      <h2>Disclaimer of Warranties</h2>
-      <p>This website is provided "as is" without warranties of any kind, either express or implied. We do not guarantee that the website will be uninterrupted, error-free, or free of viruses or other harmful components.</p>
+          <h2>Disclaimer of Warranties</h2>
+          <p>This website is provided "as is" without warranties of any kind, either express or implied. We do not guarantee that the website will be uninterrupted, error-free, or free of viruses or other harmful components.</p>
 
-      <h2>Limitation of Liability</h2>
-      <p>To the fullest extent permitted by law, The N Johnson Foundation shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of or inability to use this website.</p>
+          <h2>Limitation of Liability</h2>
+          <p>To the fullest extent permitted by law, The N Johnson Foundation shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of or inability to use this website.</p>
 
-      <h2>Governing Law</h2>
-      <p>These Terms of Use shall be governed by and construed in accordance with the laws of the State of California, without regard to its conflict of law provisions.</p>
+          <h2>Governing Law</h2>
+          <p>These Terms of Use shall be governed by and construed in accordance with the laws of the State of California, without regard to its conflict of law provisions.</p>
 
-      <h2>Changes to Terms</h2>
-      <p>We reserve the right to modify these terms at any time. Changes will be posted on this page with an updated revision date. Your continued use of the website after changes are posted constitutes acceptance of the revised terms.</p>
+          <h2>Changes to Terms</h2>
+          <p>We reserve the right to modify these terms at any time. Changes will be posted on this page with an updated revision date. Your continued use of the website after changes are posted constitutes acceptance of the revised terms.</p>
 
-      <h2>Contact</h2>
-      <p>If you have questions about these terms, please contact us:</p>
-      <p>
-        The N Johnson Foundation<br />
-        24325 Crenshaw Blvd, Unit #1031<br />
-        Torrance, CA 90505<br />
-        Phone: <a href="tel:3236782112">323-678-2112</a>
-      </p>
+          <h2>Contact</h2>
+          <p>If you have questions about these terms, please contact us:</p>
+          <p>
+            The N Johnson Foundation<br />
+            24325 Crenshaw Blvd, Unit #1031<br />
+            Torrance, CA 90505<br />
+            Phone: <a href="tel:3236782112">323-678-2112</a>
+          </p>
+        </>
+      )}
     </div>
   </section>
 </BaseLayout>
@@ -57,6 +66,10 @@ import PageHero from '../components/PageHero.astro';
   .legal-inner h2:first-of-type { margin-top: 0; }
   .legal-inner p { font-size: 0.95rem; color: var(--bark-mid); line-height: 1.8; margin-bottom: 0.8rem; }
   .legal-inner a { color: var(--teal-deep); font-weight: 500; }
+  .legal-body-wrap :global(h2) { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 700; color: var(--bark); margin: 2.5rem 0 0.8rem; }
+  .legal-body-wrap :global(h2:first-of-type) { margin-top: 0; }
+  .legal-body-wrap :global(p) { font-size: 0.95rem; color: var(--bark-mid); line-height: 1.8; margin-bottom: 0.8rem; }
+  .legal-body-wrap :global(a) { color: var(--teal-deep); font-weight: 500; }
 
   @media (max-width: 1024px) { .legal-section { padding: 3rem 2.5rem 4rem; } }
   @media (max-width: 640px) { .legal-section { padding: 2.5rem 1.5rem 3.5rem; } }

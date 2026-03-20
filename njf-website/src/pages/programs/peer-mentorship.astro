@@ -1,45 +1,82 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
+import { sanityFetch, toHtml } from '../../lib/sanity';
+
+const prog = await sanityFetch<any>(`*[_type == "program" && slug.current == "peer-mentorship"][0]`);
 ---
 
-<BaseLayout title="Peer Mentorship — The N Johnson Foundation">
-  <PageHero label="Programs" title="Peer <em>Mentorship</em>" subtitle="Trained peer leaders paired with younger students — creating safe spaces for growth." />
+<BaseLayout title={prog?.metaTitle || "Peer Mentorship — The N Johnson Foundation"} description={prog?.metaDescription || "Trained peer leaders paired with younger students — creating safe spaces for growth."}>
+  <PageHero label={prog?.heroLabel || "Programs"} title={prog?.heroTitle || 'Peer <em>Mentorship</em>'} subtitle={prog?.heroSubtitle || "Trained peer leaders paired with younger students — creating safe spaces for growth."} />
 
   <section class="program-detail">
     <div class="detail-inner">
       <div class="detail-content">
-        <h2 class="detail-heading reveal">Young people leading <em>young people.</em></h2>
-        <p class="detail-body reveal reveal-delay-1">Sometimes, a young person needs to hear "I understand" from someone close to their own age — someone who's walked a similar path. Our Peer Mentorship program pairs trained student leaders with younger peers, creating <strong>safe, judgment-free spaces</strong> for open conversation, guidance, and emotional support.</p>
-        <p class="detail-body reveal reveal-delay-2">Peer mentors receive training in active listening, conflict resolution, emotional intelligence, and boundary-setting. They become trusted figures in their school communities — proof that leadership doesn't require a title, just a willingness to show up for someone else.</p>
+        <h2 class="detail-heading reveal" set:html={prog?.detailHeading?.[0]?.children?.map(c => c.text).join('') || 'Young people leading <em>young people.</em>'} />
+        <div class="detail-body-wrap reveal reveal-delay-1" set:html={toHtml(prog?.detailBody) || '<p>Sometimes, a young person needs to hear "I understand" from someone close to their own age — someone who\'s walked a similar path. Our Peer Mentorship program pairs trained student leaders with younger peers, creating <strong>safe, judgment-free spaces</strong> for open conversation, guidance, and emotional support.</p><p>Peer mentors receive training in active listening, conflict resolution, emotional intelligence, and boundary-setting. They become trusted figures in their school communities — proof that leadership doesn\'t require a title, just a willingness to show up for someone else.</p>'} />
 
-        <h3 class="detail-subhead reveal reveal-delay-3">Program pillars</h3>
+        <h3 class="detail-subhead reveal reveal-delay-3">{prog?.detailSubhead || "Program pillars"}</h3>
         <div class="detail-list reveal reveal-delay-3">
-          <div class="detail-item"><i data-lucide="check-circle"></i><span>Structured mentor training in emotional support</span></div>
-          <div class="detail-item"><i data-lucide="check-circle"></i><span>One-on-one and small group mentoring sessions</span></div>
-          <div class="detail-item"><i data-lucide="check-circle"></i><span>Safe space conversations on real student challenges</span></div>
-          <div class="detail-item"><i data-lucide="check-circle"></i><span>Leadership development for mentors</span></div>
+          {prog?.detailItems?.length ? (
+            prog.detailItems.map(item => (
+              <div class="detail-item"><i data-lucide={item.icon || "check-circle"}></i><span>{item.text}</span></div>
+            ))
+          ) : (
+            <>
+              <div class="detail-item"><i data-lucide="check-circle"></i><span>Structured mentor training in emotional support</span></div>
+              <div class="detail-item"><i data-lucide="check-circle"></i><span>One-on-one and small group mentoring sessions</span></div>
+              <div class="detail-item"><i data-lucide="check-circle"></i><span>Safe space conversations on real student challenges</span></div>
+              <div class="detail-item"><i data-lucide="check-circle"></i><span>Leadership development for mentors</span></div>
+            </>
+          )}
         </div>
       </div>
 
       <div class="detail-sidebar">
-        <div class="info-card reveal">
-          <span class="info-icon"><i data-lucide="users"></i></span>
-          <h3>Become a mentor</h3>
-          <p>If you're a student leader or young professional who wants to make a difference, we'd love to connect with you about mentorship opportunities.</p>
-          <a href="/volunteer" class="btn-bark" style="margin-top:1rem;">Volunteer <i data-lucide="arrow-right"></i></a>
-        </div>
-        <div class="impact-quote reveal reveal-delay-1">
-          <p>"A mentor doesn't have to have all the answers. They just have to show up and listen."</p>
-        </div>
+        {prog?.sidebarInfoCards?.length ? (
+          prog.sidebarInfoCards.map((card, i) => (
+            <div class={`info-card ${card.variant || ''} reveal ${i > 0 ? 'reveal-delay-' + i : ''}`}>
+              {card.icon && <span class="info-icon"><i data-lucide={card.icon}></i></span>}
+              <h3>{card.title}</h3>
+              <p>{card.body}</p>
+              {card.linkUrl && (
+                <a href={card.linkUrl} class="btn-bark" style="margin-top:1rem;">{card.linkLabel || 'Learn more'} <i data-lucide="arrow-right"></i></a>
+              )}
+            </div>
+          ))
+        ) : prog?.sidebarStats?.length ? (
+          prog.sidebarStats.map((stat, i) => (
+            <div class={`stat-card reveal ${i > 0 ? 'reveal-delay-' + i : ''}`}>
+              <div class="stat-num">{stat.value}<span>{stat.suffix || ''}</span></div>
+              <div class="stat-label">{stat.label}</div>
+            </div>
+          ))
+        ) : (
+          <div class="info-card reveal">
+            <span class="info-icon"><i data-lucide="users"></i></span>
+            <h3>Become a mentor</h3>
+            <p>If you're a student leader or young professional who wants to make a difference, we'd love to connect with you about mentorship opportunities.</p>
+            <a href="/volunteer" class="btn-bark" style="margin-top:1rem;">Volunteer <i data-lucide="arrow-right"></i></a>
+          </div>
+        )}
+        {prog?.sidebarQuote ? (
+          <div class="impact-quote reveal reveal-delay-1">
+            <p>"{prog.sidebarQuote.text}"</p>
+            {prog.sidebarQuote.attribution && <span>— {prog.sidebarQuote.attribution}</span>}
+          </div>
+        ) : (
+          <div class="impact-quote reveal reveal-delay-1">
+            <p>"A mentor doesn't have to have all the answers. They just have to show up and listen."</p>
+          </div>
+        )}
       </div>
     </div>
   </section>
 
   <section class="program-cta">
     <div class="program-cta-inner reveal">
-      <h2>Support the next generation of <em>leaders.</em></h2>
-      <p>Your donation helps train and support peer mentors in schools across Belize.</p>
+      <h2 set:html={prog?.ctaTitle || 'Support the next generation of <em>leaders.</em>'} />
+      <p>{prog?.ctaBody || "Your donation helps train and support peer mentors in schools across Belize."}</p>
       <div class="cta-buttons">
         <a href="/donate" class="btn-teal" data-zeffy=""><i data-lucide="heart"></i> Donate now</a>
         <a href="/programs" class="btn-text-link">← Back to programs</a>
@@ -55,11 +92,17 @@ import PageHero from '../../components/PageHero.astro';
   .detail-heading { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--bark); line-height: 1.2; margin-bottom: 1.5rem; }
   .detail-heading em { font-style: italic; color: var(--teal-deep); }
   .detail-body { font-size: 1rem; color: var(--bark-mid); line-height: 1.8; margin-bottom: 1.2rem; }
+  .detail-body-wrap :global(p) { font-size: 1rem; color: var(--bark-mid); line-height: 1.8; margin-bottom: 1.2rem; }
+  .detail-body-wrap :global(strong) { color: var(--bark); font-weight: 600; }
   .detail-body strong { color: var(--bark); font-weight: 600; }
   .detail-subhead { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--bark); margin: 2rem 0 1rem; }
   .detail-list { display: flex; flex-direction: column; gap: 0.8rem; }
   .detail-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.92rem; color: var(--bark-mid); }
   .detail-sidebar { display: flex; flex-direction: column; gap: 1.2rem; }
+  .stat-card { background: var(--sand); border-radius: 20px; padding: 2rem; text-align: center; }
+  .stat-num { font-family: var(--font-serif); font-size: 3rem; font-weight: 700; color: var(--teal-deep); line-height: 1; margin-bottom: 0.5rem; }
+  .stat-num span { font-size: 1.8rem; color: var(--teal); }
+  .stat-label { font-size: 0.88rem; color: var(--bark-mid); line-height: 1.5; }
   .info-card { background: var(--sand); border-radius: 20px; padding: 2rem; }
   .info-icon { display: block; margin-bottom: 1rem; }
   .info-icon [data-lucide] { width: 32px; height: 32px; stroke: var(--teal-deep); }

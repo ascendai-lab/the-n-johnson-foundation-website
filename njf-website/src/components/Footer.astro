@@ -1,4 +1,15 @@
 ---
+import { sanityFetch } from '../lib/sanity';
+
+const settings = await sanityFetch<any>(`*[_type == "siteSettings"][0]{
+  foundationName,
+  foundationDescription,
+  phone,
+  address,
+  amazonBookLink,
+  socialLinks[]{platform, url}
+}`);
+
 const programLinks = [
   { label: 'Scholarships', href: '/programs/scholarships' },
   { label: 'Supply Drives', href: '/programs/supply-drives' },
@@ -12,7 +23,7 @@ const foundationLinks = [
   { label: 'Our Impact', href: '/about#impact' },
   { label: 'Founders', href: '/about#founders' },
   { label: 'Belize', href: '/about#belize' },
-  { label: 'Gallery', href: '/gallery' },
+  { label: 'Events', href: '/events' },
 ];
 
 const involvedLinks = [
@@ -20,10 +31,14 @@ const involvedLinks = [
   { label: 'Volunteer', href: '/volunteer' },
   { label: 'Peer Coaching', href: '/coaching' },
   { label: 'Partner With Us', href: '/partner' },
-  { label: "Nicole's Books", href: 'https://www.amazon.com/author/nicoleswasojohnsonwrites', external: true },
+  { label: "Nicole's Books", href: settings?.amazonBookLink || 'https://www.amazon.com/author/nicoleswasojohnsonwrites', external: true },
   { label: 'Contact', href: '/contact' },
 ];
 
+const addr = settings?.address;
+const phone = settings?.phone || '323-678-2112';
+const desc = settings?.foundationDescription || 'A community-driven nonprofit supporting children and families through education, emotional wellness, and direct community support in Belize and the United States.';
+const foundationName = settings?.foundationName || 'The N Johnson Foundation';
 const currentYear = new Date().getFullYear();
 ---
 
@@ -31,11 +46,11 @@ const currentYear = new Date().getFullYear();
   <div class="footer-top">
     <div class="footer-identity">
       <img src="/images/logo-footer.jpg" alt="The N Johnson Foundation" class="footer-logo-img" />
-      <p class="footer-desc">A community-driven nonprofit supporting children and families through education, emotional wellness, and direct community support in Belize and the United States.</p>
+      <p class="footer-desc">{desc}</p>
       <div class="footer-contact">
-        24325 Crenshaw Blvd, Unit #1031<br />
-        Torrance, CA 90505<br />
-        <a href="tel:3236782112">323-678-2112</a>
+        {addr ? `${addr.street}${addr.unit ? ', ' + addr.unit : ''}` : '24325 Crenshaw Blvd, Unit #1031'}<br />
+        {addr ? `${addr.city}, ${addr.state} ${addr.zip}` : 'Torrance, CA 90505'}<br />
+        <a href={`tel:${phone.replace(/\D/g, '')}`}>{phone}</a>
       </div>
     </div>
     <div class="footer-col">
@@ -68,7 +83,7 @@ const currentYear = new Date().getFullYear();
     </div>
   </div>
   <div class="footer-bottom">
-    <span>&copy; {currentYear} The N Johnson Foundation. All rights reserved.</span>
+    <span>&copy; {currentYear} {foundationName}. All rights reserved.</span>
     <span><a href="/privacy">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="/terms">Terms</a></span>
   </div>
 </footer>

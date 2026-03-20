@@ -1,15 +1,26 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import { sanityFetch, urlFor, toHtml } from '../lib/sanity';
+
+const page = await sanityFetch<any>(`*[_type == "contactPage"][0]`);
 ---
 
-<BaseLayout title="Contact — The N Johnson Foundation" description="Get in touch with The N Johnson Foundation. We'd love to hear from you.">
-  <PageHero label="Get in Touch" title="We'd love to <em>hear from you.</em>" subtitle="Whether you have a question, want to volunteer, or are interested in partnering — reach out." />
+<BaseLayout
+  title={page?.metaTitle || "Contact — The N Johnson Foundation"}
+  description={page?.metaDescription || "Get in touch with The N Johnson Foundation. We'd love to hear from you."}
+  noindex={page?.noindex}
+>
+  <PageHero
+    label={page?.heroLabel || "Get in Touch"}
+    title={page?.heroTitle || "We'd love to <em>hear from you.</em>"}
+    subtitle={page?.heroSubtitle || "Whether you have a question, want to volunteer, or are interested in partnering — reach out."}
+  />
 
   <section class="contact-section">
     <div class="contact-inner">
       <div class="contact-form-wrap">
-        <h2 class="form-heading reveal">Send us a <em>message.</em></h2>
+        <h2 class="form-heading reveal" set:html={page?.formHeading || 'Send us a <em>message.</em>'} />
         <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you" class="contact-form reveal reveal-delay-1" id="contact-form">
           <input type="hidden" name="form-name" value="contact" />
           <!-- Honeypot field — hidden from humans, traps bots -->
@@ -51,21 +62,31 @@ import PageHero from '../components/PageHero.astro';
       </div>
 
       <div class="contact-sidebar">
-        <div class="contact-card reveal">
-          <span class="contact-icon"><i data-lucide="map-pin"></i></span>
-          <h3>Address</h3>
-          <p>24325 Crenshaw Blvd<br />Unit #1031<br />Torrance, CA 90505</p>
-        </div>
-        <div class="contact-card reveal reveal-delay-1">
-          <span class="contact-icon"><i data-lucide="phone"></i></span>
-          <h3>Phone</h3>
-          <p><a href="tel:3236782112">323-678-2112</a></p>
-        </div>
-        <div class="contact-card reveal reveal-delay-2">
-          <span class="contact-icon"><i data-lucide="clock"></i></span>
-          <h3>Response Time</h3>
-          <p>We typically respond within 1–2 business days.</p>
-        </div>
+        {page?.sidebarCards?.length ? page.sidebarCards.map((card: any, i: number) => (
+          <div class={`contact-card reveal${i > 0 ? ` reveal-delay-${Math.min(i, 3)}` : ''}`}>
+            <span class="contact-icon"><i data-lucide={card.icon}></i></span>
+            <h3>{card.title}</h3>
+            <p set:html={card.body} />
+          </div>
+        )) : (
+          <>
+            <div class="contact-card reveal">
+              <span class="contact-icon"><i data-lucide="map-pin"></i></span>
+              <h3>Address</h3>
+              <p>24325 Crenshaw Blvd<br />Unit #1031<br />Torrance, CA 90505</p>
+            </div>
+            <div class="contact-card reveal reveal-delay-1">
+              <span class="contact-icon"><i data-lucide="phone"></i></span>
+              <h3>Phone</h3>
+              <p><a href="tel:3236782112">323-678-2112</a></p>
+            </div>
+            <div class="contact-card reveal reveal-delay-2">
+              <span class="contact-icon"><i data-lucide="clock"></i></span>
+              <h3>Response Time</h3>
+              <p>We typically respond within 1–2 business days.</p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   </section>

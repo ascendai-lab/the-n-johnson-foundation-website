@@ -1,35 +1,47 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import { sanityFetch, urlFor, toHtml } from '../lib/sanity';
+
+const page = await sanityFetch<any>(`*[_type == "aboutPage"][0]`);
+const teamMembers = await sanityFetch<any[]>(`*[_type == "teamMember"] | order(order asc)`);
 ---
 
-<BaseLayout title="About Us — The N Johnson Foundation" description="Learn about The N Johnson Foundation, our mission to support education and mental wellness in Belize and the United States, and meet our founders.">
+<BaseLayout
+  title={page?.metaTitle || "About Us — The N Johnson Foundation"}
+  description={page?.metaDescription || "Learn about The N Johnson Foundation, our mission to support education and mental wellness in Belize and the United States, and meet our founders."}
+  noindex={page?.noindex}
+>
 
   <PageHero
-    label="About Us"
-    title="Built on belief. Driven by <em>purpose.</em>"
-    subtitle="The N Johnson Foundation is a community-driven nonprofit supporting children and families through education, emotional wellness, and direct community support."
+    label={page?.heroLabel || "About Us"}
+    title={page?.heroTitle || "Built on belief. Driven by <em>purpose.</em>"}
+    subtitle={page?.heroSubtitle || "The N Johnson Foundation is a community-driven nonprofit supporting children and families through education, emotional wellness, and direct community support."}
   />
 
   <!-- ══ MISSION ══ -->
   <section class="mission-section">
     <div class="mission-inner">
       <div class="mission-left">
-        <div class="section-label reveal">Our Mission</div>
-        <h2 class="section-heading reveal reveal-delay-1">
-          A child cannot learn when they are hungry, afraid, or <em>unseen.</em>
-        </h2>
+        <div class="section-label reveal">{page?.missionLabel || "Our Mission"}</div>
+        <h2 class="section-heading reveal reveal-delay-1" set:html={page?.missionTitle || 'A child cannot learn when they are hungry, afraid, or <em>unseen.</em>'} />
       </div>
       <div class="mission-right">
-        <p class="body-text reveal reveal-delay-1">
-          The N. Johnson Foundation was established with a simple but powerful conviction: <strong>every child deserves the tools, support, and emotional safety to thrive in school and in life.</strong>
-        </p>
-        <p class="body-text reveal reveal-delay-2">
-          We work to ease financial burdens on families, promote emotional wellness, and make sure every student walks into school prepared — with supplies in hand and support in their corner. Our work spans <strong>Belize and the United States</strong>, rooted in culturally respectful, community-first solutions that address both practical needs and long-term healing.
-        </p>
-        <p class="body-text reveal reveal-delay-3">
-          Through generous support from book sales and community donations, we fund scholarships, supply drives, school donations, and emerging mental wellness programs — directly reaching the students and families who need it most.
-        </p>
+        {page?.missionBody ? (
+          <div class="body-text reveal reveal-delay-1" set:html={toHtml(page.missionBody)} />
+        ) : (
+          <>
+            <p class="body-text reveal reveal-delay-1">
+              The N. Johnson Foundation was established with a simple but powerful conviction: <strong>every child deserves the tools, support, and emotional safety to thrive in school and in life.</strong>
+            </p>
+            <p class="body-text reveal reveal-delay-2">
+              We work to ease financial burdens on families, promote emotional wellness, and make sure every student walks into school prepared — with supplies in hand and support in their corner. Our work spans <strong>Belize and the United States</strong>, rooted in culturally respectful, community-first solutions that address both practical needs and long-term healing.
+            </p>
+            <p class="body-text reveal reveal-delay-3">
+              Through generous support from book sales and community donations, we fund scholarships, supply drives, school donations, and emerging mental wellness programs — directly reaching the students and families who need it most.
+            </p>
+          </>
+        )}
       </div>
     </div>
   </section>
@@ -40,36 +52,46 @@ import PageHero from '../components/PageHero.astro';
       <div class="section-label reveal">What We Stand For</div>
       <h2 class="section-heading reveal reveal-delay-1">Our <em>values</em> guide everything.</h2>
       <div class="values-grid">
-        <div class="value-card reveal reveal-delay-1">
-          <span class="value-icon"><i data-lucide="heart-pulse"></i></span>
-          <h3>Mental Wellness</h3>
-          <p>We believe emotional health is the foundation of learning. A supported child is a child who can grow.</p>
-        </div>
-        <div class="value-card reveal reveal-delay-2">
-          <span class="value-icon"><i data-lucide="graduation-cap"></i></span>
-          <h3>Educational Equity</h3>
-          <p>Every student — regardless of zip code or income — deserves access to quality education and the supplies to succeed.</p>
-        </div>
-        <div class="value-card reveal reveal-delay-3">
-          <span class="value-icon"><i data-lucide="heart"></i></span>
-          <h3>Self-Love &amp; Boundaries</h3>
-          <p>We teach young people that caring for themselves is not selfish — it's essential. Healthy boundaries create healthy communities.</p>
-        </div>
-        <div class="value-card reveal reveal-delay-1">
-          <span class="value-icon"><i data-lucide="users"></i></span>
-          <h3>Community First</h3>
-          <p>We don't bring solutions from the outside. We listen, learn, and build programs that respect the communities we serve.</p>
-        </div>
-        <div class="value-card reveal reveal-delay-2">
-          <span class="value-icon"><i data-lucide="sparkles"></i></span>
-          <h3>Youth Empowerment</h3>
-          <p>Young people are not just beneficiaries — they are leaders, mentors, and changemakers in their own right.</p>
-        </div>
-        <div class="value-card reveal reveal-delay-3">
-          <span class="value-icon"><i data-lucide="brain"></i></span>
-          <h3>Emotional Intelligence</h3>
-          <p>We foster the skills to understand, express, and manage emotions — equipping young people for life beyond the classroom.</p>
-        </div>
+        {page?.values?.length ? page.values.map((v: any, i: number) => (
+          <div class={`value-card reveal reveal-delay-${(i % 3) + 1}`}>
+            <span class="value-icon"><i data-lucide={v.icon}></i></span>
+            <h3>{v.title}</h3>
+            <p>{v.description}</p>
+          </div>
+        )) : (
+          <>
+            <div class="value-card reveal reveal-delay-1">
+              <span class="value-icon"><i data-lucide="heart-pulse"></i></span>
+              <h3>Mental Wellness</h3>
+              <p>We believe emotional health is the foundation of learning. A supported child is a child who can grow.</p>
+            </div>
+            <div class="value-card reveal reveal-delay-2">
+              <span class="value-icon"><i data-lucide="graduation-cap"></i></span>
+              <h3>Educational Equity</h3>
+              <p>Every student — regardless of zip code or income — deserves access to quality education and the supplies to succeed.</p>
+            </div>
+            <div class="value-card reveal reveal-delay-3">
+              <span class="value-icon"><i data-lucide="heart"></i></span>
+              <h3>Self-Love &amp; Boundaries</h3>
+              <p>We teach young people that caring for themselves is not selfish — it's essential. Healthy boundaries create healthy communities.</p>
+            </div>
+            <div class="value-card reveal reveal-delay-1">
+              <span class="value-icon"><i data-lucide="users"></i></span>
+              <h3>Community First</h3>
+              <p>We don't bring solutions from the outside. We listen, learn, and build programs that respect the communities we serve.</p>
+            </div>
+            <div class="value-card reveal reveal-delay-2">
+              <span class="value-icon"><i data-lucide="sparkles"></i></span>
+              <h3>Youth Empowerment</h3>
+              <p>Young people are not just beneficiaries — they are leaders, mentors, and changemakers in their own right.</p>
+            </div>
+            <div class="value-card reveal reveal-delay-3">
+              <span class="value-icon"><i data-lucide="brain"></i></span>
+              <h3>Emotional Intelligence</h3>
+              <p>We foster the skills to understand, express, and manage emotions — equipping young people for life beyond the classroom.</p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   </section>
@@ -77,39 +99,66 @@ import PageHero from '../components/PageHero.astro';
   <!-- ══ FOUNDERS ══ -->
   <section class="founders-section" id="founders">
     <div class="founders-inner">
-      <div class="founder-card reveal">
-        <div class="founder-img-wrap">
-          <img src="/images/founder-nicole.jpg" alt="Nicole Johnson, MHA" class="founder-img" />
-        </div>
-        <div class="founder-info">
-          <h3>Nicole Johnson, MHA</h3>
-          <span class="founder-role">Founder &amp; Executive Director</span>
-          <p>Nicole Johnson is a U.S. Veteran, published author, and Medi-Cal Certified Peer Support Specialist with a Master of Healthcare Administration. Her years in behavioral health — combined with her own lived experience — give her a rare ability to bridge systems thinking with deep human compassion.</p>
-          <p>Her published novels, centered on themes of resilience and healing, directly fund the Foundation's programs — creating a unique model where storytelling fuels real-world change.</p>
-          <div class="founder-creds">
-            <span class="cred">MHA · Master of Healthcare Administration</span>
-            <span class="cred">CPSS Certified</span>
-            <span class="cred">U.S. Veteran</span>
-            <span class="cred">Published Author</span>
+      {teamMembers?.length ? teamMembers.map((member: any, i: number) => (
+        <div class={`founder-card reveal${i > 0 ? ` reveal-delay-${Math.min(i * 2, 4)}` : ''}`}>
+          <div class="founder-img-wrap">
+            <img
+              src={member.photo ? urlFor(member.photo).width(480).height(480).url() : '/images/founder-nicole.jpg'}
+              alt={`${member.name || 'Team member'}${member.credentials ? `, ${member.credentials}` : ''}`}
+              class="founder-img"
+            />
+          </div>
+          <div class="founder-info">
+            <h3>{member.name}{member.credentials ? `, ${member.credentials}` : ''}</h3>
+            <span class="founder-role">{member.role || ''}</span>
+            {member.bio ? (
+              <div set:html={toHtml(member.bio)} />
+            ) : null}
+            {member.credentialTags?.length ? (
+              <div class="founder-creds">
+                {member.credentialTags.map((tag: string) => (
+                  <span class="cred">{tag}</span>
+                ))}
+              </div>
+            ) : null}
           </div>
         </div>
-      </div>
-
-      <div class="founder-card reveal reveal-delay-2">
-        <div class="founder-img-wrap">
-          <img src="/images/founder-monica.jpg" alt="Monica Stuart, Esq." class="founder-img" />
-        </div>
-        <div class="founder-info">
-          <h3>Monica Stuart, Esq.</h3>
-          <span class="founder-role">Co-Founder &amp; Attorney-at-Law</span>
-          <p>Monica Stuart brings governance, compliance, and advocacy expertise to the Foundation — ensuring it operates with transparency, accountability, and an unwavering ethical foundation. Her legal acumen and passion for community justice make her an essential pillar of the organization's leadership.</p>
-          <div class="founder-creds">
-            <span class="cred">Attorney-at-Law</span>
-            <span class="cred">Governance &amp; Compliance</span>
-            <span class="cred">Advocacy</span>
+      )) : (
+        <>
+          <div class="founder-card reveal">
+            <div class="founder-img-wrap">
+              <img src="/images/founder-nicole.jpg" alt="Nicole Johnson, MHA" class="founder-img" />
+            </div>
+            <div class="founder-info">
+              <h3>Nicole Johnson, MHA</h3>
+              <span class="founder-role">Founder &amp; Executive Director</span>
+              <p>Nicole Johnson is a U.S. Veteran, published author, and Medi-Cal Certified Peer Support Specialist with a Master of Healthcare Administration. Her years in behavioral health — combined with her own lived experience — give her a rare ability to bridge systems thinking with deep human compassion.</p>
+              <p>Her published novels, centered on themes of resilience and healing, directly fund the Foundation's programs — creating a unique model where storytelling fuels real-world change.</p>
+              <div class="founder-creds">
+                <span class="cred">MHA · Master of Healthcare Administration</span>
+                <span class="cred">CPSS Certified</span>
+                <span class="cred">U.S. Veteran</span>
+                <span class="cred">Published Author</span>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+          <div class="founder-card reveal reveal-delay-2">
+            <div class="founder-img-wrap">
+              <img src="/images/founder-monica.jpg" alt="Monica Stuart, Esq." class="founder-img" />
+            </div>
+            <div class="founder-info">
+              <h3>Monica Stuart, Esq.</h3>
+              <span class="founder-role">Co-Founder &amp; Attorney-at-Law</span>
+              <p>Monica Stuart brings governance, compliance, and advocacy expertise to the Foundation — ensuring it operates with transparency, accountability, and an unwavering ethical foundation. Her legal acumen and passion for community justice make her an essential pillar of the organization's leadership.</p>
+              <div class="founder-creds">
+                <span class="cred">Attorney-at-Law</span>
+                <span class="cred">Governance &amp; Compliance</span>
+                <span class="cred">Advocacy</span>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   </section>
 
@@ -117,31 +166,46 @@ import PageHero from '../components/PageHero.astro';
   <section class="belize-about-section" id="belize">
     <div class="belize-about-inner">
       <div class="belize-about-left">
-        <div class="section-label reveal">Where We Serve</div>
-        <h2 class="section-heading reveal reveal-delay-1">Our heart is in <em>Belize</em> — and growing.</h2>
-        <p class="body-text reveal reveal-delay-2">
-          The Foundation was born from a deep personal connection to Belizean communities where educational access and financial hardship prevent talented, eager children from reaching their potential.
-        </p>
-        <p class="body-text reveal reveal-delay-3">
-          We show up with culturally respectful, community-first solutions — not charity, but solidarity. From our base in Torrance, California, we raise funds, build partnerships, and coordinate programs that flow directly to the students and schools that need them most.
-        </p>
+        <div class="section-label reveal">{page?.belizeLabel || "Where We Serve"}</div>
+        <h2 class="section-heading reveal reveal-delay-1" set:html={page?.belizeTitle || 'Our heart is in <em>Belize</em> — and growing.'} />
+        {page?.belizeBody ? (
+          <div class="body-text reveal reveal-delay-2" set:html={toHtml(page.belizeBody)} />
+        ) : (
+          <>
+            <p class="body-text reveal reveal-delay-2">
+              The Foundation was born from a deep personal connection to Belizean communities where educational access and financial hardship prevent talented, eager children from reaching their potential.
+            </p>
+            <p class="body-text reveal reveal-delay-3">
+              We show up with culturally respectful, community-first solutions — not charity, but solidarity. From our base in Torrance, California, we raise funds, build partnerships, and coordinate programs that flow directly to the students and schools that need them most.
+            </p>
+          </>
+        )}
         <div class="reveal reveal-delay-4" style="margin-top:2rem;">
           <a href="/donate" class="btn-bark">Support our work <i data-lucide="arrow-right"></i></a>
         </div>
       </div>
       <div class="belize-about-right">
-        <div class="belize-stat-card reveal reveal-delay-1">
-          <div class="belize-stat-num">30<span>+</span></div>
-          <div class="belize-stat-label">Students supported with backpacks &amp; materials</div>
-        </div>
-        <div class="belize-stat-card reveal reveal-delay-2">
-          <div class="belize-stat-num">6</div>
-          <div class="belize-stat-label">Scholarships awarded to Belizean students</div>
-        </div>
-        <div class="belize-stat-card reveal reveal-delay-3">
-          <div class="belize-stat-num">2</div>
-          <div class="belize-stat-label">Countries actively served</div>
-        </div>
+        {page?.belizeStats?.length ? page.belizeStats.map((stat: any, i: number) => (
+          <div class={`belize-stat-card reveal reveal-delay-${Math.min(i + 1, 3)}`}>
+            <div class="belize-stat-num" set:html={stat.value || ''} />
+            <div class="belize-stat-label">{stat.label || ''}</div>
+          </div>
+        )) : (
+          <>
+            <div class="belize-stat-card reveal reveal-delay-1">
+              <div class="belize-stat-num">30<span>+</span></div>
+              <div class="belize-stat-label">Students supported with backpacks &amp; materials</div>
+            </div>
+            <div class="belize-stat-card reveal reveal-delay-2">
+              <div class="belize-stat-num">6</div>
+              <div class="belize-stat-label">Scholarships awarded to Belizean students</div>
+            </div>
+            <div class="belize-stat-card reveal reveal-delay-3">
+              <div class="belize-stat-num">2</div>
+              <div class="belize-stat-label">Countries actively served</div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   </section>
@@ -173,8 +237,8 @@ import PageHero from '../components/PageHero.astro';
   <!-- ══ CTA ══ -->
   <section class="about-cta">
     <div class="about-cta-inner reveal">
-      <h2>Ready to make a <em>difference?</em></h2>
-      <p>Whether you donate, volunteer, or partner with us — every action helps a child show up to school ready to learn.</p>
+      <h2 set:html={page?.ctaTitle || 'Ready to make a <em>difference?</em>'} />
+      <p>{page?.ctaBody || "Whether you donate, volunteer, or partner with us — every action helps a child show up to school ready to learn."}</p>
       <div class="about-cta-buttons">
         <a href="/donate" class="btn-teal" data-zeffy=""><i data-lucide="heart"></i> Donate now</a>
         <a href="/volunteer" class="btn-bark">Volunteer <i data-lucide="arrow-right"></i></a>

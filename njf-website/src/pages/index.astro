@@ -1,8 +1,65 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { sanityFetch, urlFor, toHtml } from '../lib/sanity';
+
+const page = await sanityFetch<any>(`*[_type == "homePage"][0]{
+  ...,
+  "programs": *[_type == "program"] | order(order asc) {
+    title, slug, shortDescription, icon, linkLabel, externalUrl, isComingSoon, wash
+  }
+}`);
+
+const settings = await sanityFetch<any>(`*[_type == "siteSettings"][0]{
+  amazonBookLink, zeffyDonationUrl
+}`);
+
+const founders = await sanityFetch<any>(`*[_type == "teamMember"] | order(order asc) {
+  name, credentials, role, photo, bio, credentialTags
+}`);
+
+const defaultRibbonItems = [
+  'Youth Education', 'Mental Wellness', 'Belize & United States', 'Scholarships',
+  'School Supply Drives', 'Community Support', 'Emotional Resilience', 'Self-Love & Boundaries'
+];
+const ribbonItems = page?.ribbonItems?.length ? page.ribbonItems : defaultRibbonItems;
+
+const defaultIntroValues = [
+  'Mental Wellness', 'Educational Equity', 'Self-Love', 'Healthy Boundaries',
+  'Youth Empowerment', 'Community First', 'Emotional Intelligence'
+];
+const introValues = page?.introValues?.length ? page.introValues : defaultIntroValues;
+
+const defaultImpactNumbers = [
+  { value: '30', suffix: '+', label: 'Students received backpacks & classroom materials this school year', topColor: '' },
+  { value: '6', suffix: '', label: 'Scholarships, school bags & essential supplies awarded to students', topColor: 'purple-top' },
+  { value: '2', suffix: '', label: 'Countries actively served — Belize & United States', topColor: 'slate-top' },
+  { value: '∞', suffix: '', label: 'Potential unlocked when a child feels supported', topColor: '', customColor: 'var(--teal-wash)' },
+];
+const impactNumbers = page?.impactNumbers?.length ? page.impactNumbers : defaultImpactNumbers;
+
+const defaultBelizeHighlights = [
+  { icon: 'school', title: 'Muslim Community School', description: 'Primary partner — scholarships, supply drives & direct school donations' },
+  { icon: 'heart-handshake', title: 'Families in need', description: 'Working directly with underserved families to reduce educational barriers' },
+  { icon: 'sprout', title: 'Mental wellness — coming soon', description: 'Workshops for students & families planned for expansion' },
+];
+const belizeHighlights = page?.belizeHighlights?.length ? page.belizeHighlights : defaultBelizeHighlights;
+
+const defaultDonationReasons = [
+  { icon: 'backpack', title: '$25 — School supplies for one child', description: 'A backpack, notebook, and pens so a student walks in prepared and proud.' },
+  { icon: 'graduation-cap', title: '$100 — Scholarship contribution', description: 'Helps cover fees so a family isn\'t forced to pull their child from school.' },
+  { icon: 'school', title: '$250 — Classroom resource bundle', description: 'Books, materials & tools donated directly to a school in Belize.' },
+];
+const donationReasons = page?.donationReasons?.length ? page.donationReasons : defaultDonationReasons;
+
+const nicole = founders?.[0];
+const monica = founders?.[1];
+
+const amazonLink = settings?.amazonBookLink || 'https://www.amazon.com/author/nicoleswasojohnsonwrites';
+
+const defaultIntroBody = '<p class="intro-body reveal reveal-delay-1">The N. Johnson Foundation is a community-driven nonprofit built on the belief that <strong>a child cannot learn when they are hungry, afraid, or unseen.</strong> We work to ease financial burdens on families, promote emotional wellness, and make sure every student walks into school prepared — with supplies in hand and support in their corner.</p><p class="intro-body reveal reveal-delay-2">Our work spans Belize and the United States, rooted in culturally respectful, community-first solutions that address both <strong>practical needs</strong> and <strong>long-term healing.</strong></p>';
 ---
 
-<BaseLayout title="The N Johnson Foundation — Education & Mental Wellness">
+<BaseLayout title={page?.metaTitle || "The N Johnson Foundation — Education & Mental Wellness"} description={page?.metaDescription || undefined}>
 
   <!-- ══ HERO ══ -->
   <section class="hero" id="home">
@@ -14,23 +71,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="hero-left">
       <div class="hero-kicker rise d1">
         <span class="kicker-line"></span>
-        Youth Education &amp; Mental Wellness
+        {page?.heroLabel || 'Youth Education & Mental Wellness'}
       </div>
 
-      <h1 class="hero-heading rise d2">
-        Every child<br />
-        deserves to <em>thrive</em>,<br />
-        not just <span class="hand">survive.</span>
-      </h1>
+      <h1 class="hero-heading rise d2" set:html={page?.heroHeading || 'Every child<br />deserves to <em>thrive</em>,<br />not just <span class="hand">survive.</span>'} />
 
       <p class="hero-body rise d3">
-        The N Johnson Foundation removes educational and financial barriers for children and families in Belize and the
-        United States — so every student can show up prepared, supported, and ready to grow.
+        {page?.heroBody || 'The N Johnson Foundation removes educational and financial barriers for children and families in Belize and the United States — so every student can show up prepared, supported, and ready to grow.'}
       </p>
 
       <div class="hero-ctas rise d4">
-        <a href="/donate" class="btn-bark">Support a student <i data-lucide="arrow-up-right"></i></a>
-        <a href="/programs" class="btn-text-link">See our programs <i data-lucide="arrow-right"></i></a>
+        <a href="/donate" class="btn-bark">{page?.heroCtaLabel || 'Support a student'} <i data-lucide="arrow-up-right"></i></a>
+        <a href="/programs" class="btn-text-link">{page?.heroSecondaryCtaLabel || 'See our programs'} <i data-lucide="arrow-right"></i></a>
       </div>
     </div>
 
@@ -41,7 +93,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <path id="circ" d="M 40,40 m -28,0 a 28,28 0 1,1 56,0 a 28,28 0 1,1 -56,0" />
           </defs>
           <text font-size="8.5" fill="#2EA99B" font-family="'DM Sans', sans-serif" font-weight="500" letter-spacing="2">
-            <textPath href="#circ">Belize · USA · Community · Education ·</textPath>
+            <textPath href="#circ">{page?.badgeText || 'Belize · USA · Community · Education ·'}</textPath>
           </text>
           <circle cx="40" cy="40" r="5" fill="#2EA99B" />
         </svg>
@@ -49,25 +101,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div class="photo-frame rise d2">
         <img
-          src="/images/hero-nicole.png"
-          alt="Nicole Johnson, Founder of The N Johnson Foundation"
+          src={page?.heroImage ? urlFor(page.heroImage).width(680).url() : '/images/hero-nicole.png'}
+          alt={page?.heroImageAlt || 'Nicole Johnson, Founder of The N Johnson Foundation'}
           class="hero-real-img"
         />
       </div>
 
       <div class="sticker sticker-1 rise d4">
-        <span class="sticker-icon"><i data-lucide="backpack"></i></span>
+        <span class="sticker-icon"><i data-lucide={page?.sticker1Icon || 'backpack'}></i></span>
         <div class="sticker-text">
-          <strong>30+ students</strong>
-          supported this school year
+          <strong>{page?.sticker1Title || '30+ students'}</strong>
+          {page?.sticker1Text || 'supported this school year'}
         </div>
       </div>
 
       <div class="sticker sticker-2 rise d5">
-        <span class="sticker-icon"><i data-lucide="graduation-cap"></i></span>
+        <span class="sticker-icon"><i data-lucide={page?.sticker2Icon || 'graduation-cap'}></i></span>
         <div class="sticker-text">
-          <strong>6 scholarships</strong>
-          awarded in Belize
+          <strong>{page?.sticker2Title || '6 scholarships'}</strong>
+          {page?.sticker2Text || 'awarded in Belize'}
         </div>
       </div>
     </div>
@@ -76,52 +128,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <!-- ══ RIBBON ══ -->
   <div class="ribbon">
     <div class="ribbon-track">
-      <span class="ribbon-item">Youth Education <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">Mental Wellness <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">Belize &amp; United States <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">Scholarships <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">School Supply Drives <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">Community Support <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">Emotional Resilience <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">Self-Love &amp; Boundaries <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">Youth Education <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">Mental Wellness <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">Belize &amp; United States <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">Scholarships <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">School Supply Drives <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">Community Support <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">Emotional Resilience <span class="ribbon-sep">✦</span></span>
-      <span class="ribbon-item">Self-Love &amp; Boundaries <span class="ribbon-sep">✦</span></span>
+      {ribbonItems.map((item) => (
+        <span class="ribbon-item">{typeof item === 'string' ? item : item.text || item} <span class="ribbon-sep">✦</span></span>
+      ))}
+      {ribbonItems.map((item) => (
+        <span class="ribbon-item">{typeof item === 'string' ? item : item.text || item} <span class="ribbon-sep">✦</span></span>
+      ))}
     </div>
   </div>
 
   <!-- ══ INTRO ══ -->
   <section class="intro" id="about-intro">
     <div>
-      <div class="section-label reveal">Our Purpose</div>
-      <h2 class="intro-title reveal reveal-delay-1">
-        Education &amp; <em>healing</em><br />go hand in hand.
-      </h2>
+      <div class="section-label reveal">{page?.introLabel || 'Our Purpose'}</div>
+      <h2 class="intro-title reveal reveal-delay-1" set:html={page?.introHeading || 'Education &amp; <em>healing</em><br />go hand in hand.'} />
     </div>
     <div class="intro-right">
-      <p class="intro-body reveal reveal-delay-1">
-        The N. Johnson Foundation is a community-driven nonprofit built on the belief that <strong>a child cannot learn
-          when they are hungry, afraid, or unseen.</strong> We work to ease financial burdens on families, promote
-        emotional wellness, and make sure every student walks into school prepared — with supplies in hand and support
-        in their corner.
-      </p>
-      <p class="intro-body reveal reveal-delay-2">
-        Our work spans Belize and the United States, rooted in culturally respectful, community-first solutions that
-        address both <strong>practical needs</strong> and <strong>long-term healing.</strong>
-      </p>
+      {page?.introBody ? <Fragment set:html={toHtml(page.introBody)} /> : <Fragment set:html={defaultIntroBody} />}
       <div class="intro-values reveal reveal-delay-3">
-        <span class="value-chip">Mental Wellness</span>
-        <span class="value-chip">Educational Equity</span>
-        <span class="value-chip">Self-Love</span>
-        <span class="value-chip">Healthy Boundaries</span>
-        <span class="value-chip">Youth Empowerment</span>
-        <span class="value-chip">Community First</span>
-        <span class="value-chip">Emotional Intelligence</span>
+        {introValues.map((val) => (
+          <span class="value-chip">{typeof val === 'string' ? val : val.text || val}</span>
+        ))}
       </div>
     </div>
   </section>
@@ -130,55 +157,64 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="programs" id="programs">
     <div class="programs-bg-blob"></div>
     <div class="programs-header">
-      <div class="section-label reveal">What We Do</div>
-      <h2 class="reveal reveal-delay-1">
-        Programs rooted in<br />
-        <em>real community needs.</em>
-      </h2>
+      <div class="section-label reveal">{page?.programsLabel || 'What We Do'}</div>
+      <h2 class="reveal reveal-delay-1" set:html={page?.programsHeading || 'Programs rooted in<br /><em>real community needs.</em>'} />
     </div>
 
     <div class="programs-grid">
-      <div class="prog-card prog-card-a prog-card-wash-teal reveal">
-        <span class="prog-icon"><i data-lucide="graduation-cap"></i></span>
-        <div class="prog-title">Student Scholarships</div>
-        <div class="prog-desc">Financial assistance ensuring students continue their education without interruption. We directly fund tuition, fees, and materials so families don't have to choose between bills and school.</div>
-        <a href="/programs/scholarships" class="prog-link">Learn more →</a>
-      </div>
-
-      <div class="prog-card prog-card-b reveal reveal-delay-1">
-        <span class="prog-icon"><i data-lucide="backpack"></i></span>
-        <div class="prog-title">School Supply Drives</div>
-        <div class="prog-desc">Backpacks, uniforms, books, and essentials distributed directly to students in Belize and the U.S.</div>
-        <a href="/programs/supply-drives" class="prog-link">Learn more →</a>
-      </div>
-
-      <div class="prog-card prog-card-c prog-card-wash-purple reveal reveal-delay-2">
-        <span class="prog-icon"><i data-lucide="heart-pulse"></i></span>
-        <div class="prog-title">Mental Wellness Workshops</div>
-        <div class="prog-desc">Upcoming sessions for students and families on emotional resilience, self-love, and healthy boundaries.</div>
-        <a href="/programs/mental-wellness" class="prog-link">Coming soon →</a>
-      </div>
-
-      <div class="prog-card prog-card-d reveal reveal-delay-1">
-        <span class="prog-icon"><i data-lucide="school"></i></span>
-        <div class="prog-title">School Donations</div>
-        <div class="prog-desc">Classroom resources tailored directly to what teachers and students actually need to succeed.</div>
-        <a href="/programs/school-support" class="prog-link">Learn more →</a>
-      </div>
-
-      <div class="prog-card prog-card-e reveal reveal-delay-2">
-        <span class="prog-icon"><i data-lucide="users"></i></span>
-        <div class="prog-title">Peer Mentorship</div>
-        <div class="prog-desc">Trained peer leaders paired with younger students — creating safe, judgment-free spaces for open conversation, guidance, and emotional support.</div>
-        <a href="/programs/peer-mentorship" class="prog-link">Learn more →</a>
-      </div>
-
-      <div class="prog-card prog-card-f prog-card-wash-teal reveal reveal-delay-3">
-        <span class="prog-icon"><i data-lucide="book-open"></i></span>
-        <div class="prog-title">The Book Initiative</div>
-        <div class="prog-desc">Proceeds from Nicole Johnson's published novels — stories of resilience and healing — fund the Foundation's programs directly.</div>
-        <a href="https://www.amazon.com/author/nicoleswasojohnsonwrites" target="_blank" rel="noopener noreferrer" class="prog-link">Shop on Amazon →</a>
-      </div>
+      {page?.programs?.length ? page.programs.map((prog, i) => {
+        const washClass = prog.wash === 'teal' ? 'prog-card-wash-teal' : prog.wash === 'purple' ? 'prog-card-wash-purple' : '';
+        const gridClasses = ['prog-card-a','prog-card-b','prog-card-c','prog-card-d','prog-card-e','prog-card-f'];
+        const href = prog.externalUrl || `/programs/${prog.slug?.current}`;
+        const target = prog.externalUrl ? '_blank' : undefined;
+        return (
+          <div class={`prog-card ${gridClasses[i] || ''} ${washClass} reveal ${i > 0 ? 'reveal-delay-' + Math.min(i, 3) : ''}`}>
+            <span class="prog-icon"><i data-lucide={prog.icon}></i></span>
+            <div class="prog-title">{prog.title}</div>
+            <div class="prog-desc">{prog.shortDescription}</div>
+            <a href={href} target={target} rel={target ? 'noopener noreferrer' : undefined} class="prog-link">{prog.linkLabel || 'Learn more'} →</a>
+          </div>
+        );
+      }) : (
+        <Fragment>
+          <div class="prog-card prog-card-a prog-card-wash-teal reveal">
+            <span class="prog-icon"><i data-lucide="graduation-cap"></i></span>
+            <div class="prog-title">Student Scholarships</div>
+            <div class="prog-desc">Financial assistance ensuring students continue their education without interruption. We directly fund tuition, fees, and materials so families don't have to choose between bills and school.</div>
+            <a href="/programs/scholarships" class="prog-link">Learn more →</a>
+          </div>
+          <div class="prog-card prog-card-b reveal reveal-delay-1">
+            <span class="prog-icon"><i data-lucide="backpack"></i></span>
+            <div class="prog-title">School Supply Drives</div>
+            <div class="prog-desc">Backpacks, uniforms, books, and essentials distributed directly to students in Belize and the U.S.</div>
+            <a href="/programs/supply-drives" class="prog-link">Learn more →</a>
+          </div>
+          <div class="prog-card prog-card-c prog-card-wash-purple reveal reveal-delay-2">
+            <span class="prog-icon"><i data-lucide="heart-pulse"></i></span>
+            <div class="prog-title">Mental Wellness Workshops</div>
+            <div class="prog-desc">Upcoming sessions for students and families on emotional resilience, self-love, and healthy boundaries.</div>
+            <a href="/programs/mental-wellness" class="prog-link">Coming soon →</a>
+          </div>
+          <div class="prog-card prog-card-d reveal reveal-delay-1">
+            <span class="prog-icon"><i data-lucide="school"></i></span>
+            <div class="prog-title">School Donations</div>
+            <div class="prog-desc">Classroom resources tailored directly to what teachers and students actually need to succeed.</div>
+            <a href="/programs/school-support" class="prog-link">Learn more →</a>
+          </div>
+          <div class="prog-card prog-card-e reveal reveal-delay-2">
+            <span class="prog-icon"><i data-lucide="users"></i></span>
+            <div class="prog-title">Peer Mentorship</div>
+            <div class="prog-desc">Trained peer leaders paired with younger students — creating safe, judgment-free spaces for open conversation, guidance, and emotional support.</div>
+            <a href="/programs/peer-mentorship" class="prog-link">Learn more →</a>
+          </div>
+          <div class="prog-card prog-card-f prog-card-wash-teal reveal reveal-delay-3">
+            <span class="prog-icon"><i data-lucide="book-open"></i></span>
+            <div class="prog-title">The Book Initiative</div>
+            <div class="prog-desc">Proceeds from Nicole Johnson's published novels — stories of resilience and healing — fund the Foundation's programs directly.</div>
+            <a href={amazonLink} target="_blank" rel="noopener noreferrer" class="prog-link">Shop on Amazon →</a>
+          </div>
+        </Fragment>
+      )}
     </div>
   </section>
 
@@ -188,40 +224,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="impact-blob-2"></div>
     <div class="impact-inner">
       <div>
-        <div class="section-label section-label-dark reveal">Our Impact to Date</div>
-        <h2 class="reveal reveal-delay-1">
-          Small foundation.<br /><em>Real lives changed.</em>
-        </h2>
-        <p class="impact-body reveal reveal-delay-2">
-          Despite being in its early stages, The N. Johnson Foundation has already made <strong>meaningful, measurable
-            contributions</strong> to students and communities in Belize. Every number below represents a child who
-          showed up to school this year because someone believed in them.
-        </p>
-        <a href="/donate" class="btn-teal reveal reveal-delay-3">Be part of the next chapter <i data-lucide="arrow-right"></i></a>
+        <div class="section-label section-label-dark reveal">{page?.impactLabel || 'Our Impact to Date'}</div>
+        <h2 class="reveal reveal-delay-1" set:html={page?.impactHeading || 'Small foundation.<br /><em>Real lives changed.</em>'} />
+        <p class="impact-body reveal reveal-delay-2" set:html={page?.impactBody || 'Despite being in its early stages, The N. Johnson Foundation has already made <strong>meaningful, measurable contributions</strong> to students and communities in Belize. Every number below represents a child who showed up to school this year because someone believed in them.'} />
+        <a href="/donate" class="btn-teal reveal reveal-delay-3">{page?.impactCtaLabel || 'Be part of the next chapter'} <i data-lucide="arrow-right"></i></a>
       </div>
       <div class="impact-numbers reveal reveal-delay-2">
-        <div class="impact-num-card">
-          <div class="i-num">30<span>+</span></div>
-          <div class="i-label">Students received backpacks &amp; classroom materials this school year</div>
-        </div>
-        <div class="impact-num-card purple-top">
-          <div class="i-num">6</div>
-          <div class="i-label">Scholarships, school bags &amp; essential supplies awarded to students</div>
-        </div>
-        <div class="impact-num-card slate-top">
-          <div class="i-num">2</div>
-          <div class="i-label">Countries actively served — Belize &amp; United States</div>
-        </div>
-        <div class="impact-num-card">
-          <div class="i-num" style="color:var(--teal-wash)">∞</div>
-          <div class="i-label">Potential unlocked when a child feels supported</div>
-        </div>
+        {impactNumbers.map((item) => (
+          <div class={`impact-num-card ${item.topColor || ''}`}>
+            <div class="i-num" style={item.customColor ? `color:${item.customColor}` : undefined}>{item.value}{item.suffix ? <span>{item.suffix}</span> : null}</div>
+            <div class="i-label">{item.label}</div>
+          </div>
+        ))}
         <div class="impact-num-card wide-card">
           <div style="flex-shrink:0;">
-            <div class="i-num" style="font-size:1.8rem; color:var(--cream)">Muslim<br />Community<br />School</div>
+            <div class="i-num" style="font-size:1.8rem; color:var(--cream)" set:html={page?.impactWideCardTitle || 'Muslim<br />Community<br />School'} />
           </div>
           <div class="wide-divider"></div>
-          <div class="wide-note">Our primary school partner in Belize — recipient of <strong>direct classroom donations</strong>, scholarship support, and supply drives for both students and teachers.</div>
+          <div class="wide-note" set:html={page?.impactWideCardNote || 'Our primary school partner in Belize — recipient of <strong>direct classroom donations</strong>, scholarship support, and supply drives for both students and teachers.'} />
         </div>
       </div>
     </div>
@@ -232,48 +252,31 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="belize-left">
       <div class="belize-card reveal">
         <div class="belize-flag-wrap"><i data-lucide="map-pin"></i></div>
-        <div class="belize-card-title">Belize, Central America</div>
-        <div class="belize-card-sub">Our primary home of service</div>
-        <div class="belize-row">
-          <span class="belize-row-icon"><i data-lucide="school"></i></span>
-          <div class="belize-row-text">
-            <strong>Muslim Community School</strong>
-            Primary partner — scholarships, supply drives &amp; direct school donations
+        <div class="belize-card-title">{page?.belizeCardTitle || 'Belize, Central America'}</div>
+        <div class="belize-card-sub">{page?.belizeCardSub || 'Our primary home of service'}</div>
+        {belizeHighlights.map((row) => (
+          <div class="belize-row">
+            <span class="belize-row-icon"><i data-lucide={row.icon}></i></span>
+            <div class="belize-row-text">
+              <strong>{row.title}</strong>
+              {row.description}
+            </div>
           </div>
-        </div>
-        <div class="belize-row">
-          <span class="belize-row-icon"><i data-lucide="heart-handshake"></i></span>
-          <div class="belize-row-text">
-            <strong>Families in need</strong>
-            Working directly with underserved families to reduce educational barriers
-          </div>
-        </div>
-        <div class="belize-row">
-          <span class="belize-row-icon"><i data-lucide="sprout"></i></span>
-          <div class="belize-row-text">
-            <strong>Mental wellness — coming soon</strong>
-            Workshops for students &amp; families planned for expansion
-          </div>
-        </div>
+        ))}
       </div>
     </div>
 
     <div class="belize-right">
-      <div class="section-label reveal">Where We Serve</div>
-      <h2 class="belize-title reveal reveal-delay-1">
-        Our heart is<br />in <em>Belize</em> —<br />and growing.
-      </h2>
+      <div class="section-label reveal">{page?.belizeLabel || 'Where We Serve'}</div>
+      <h2 class="belize-title reveal reveal-delay-1" set:html={page?.belizeHeading || 'Our heart is<br />in <em>Belize</em> —<br />and growing.'} />
       <p class="belize-body reveal reveal-delay-2">
-        The Foundation was born from a deep personal connection to Belizean communities where educational access and
-        financial hardship prevent talented, eager children from reaching their potential. We show up with culturally
-        respectful, community-first solutions — not charity, but solidarity.
+        {page?.belizeBody1 || 'The Foundation was born from a deep personal connection to Belizean communities where educational access and financial hardship prevent talented, eager children from reaching their potential. We show up with culturally respectful, community-first solutions — not charity, but solidarity.'}
       </p>
       <p class="belize-body reveal reveal-delay-3">
-        From our base in Torrance, California, we raise funds, build partnerships, and coordinate programs that flow
-        directly to the students and schools that need them most.
+        {page?.belizeBody2 || 'From our base in Torrance, California, we raise funds, build partnerships, and coordinate programs that flow directly to the students and schools that need them most.'}
       </p>
       <div class="reveal reveal-delay-4" style="margin-top:1.8rem;">
-        <a href="/donate" class="btn-bark">Support Belize <i data-lucide="arrow-right"></i></a>
+        <a href="/donate" class="btn-bark">{page?.belizeCtaLabel || 'Support Belize'} <i data-lucide="arrow-right"></i></a>
       </div>
     </div>
   </section>
@@ -285,45 +288,59 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="founder-portrait-wrap reveal">
         <div class="founder-portrait">
           <img
-            src="/images/founder-nicole.jpg"
-            alt="Nicole Johnson, MHA – Founder of The N Johnson Foundation"
+            src={nicole?.photo ? urlFor(nicole.photo).width(600).url() : '/images/founder-nicole.jpg'}
+            alt={nicole ? `${nicole.name}${nicole.credentials ? ', ' + nicole.credentials : ''} – Founder of The N Johnson Foundation` : 'Nicole Johnson, MHA – Founder of The N Johnson Foundation'}
             class="founder-real-img"
           />
           <div class="founder-portrait-label" style="position:absolute; bottom:1.5rem; left:0; right:0; background:rgba(248,250,252,0.92); padding:0.75rem 1rem; text-align:center;">
-            Nicole Johnson, MHA
-            <em>Founder &amp; Executive Director</em>
+            {nicole ? `${nicole.name}${nicole.credentials ? ', ' + nicole.credentials : ''}` : 'Nicole Johnson, MHA'}
+            <em>{nicole?.role || 'Founder & Executive Director'}</em>
           </div>
         </div>
         <div class="cofounder-pill">
           <span class="cofounder-icon"><i data-lucide="scale"></i></span>
-          <span><strong>Monica Stuart</strong>, Attorney-at-Law · Co-Founder</span>
+          <span><strong>{monica?.name || 'Monica Stuart'}</strong>, {monica?.credentials || 'Attorney-at-Law'} · {monica?.role || 'Co-Founder'}</span>
         </div>
       </div>
 
       <div class="founder-content">
-        <div class="section-label reveal">Our Founders</div>
-        <h2 class="founder-title reveal reveal-delay-1">
-          Led by <em>lived experience.</em><br />Driven by purpose.
-        </h2>
-        <p class="founder-bio reveal reveal-delay-2">
-          <strong>Nicole Johnson</strong> is a U.S. Veteran, published author, and Medi-Cal Certified Peer Support
-          Specialist with a Master of Healthcare Administration. Her years in behavioral health — combined with her own
-          lived experience — give her a rare ability to bridge systems thinking with deep human compassion.
-        </p>
-        <p class="founder-bio reveal reveal-delay-3">
-          <strong>Monica Stuart</strong>, Attorney-at-Law and Co-Founder, brings governance, compliance, and advocacy
-          expertise — ensuring the Foundation operates with transparency, accountability, and an unwavering ethical
-          foundation.
-        </p>
+        <div class="section-label reveal">{page?.foundersLabel || 'Our Founders'}</div>
+        <h2 class="founder-title reveal reveal-delay-1" set:html={page?.foundersHeading || 'Led by <em>lived experience.</em><br />Driven by purpose.'} />
+        {nicole?.bio ? (
+          <div class="founder-bio reveal reveal-delay-2" set:html={toHtml(nicole.bio)} />
+        ) : (
+          <p class="founder-bio reveal reveal-delay-2">
+            <strong>Nicole Johnson</strong> is a U.S. Veteran, published author, and Medi-Cal Certified Peer Support
+            Specialist with a Master of Healthcare Administration. Her years in behavioral health — combined with her own
+            lived experience — give her a rare ability to bridge systems thinking with deep human compassion.
+          </p>
+        )}
+        {monica?.bio ? (
+          <div class="founder-bio reveal reveal-delay-3" set:html={toHtml(monica.bio)} />
+        ) : (
+          <p class="founder-bio reveal reveal-delay-3">
+            <strong>Monica Stuart</strong>, Attorney-at-Law and Co-Founder, brings governance, compliance, and advocacy
+            expertise — ensuring the Foundation operates with transparency, accountability, and an unwavering ethical
+            foundation.
+          </p>
+        )}
         <div class="creds reveal reveal-delay-3">
-          <span class="cred">MHA · Master of Healthcare Administration</span>
-          <span class="cred">CPSS Certified</span>
-          <span class="cred">U.S. Veteran</span>
-          <span class="cred">Published Author</span>
-          <span class="cred">Attorney-at-Law</span>
+          {(nicole?.credentialTags || monica?.credentialTags) ? (
+            [...(nicole?.credentialTags || []), ...(monica?.credentialTags || [])].map((tag) => (
+              <span class="cred">{tag}</span>
+            ))
+          ) : (
+            <Fragment>
+              <span class="cred">MHA · Master of Healthcare Administration</span>
+              <span class="cred">CPSS Certified</span>
+              <span class="cred">U.S. Veteran</span>
+              <span class="cred">Published Author</span>
+              <span class="cred">Attorney-at-Law</span>
+            </Fragment>
+          )}
         </div>
         <div class="reveal reveal-delay-4">
-          <a href="/about" class="btn-bark">More about our team <i data-lucide="arrow-right"></i></a>
+          <a href="/about" class="btn-bark">{page?.foundersCtaLabel || 'More about our team'} <i data-lucide="arrow-right"></i></a>
         </div>
       </div>
     </div>
@@ -333,43 +350,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="donate-section" id="donate">
     <div class="donate-band">
       <div class="donate-left">
-        <div class="section-label reveal">Get Involved</div>
-        <h2 class="donate-title reveal reveal-delay-1">
-          Help a child focus on<br />
-          <em>learning, not hardship.</em>
-        </h2>
+        <div class="section-label reveal">{page?.donateLabel || 'Get Involved'}</div>
+        <h2 class="donate-title reveal reveal-delay-1" set:html={page?.donateHeading || 'Help a child focus on<br /><em>learning, not hardship.</em>'} />
         <p class="donate-body reveal reveal-delay-2">
-          Your donation directly funds scholarships, school supplies, and community programs that promote both learning
-          and emotional well-being. Every contribution — large or small — means a child shows up to school with what
-          they need.
+          {page?.donateBody || 'Your donation directly funds scholarships, school supplies, and community programs that promote both learning and emotional well-being. Every contribution — large or small — means a child shows up to school with what they need.'}
         </p>
         <div class="donate-actions reveal reveal-delay-3">
-          <a href="/donate" class="btn-teal" data-zeffy=""><i data-lucide="heart"></i> Donate now</a>
-          <a href="https://www.amazon.com/author/nicoleswasojohnsonwrites" target="_blank" rel="noopener noreferrer" class="btn-text-link"><i data-lucide="book-open"></i> Buy a book →</a>
+          <a href="/donate" class="btn-teal" data-zeffy=""><i data-lucide="heart"></i> {page?.donateCtaLabel || 'Donate now'}</a>
+          <a href={amazonLink} target="_blank" rel="noopener noreferrer" class="btn-text-link"><i data-lucide="book-open"></i> {page?.donateBookLabel || 'Buy a book →'}</a>
         </div>
       </div>
       <div class="donate-right">
-        <div class="donate-reason reveal reveal-delay-1">
-          <span class="donate-reason-icon"><i data-lucide="backpack"></i></span>
-          <div class="donate-reason-text">
-            <strong>$25 — School supplies for one child</strong>
-            A backpack, notebook, and pens so a student walks in prepared and proud.
+        {donationReasons.map((reason, i) => (
+          <div class={`donate-reason reveal reveal-delay-${i + 1}`}>
+            <span class="donate-reason-icon"><i data-lucide={reason.icon}></i></span>
+            <div class="donate-reason-text">
+              <strong>{reason.title}</strong>
+              {reason.description}
+            </div>
           </div>
-        </div>
-        <div class="donate-reason reveal reveal-delay-2">
-          <span class="donate-reason-icon"><i data-lucide="graduation-cap"></i></span>
-          <div class="donate-reason-text">
-            <strong>$100 — Scholarship contribution</strong>
-            Helps cover fees so a family isn't forced to pull their child from school.
-          </div>
-        </div>
-        <div class="donate-reason reveal reveal-delay-3">
-          <span class="donate-reason-icon"><i data-lucide="school"></i></span>
-          <div class="donate-reason-text">
-            <strong>$250 — Classroom resource bundle</strong>
-            Books, materials &amp; tools donated directly to a school in Belize.
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   </section>

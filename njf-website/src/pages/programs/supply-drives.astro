@@ -1,47 +1,75 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
+import { sanityFetch, toHtml } from '../../lib/sanity';
+
+const prog = await sanityFetch<any>(`*[_type == "program" && slug.current == "supply-drives"][0]`);
 ---
 
-<BaseLayout title="School Supply Drives — The N Johnson Foundation">
-  <PageHero label="Programs" title="School <em>Supply Drives</em>" subtitle="Backpacks, books, and essentials — so every student walks in prepared and proud." />
+<BaseLayout title={prog?.metaTitle || "School Supply Drives — The N Johnson Foundation"} description={prog?.metaDescription || "Backpacks, books, and essentials — so every student walks in prepared and proud."}>
+  <PageHero label={prog?.heroLabel || "Programs"} title={prog?.heroTitle || 'School <em>Supply Drives</em>'} subtitle={prog?.heroSubtitle || "Backpacks, books, and essentials — so every student walks in prepared and proud."} />
 
   <section class="program-detail">
     <div class="detail-inner">
       <div class="detail-content">
-        <h2 class="detail-heading reveal">Every child deserves to start the school year <em>ready.</em></h2>
-        <p class="detail-body reveal reveal-delay-1">For many families in Belize and the United States, back-to-school season brings financial stress. The cost of backpacks, notebooks, pens, uniforms, and other essentials adds up quickly — and for families already stretched thin, it can mean a child shows up to school without the tools they need to learn.</p>
-        <p class="detail-body reveal reveal-delay-2">Our supply drive program distributes <strong>backpacks, classroom materials, uniforms, books, and essential supplies</strong> directly to students. We coordinate with schools and community leaders to ensure supplies reach the students who need them most — and that they arrive in time for the first day of class.</p>
+        <h2 class="detail-heading reveal" set:html={prog?.detailHeading?.[0]?.children?.map(c => c.text).join('') || 'Every child deserves to start the school year <em>ready.</em>'} />
+        <div class="detail-body-wrap reveal reveal-delay-1" set:html={toHtml(prog?.detailBody) || '<p>For many families in Belize and the United States, back-to-school season brings financial stress. The cost of backpacks, notebooks, pens, uniforms, and other essentials adds up quickly — and for families already stretched thin, it can mean a child shows up to school without the tools they need to learn.</p><p>Our supply drive program distributes <strong>backpacks, classroom materials, uniforms, books, and essential supplies</strong> directly to students. We coordinate with schools and community leaders to ensure supplies reach the students who need them most — and that they arrive in time for the first day of class.</p>'} />
 
-        <h3 class="detail-subhead reveal reveal-delay-3">What we provide</h3>
+        <h3 class="detail-subhead reveal reveal-delay-3">{prog?.detailSubhead || "What we provide"}</h3>
         <div class="detail-list reveal reveal-delay-3">
-          <div class="detail-item"><i data-lucide="check-circle"></i><span>Backpacks filled with school supplies</span></div>
-          <div class="detail-item"><i data-lucide="check-circle"></i><span>Notebooks, pens, pencils, and rulers</span></div>
-          <div class="detail-item"><i data-lucide="check-circle"></i><span>School uniforms and appropriate clothing</span></div>
-          <div class="detail-item"><i data-lucide="check-circle"></i><span>Textbooks and reading materials</span></div>
+          {prog?.detailItems?.length ? (
+            prog.detailItems.map(item => (
+              <div class="detail-item"><i data-lucide={item.icon || "check-circle"}></i><span>{item.text}</span></div>
+            ))
+          ) : (
+            <>
+              <div class="detail-item"><i data-lucide="check-circle"></i><span>Backpacks filled with school supplies</span></div>
+              <div class="detail-item"><i data-lucide="check-circle"></i><span>Notebooks, pens, pencils, and rulers</span></div>
+              <div class="detail-item"><i data-lucide="check-circle"></i><span>School uniforms and appropriate clothing</span></div>
+              <div class="detail-item"><i data-lucide="check-circle"></i><span>Textbooks and reading materials</span></div>
+            </>
+          )}
         </div>
       </div>
 
       <div class="detail-sidebar">
-        <div class="stat-card reveal">
-          <div class="stat-num">30<span>+</span></div>
-          <div class="stat-label">Students received backpacks &amp; classroom materials this school year</div>
-        </div>
-        <div class="stat-card reveal reveal-delay-1">
-          <div class="stat-num">2</div>
-          <div class="stat-label">Countries served — Belize &amp; United States</div>
-        </div>
-        <div class="impact-quote reveal reveal-delay-2">
-          <p>"When a child has what they need, they can focus on learning — not on what they're missing."</p>
-        </div>
+        {prog?.sidebarStats?.length ? (
+          prog.sidebarStats.map((stat, i) => (
+            <div class={`stat-card reveal ${i > 0 ? 'reveal-delay-' + i : ''}`}>
+              <div class="stat-num">{stat.value}<span>{stat.suffix || ''}</span></div>
+              <div class="stat-label">{stat.label}</div>
+            </div>
+          ))
+        ) : (
+          <>
+            <div class="stat-card reveal">
+              <div class="stat-num">30<span>+</span></div>
+              <div class="stat-label">Students received backpacks &amp; classroom materials this school year</div>
+            </div>
+            <div class="stat-card reveal reveal-delay-1">
+              <div class="stat-num">2</div>
+              <div class="stat-label">Countries served — Belize &amp; United States</div>
+            </div>
+          </>
+        )}
+        {prog?.sidebarQuote ? (
+          <div class="impact-quote reveal reveal-delay-2">
+            <p>"{prog.sidebarQuote.text}"</p>
+            {prog.sidebarQuote.attribution && <span>— {prog.sidebarQuote.attribution}</span>}
+          </div>
+        ) : (
+          <div class="impact-quote reveal reveal-delay-2">
+            <p>"When a child has what they need, they can focus on learning — not on what they're missing."</p>
+          </div>
+        )}
       </div>
     </div>
   </section>
 
   <section class="program-cta">
     <div class="program-cta-inner reveal">
-      <h2>Supply a <em>student.</em></h2>
-      <p>$25 provides a backpack, notebook, and pens so a student walks in prepared and proud.</p>
+      <h2 set:html={prog?.ctaTitle || 'Supply a <em>student.</em>'} />
+      <p>{prog?.ctaBody || "$25 provides a backpack, notebook, and pens so a student walks in prepared and proud."}</p>
       <div class="cta-buttons">
         <a href="/donate" class="btn-teal" data-zeffy=""><i data-lucide="heart"></i> Donate now</a>
         <a href="/programs" class="btn-text-link">← Back to programs</a>
@@ -57,6 +85,8 @@ import PageHero from '../../components/PageHero.astro';
   .detail-heading { font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--bark); line-height: 1.2; margin-bottom: 1.5rem; }
   .detail-heading em { font-style: italic; color: var(--teal-deep); }
   .detail-body { font-size: 1rem; color: var(--bark-mid); line-height: 1.8; margin-bottom: 1.2rem; }
+  .detail-body-wrap :global(p) { font-size: 1rem; color: var(--bark-mid); line-height: 1.8; margin-bottom: 1.2rem; }
+  .detail-body-wrap :global(strong) { color: var(--bark); font-weight: 600; }
   .detail-body strong { color: var(--bark); font-weight: 600; }
   .detail-subhead { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--bark); margin: 2rem 0 1rem; }
   .detail-list { display: flex; flex-direction: column; gap: 0.8rem; }

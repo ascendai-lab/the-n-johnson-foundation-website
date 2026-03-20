@@ -1,44 +1,65 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import { sanityFetch, urlFor, toHtml } from '../lib/sanity';
+
+const page = await sanityFetch<any>(`*[_type == "volunteerPage"][0]`);
 ---
 
-<BaseLayout title="Volunteer — The N Johnson Foundation" description="Volunteer with The N Johnson Foundation and help support education and mental wellness for children.">
-  <PageHero label="Get Involved" title="Volunteer with <em>us.</em>" subtitle="Your time and skills can make a real difference in a child's life." />
+<BaseLayout
+  title={page?.metaTitle || "Volunteer — The N Johnson Foundation"}
+  description={page?.metaDescription || "Volunteer with The N Johnson Foundation and help support education and mental wellness for children."}
+  noindex={page?.noindex}
+>
+  <PageHero
+    label={page?.heroLabel || "Get Involved"}
+    title={page?.heroTitle || "Volunteer with <em>us.</em>"}
+    subtitle={page?.heroSubtitle || "Your time and skills can make a real difference in a child's life."}
+  />
 
   <section class="volunteer-section">
     <div class="volunteer-inner">
-      <div class="section-label reveal">Opportunities</div>
-      <h2 class="vol-heading reveal reveal-delay-1">Ways you can <em>help.</em></h2>
+      <div class="section-label reveal">{page?.sectionLabel || "Opportunities"}</div>
+      <h2 class="vol-heading reveal reveal-delay-1" set:html={page?.sectionTitle || 'Ways you can <em>help.</em>'} />
       <div class="vol-grid">
-        <div class="vol-card reveal reveal-delay-1">
-          <span class="vol-icon"><i data-lucide="package"></i></span>
-          <h3>Supply Drive Support</h3>
-          <p>Help organize, sort, and distribute school supplies to students. We need hands during our annual back-to-school drives in both Belize and the U.S.</p>
-        </div>
-        <div class="vol-card reveal reveal-delay-2">
-          <span class="vol-icon"><i data-lucide="users"></i></span>
-          <h3>Mentorship</h3>
-          <p>Become a peer mentor or help train the next generation of student leaders. Share your experience and provide guidance to young people who need it.</p>
-        </div>
-        <div class="vol-card reveal reveal-delay-3">
-          <span class="vol-icon"><i data-lucide="calendar"></i></span>
-          <h3>Event Coordination</h3>
-          <p>Help plan and execute fundraisers, community events, and awareness campaigns. Great for people who love logistics and bringing people together.</p>
-        </div>
-        <div class="vol-card reveal reveal-delay-1">
-          <span class="vol-icon"><i data-lucide="megaphone"></i></span>
-          <h3>Community Outreach</h3>
-          <p>Spread the word about our mission. Help us connect with schools, community leaders, and potential partners in Belize and the United States.</p>
-        </div>
+        {page?.opportunities?.length ? page.opportunities.map((opp: any, i: number) => (
+          <div class={`vol-card reveal reveal-delay-${(i % 3) + 1}`}>
+            <span class="vol-icon"><i data-lucide={opp.icon}></i></span>
+            <h3>{opp.title}</h3>
+            <p>{opp.description}</p>
+          </div>
+        )) : (
+          <>
+            <div class="vol-card reveal reveal-delay-1">
+              <span class="vol-icon"><i data-lucide="package"></i></span>
+              <h3>Supply Drive Support</h3>
+              <p>Help organize, sort, and distribute school supplies to students. We need hands during our annual back-to-school drives in both Belize and the U.S.</p>
+            </div>
+            <div class="vol-card reveal reveal-delay-2">
+              <span class="vol-icon"><i data-lucide="users"></i></span>
+              <h3>Mentorship</h3>
+              <p>Become a peer mentor or help train the next generation of student leaders. Share your experience and provide guidance to young people who need it.</p>
+            </div>
+            <div class="vol-card reveal reveal-delay-3">
+              <span class="vol-icon"><i data-lucide="calendar"></i></span>
+              <h3>Event Coordination</h3>
+              <p>Help plan and execute fundraisers, community events, and awareness campaigns. Great for people who love logistics and bringing people together.</p>
+            </div>
+            <div class="vol-card reveal reveal-delay-1">
+              <span class="vol-icon"><i data-lucide="megaphone"></i></span>
+              <h3>Community Outreach</h3>
+              <p>Spread the word about our mission. Help us connect with schools, community leaders, and potential partners in Belize and the United States.</p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   </section>
 
   <section class="volunteer-cta">
     <div class="volunteer-cta-inner reveal">
-      <h2>Ready to get <em>started?</em></h2>
-      <p>Fill out our contact form and let us know how you'd like to help. We'll follow up with opportunities that match your skills and availability.</p>
+      <h2 set:html={page?.ctaTitle || 'Ready to get <em>started?</em>'} />
+      <p>{page?.ctaBody || "Fill out our contact form and let us know how you'd like to help. We'll follow up with opportunities that match your skills and availability."}</p>
       <a href="/contact" class="btn-teal"><i data-lucide="send"></i> Contact us</a>
     </div>
   </section>
