@@ -3,36 +3,49 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import { sanityFetch, urlFor } from '../lib/sanity';
 
-const events = await sanityFetch<any[]>(`*[_type == "event"] | order(order asc) {eventName, slug, date, description, coverPhoto, photos[]{image, alt, caption}}`);
+const events = await sanityFetch<any[]>(`*[_type == "event"] | order(order asc) {
+  eventName, slug, date, description, coverPhoto,
+  photos[]{image, alt, caption}
+}`);
 
 const fallbackPhotos = [
-  { src: '/images/gallery/community-meeting.jpg', alt: 'Nicole Johnson meeting with school staff at Muslim Community Primary School in Belize City', caption: 'Building relationships with school leaders in Belize City', position: 'center center' },
-  { src: '/images/gallery/students-backpacks.jpg', alt: 'Students receiving new backpacks and school supplies during a Foundation supply drive', caption: 'Students pick up their new backpacks during a supply drive' },
-  { src: '/images/gallery/classroom-visit.jpg', alt: 'Foundation team visiting a classroom with students at Muslim Community Primary School', caption: 'Visiting classrooms and connecting with students firsthand' },
-  { src: '/images/gallery/teacher-with-students.jpg', alt: 'School staff member speaking with students as they receive supplies', caption: 'A teacher guides students through the supply distribution' },
-  { src: '/images/gallery/students-lineup.jpg', alt: 'Students lined up in classroom waiting to receive school supplies and backpacks', caption: 'Students eagerly await their new supplies', position: 'center center' },
-  { src: '/images/gallery/book-donation.jpg', alt: 'Nicole Johnson and school staff holding donated books including IMANI and A Belizean Girl', caption: "Donating copies of Nicole's novels to the school library" },
-  { src: '/images/gallery/unpacking-supplies.jpg', alt: 'Foundation team and school staff unpacking boxes of donated school supplies', caption: 'Unpacking supplies with the school administration team' },
-  { src: '/images/gallery/reviewing-journals.jpg', alt: 'Team reviewing donated journals and educational materials for students', caption: 'Reviewing journals and educational materials before distribution' },
-  { src: '/images/gallery/holding-books.jpg', alt: 'Three women smiling and holding copies of IMANI and A Belizean Girl with backpacks in foreground', caption: 'Smiles all around — books and backpacks ready to change lives' },
+  { src: '/images/gallery/community-meeting.jpg', alt: 'Building relationships with school leaders in Belize City', caption: 'Building relationships with school leaders in Belize City', position: 'center center' },
+  { src: '/images/gallery/students-backpacks.jpg', alt: 'Students pick up their new backpacks during a supply drive', caption: 'Students pick up their new backpacks during a supply drive' },
+  { src: '/images/gallery/classroom-visit.jpg', alt: 'Visiting classrooms and connecting with students firsthand', caption: 'Visiting classrooms and connecting with students firsthand' },
+  { src: '/images/gallery/teacher-with-students.jpg', alt: 'A teacher guides students through the supply distribution', caption: 'A teacher guides students through the supply distribution' },
+  { src: '/images/gallery/students-lineup.jpg', alt: 'Students eagerly await their new supplies', caption: 'Students eagerly await their new supplies', position: 'center center' },
+  { src: '/images/gallery/book-donation.jpg', alt: "Donating copies of Nicole's novels to the school library", caption: "Donating copies of Nicole's novels to the school library" },
+  { src: '/images/gallery/unpacking-supplies.jpg', alt: 'Unpacking supplies with the school administration team', caption: 'Unpacking supplies with the school administration team' },
+  { src: '/images/gallery/reviewing-journals.jpg', alt: 'Reviewing journals and educational materials before distribution', caption: 'Reviewing journals and educational materials before distribution' },
+  { src: '/images/gallery/holding-books.jpg', alt: 'Smiles all around — books and backpacks ready to change lives', caption: 'Smiles all around — books and backpacks ready to change lives' },
 ];
 
-// Flatten all event photos into a single array for the gallery grid and lightbox
-const allPhotos = events?.length
+const hasEvents = events && events.length > 0;
+
+// Build a flat photos array for the lightbox (all events combined)
+const allPhotos = hasEvents
   ? events.flatMap(event =>
       (event.photos || []).map(photo => ({
-        src: photo.image ? urlFor(photo.image).width(800).url() : '',
+        src: photo.image ? urlFor(photo.image).width(1200).url() : '',
+        thumb: photo.image ? urlFor(photo.image).width(800).url() : '',
         alt: photo.alt || event.eventName || '',
         caption: photo.caption || '',
-        eventName: event.eventName || '',
       }))
     )
-  : [];
+  : fallbackPhotos.map(p => ({ ...p, thumb: p.src }));
 
-const photos = allPhotos.length ? allPhotos : fallbackPhotos;
+// Format date helper
+function formatDate(dateStr: string) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+// Track photo index offset per event for lightbox linking
+let photoIndexOffset = 0;
 ---
 
-<BaseLayout title="Nonprofit Community Events | N Johnson Foundation" description="Photos from The N Johnson Foundation's supply drives, school visits, and community programs in Belize.">
+<BaseLayout title="Nonprofit Community Events | N Johnson Foundation" description="Photos and highlights from The N Johnson Foundation's supply drives, school visits, and community programs in Belize.">
 
   <PageHero
     label="Events"
@@ -40,22 +53,78 @@ const photos = allPhotos.length ? allPhotos : fallbackPhotos;
     subtitle="Moments from our supply drives, school visits, and community programs in Belize."
   />
 
-  <!-- ══ GALLERY GRID ══ -->
-  <section class="gallery-section">
-    <div class="gallery-inner">
-      {photos.map((photo, i) => (
-        <div class={`gallery-item ${i === 0 || i === 5 ? 'featured' : ''} reveal ${i > 0 ? `reveal-delay-${((i % 4) || 1)}` : ''}`}>
-          <div class="gallery-img-wrap" data-lightbox={i}>
-            <img src={photo.src} alt={photo.alt || ''} loading={i < 4 ? 'eager' : 'lazy'} style={photo.position ? `object-position: ${photo.position}` : ''} />
-            <div class="gallery-overlay">
-              <span class="gallery-zoom"><i data-lucide="maximize-2"></i></span>
+  {hasEvents ? (
+    <!-- ══ EVENTS LIST ══ -->
+    <section class="events-section">
+      {events.map((event, eventIdx) => {
+        const eventPhotos = event.photos || [];
+        const startIndex = photoIndexOffset;
+        photoIndexOffset += eventPhotos.length;
+        const coverSrc = event.coverPhoto
+          ? urlFor(event.coverPhoto).width(1200).url()
+          : (eventPhotos[0]?.image ? urlFor(eventPhotos[0].image).width(1200).url() : '/images/gallery/community-meeting.jpg');
+        const coverAlt = event.coverPhoto?.alt || event.eventName || '';
+
+        return (
+          <div class="event-block reveal">
+            <!-- Event Header -->
+            <div class="event-header">
+              <div class="event-meta">
+                {event.date && <span class="event-date"><i data-lucide="calendar"></i> {formatDate(event.date)}</span>}
+              </div>
+              <h2 class="event-title">{event.eventName}</h2>
+              {event.description && <p class="event-description">{event.description}</p>}
             </div>
+
+            <!-- Cover Photo -->
+            <div class="event-cover" data-lightbox={startIndex}>
+              <img src={coverSrc} alt={coverAlt} loading={eventIdx === 0 ? 'eager' : 'lazy'} />
+              <div class="event-cover-overlay">
+                <span class="event-photo-count"><i data-lucide="images"></i> {eventPhotos.length} photos</span>
+              </div>
+            </div>
+
+            <!-- Photo Grid -->
+            {eventPhotos.length > 0 && (
+              <div class="event-photos-grid">
+                {eventPhotos.map((photo, i) => {
+                  const photoSrc = photo.image ? urlFor(photo.image).width(800).url() : '';
+                  return (
+                    <div class={`event-photo-item ${i === 0 ? 'featured' : ''} reveal reveal-delay-${Math.min((i % 4) + 1, 3)}`}>
+                      <div class="gallery-img-wrap" data-lightbox={startIndex + i}>
+                        <img src={photoSrc} alt={photo.alt || ''} loading="lazy" />
+                        <div class="gallery-overlay">
+                          <span class="gallery-zoom"><i data-lucide="maximize-2"></i></span>
+                        </div>
+                      </div>
+                      {photo.caption && <p class="gallery-caption">{photo.caption}</p>}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
-          <p class="gallery-caption">{photo.caption || ''}</p>
-        </div>
-      ))}
-    </div>
-  </section>
+        );
+      })}
+    </section>
+  ) : (
+    <!-- ══ FALLBACK GALLERY ══ -->
+    <section class="gallery-section">
+      <div class="gallery-inner">
+        {fallbackPhotos.map((photo, i) => (
+          <div class={`gallery-item ${i === 0 || i === 5 ? 'featured' : ''} reveal ${i > 0 ? `reveal-delay-${((i % 4) || 1)}` : ''}`}>
+            <div class="gallery-img-wrap" data-lightbox={i}>
+              <img src={photo.src} alt={photo.alt || ''} loading={i < 4 ? 'eager' : 'lazy'} style={photo.position ? `object-position: ${photo.position}` : ''} />
+              <div class="gallery-overlay">
+                <span class="gallery-zoom"><i data-lucide="maximize-2"></i></span>
+              </div>
+            </div>
+            <p class="gallery-caption">{photo.caption || ''}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
 
   <!-- ══ LIGHTBOX ══ -->
   <div id="lightbox" class="lightbox" aria-hidden="true">
@@ -86,7 +155,129 @@ const photos = allPhotos.length ? allPhotos : fallbackPhotos;
 <style>
   [data-lucide] { width: 20px; height: 20px; stroke: currentColor; }
 
-  /* ── Gallery Grid ── */
+  /* ── Events Section ── */
+  .events-section { padding: 4rem; background: var(--cream); }
+
+  .event-block {
+    max-width: 1100px;
+    margin: 0 auto 5rem;
+    padding-bottom: 5rem;
+    border-bottom: 1px solid var(--sand-dark);
+  }
+
+  .event-block:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .event-header {
+    margin-bottom: 2rem;
+  }
+
+  .event-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .event-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal-deep);
+    background: var(--teal-mist);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+  }
+
+  .event-date [data-lucide] {
+    width: 15px;
+    height: 15px;
+  }
+
+  .event-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--bark);
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+  }
+
+  .event-description {
+    font-size: 1rem;
+    color: var(--bark-mid);
+    line-height: 1.75;
+    max-width: 700px;
+  }
+
+  /* ── Cover Photo ── */
+  .event-cover {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    aspect-ratio: 21 / 9;
+  }
+
+  .event-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .event-cover:hover img {
+    transform: scale(1.03);
+  }
+
+  .event-cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 60%, rgba(44, 74, 90, 0.5) 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 1.5rem;
+  }
+
+  .event-photo-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 0.45rem 1rem;
+    border-radius: 100px;
+  }
+
+  .event-photo-count [data-lucide] {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* ── Event Photos Grid ── */
+  .event-photos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+  }
+
+  .event-photo-item.featured {
+    grid-column: span 2;
+  }
+
+  /* ── Shared Gallery Styles ── */
   .gallery-section { padding: 5rem 4rem; background: var(--cream); }
   .gallery-inner {
     max-width: 1100px;
@@ -108,7 +299,8 @@ const photos = allPhotos.length ? allPhotos : fallbackPhotos;
     aspect-ratio: 4 / 3;
   }
 
-  .gallery-item.featured .gallery-img-wrap {
+  .gallery-item.featured .gallery-img-wrap,
+  .event-photo-item.featured .gallery-img-wrap {
     aspect-ratio: 16 / 10;
   }
 
@@ -276,6 +468,9 @@ const photos = allPhotos.length ? allPhotos : fallbackPhotos;
 
   /* ── Responsive ── */
   @media (max-width: 1024px) {
+    .events-section { padding: 3rem 2.5rem; }
+    .event-photos-grid { grid-template-columns: repeat(2, 1fr); }
+    .event-photo-item.featured { grid-column: span 2; }
     .gallery-section { padding: 4rem 2.5rem; }
     .gallery-inner { grid-template-columns: repeat(2, 1fr); }
     .gallery-item.featured { grid-column: span 2; }
@@ -283,6 +478,11 @@ const photos = allPhotos.length ? allPhotos : fallbackPhotos;
   }
 
   @media (max-width: 640px) {
+    .events-section { padding: 2.5rem 1.25rem; }
+    .event-cover { aspect-ratio: 16 / 9; }
+    .event-photos-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .event-photo-item.featured { grid-column: span 1; }
+    .event-photo-item.featured .gallery-img-wrap { aspect-ratio: 4 / 3; }
     .gallery-section { padding: 3rem 1.25rem; }
     .gallery-inner { grid-template-columns: 1fr; gap: 1.25rem; }
     .gallery-item.featured { grid-column: span 1; }
@@ -306,8 +506,9 @@ const photos = allPhotos.length ? allPhotos : fallbackPhotos;
 
   const photos = Array.from(items).map(function(el) {
     const img = el.querySelector('img');
-    const caption = el.closest('.gallery-item').querySelector('.gallery-caption');
-    return { src: img.src, alt: img.alt, caption: caption ? caption.textContent : '' };
+    const caption = el.closest('.gallery-item, .event-photo-item, .event-cover');
+    const captionEl = caption ? caption.querySelector('.gallery-caption') : null;
+    return { src: img.src, alt: img.alt, caption: captionEl ? captionEl.textContent : '' };
   });
 
   function show(idx) {
