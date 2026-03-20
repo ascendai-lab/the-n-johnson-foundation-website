@@ -1,0 +1,19 @@
+<!--
+  This hidden HTML file exists solely for Netlify's form detection.
+  Netlify scans static HTML at deploy time to register forms.
+  The actual form lives in /src/pages/contact.astro.
+-->
+<html>
+<head><title>Form Detection</title></head>
+<body>
+  <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+    <input name="bot-field" />
+    <input name="form-name" />
+    <input name="name" />
+    <input name="email" />
+    <input name="subject" />
+    <input name="message" />
+    <input name="cf-turnstile-response" />
+  </form>
+</body>
+</html>

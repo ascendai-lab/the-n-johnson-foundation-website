@@ -10,8 +10,12 @@ import PageHero from '../components/PageHero.astro';
     <div class="contact-inner">
       <div class="contact-form-wrap">
         <h2 class="form-heading reveal">Send us a <em>message.</em></h2>
-        <form name="contact" method="POST" data-netlify="true" class="contact-form reveal reveal-delay-1">
+        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you" class="contact-form reveal reveal-delay-1" id="contact-form">
           <input type="hidden" name="form-name" value="contact" />
+          <!-- Honeypot field — hidden from humans, traps bots -->
+          <p class="honey" aria-hidden="true">
+            <label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+          </p>
           <div class="form-row">
             <div class="form-group">
               <label for="name">Name</label>
@@ -30,8 +34,20 @@ import PageHero from '../components/PageHero.astro';
             <label for="message">Message</label>
             <textarea id="message" name="message" rows="6" required placeholder="Tell us more..."></textarea>
           </div>
-          <button type="submit" class="btn-teal"><i data-lucide="send"></i> Send message</button>
+          <!-- Cloudflare Turnstile widget -->
+          <div class="cf-turnstile" data-sitekey="REPLACE_WITH_YOUR_SITE_KEY" data-theme="light"></div>
+          <button type="submit" class="btn-teal" id="submit-btn"><i data-lucide="send"></i> Send message</button>
         </form>
+        <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+        <script is:inline>
+          document.getElementById('contact-form').addEventListener('submit', function(e) {
+            var response = document.querySelector('[name="cf-turnstile-response"]');
+            if (!response || !response.value) {
+              e.preventDefault();
+              alert('Please complete the security check before submitting.');
+            }
+          });
+        </script>
       </div>
 
       <div class="contact-sidebar">
@@ -56,6 +72,7 @@ import PageHero from '../components/PageHero.astro';
 </BaseLayout>
 
 <style>
+  .honey { position: absolute; left: -9999px; height: 0; overflow: hidden; }
   [data-lucide] { width: 20px; height: 20px; stroke: var(--teal-deep); flex-shrink: 0; }
   .contact-icon [data-lucide] { width: 24px; height: 24px; }
 
@@ -78,6 +95,7 @@ import PageHero from '../components/PageHero.astro';
     border-color: var(--teal); box-shadow: 0 0 0 3px rgba(46, 169, 155, 0.15);
   }
   .form-group textarea { resize: vertical; min-height: 120px; }
+  .cf-turnstile { margin-top: 0.4rem; }
 
   .contact-sidebar { display: flex; flex-direction: column; gap: 1.2rem; }
   .contact-card { background: var(--sand); border-radius: 20px; padding: 1.8rem; }
