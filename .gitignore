@@ -1,6 +1,11 @@
 # Local Netlify folder
 .netlify
 
+# Environment variables (contains API tokens)
+.env
+.env.local
+.env.production
+
 # macOS
 .DS_Store
 

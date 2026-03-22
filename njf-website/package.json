@@ -12,11 +12,16 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/netlify": "^7.0.4",
+    "@astrojs/react": "^5.0.1",
     "@portabletext/to-html": "^5.0.2",
+    "@sanity/astro": "^3.3.1",
     "@sanity/client": "^7.19.0",
     "@sanity/image-url": "^2.0.3",
     "@tailwindcss/vite": "^4.2.1",
     "astro": "^6.0.5",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "tailwindcss": "^4.2.1"
   }
 }

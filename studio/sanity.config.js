@@ -1,6 +1,7 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
+import {presentationTool} from 'sanity/presentation'
 import {schemaTypes} from './schemaTypes'
 import {
   DocumentIcon,
@@ -20,6 +21,38 @@ function singletonListItem(S, typeName, title, icon) {
     .title(title)
     .icon(icon)
     .child(S.document().schemaType(typeName).documentId(typeName))
+}
+
+/* ── Route Resolver ── */
+
+/** Maps document types to their frontend URLs for the Presentation tool. */
+function resolveProductionUrl(doc) {
+  switch (doc._type) {
+    case 'homePage':
+      return '/'
+    case 'aboutPage':
+      return '/about'
+    case 'coachingPage':
+      return '/coaching'
+    case 'donatePage':
+      return '/donate'
+    case 'volunteerPage':
+      return '/volunteer'
+    case 'partnerPage':
+      return '/partner'
+    case 'contactPage':
+      return '/contact'
+    case 'program':
+      return doc?.slug?.current ? `/programs/${doc.slug.current}` : '/programs'
+    case 'event':
+      return doc?.slug?.current ? `/events/${doc.slug.current}` : '/events'
+    case 'legalPage':
+      return doc?.slug?.current ? `/${doc.slug.current}` : '/'
+    case 'customPage':
+      return doc?.slug?.current ? `/${doc.slug.current}` : '/'
+    default:
+      return '/'
+  }
 }
 
 /* ── Structure Builder ── */
@@ -94,6 +127,24 @@ export default defineConfig({
 
   plugins: [
     structureTool({structure}),
+    presentationTool({
+      previewUrl: 'https://njohnsonfoundation.org',
+      resolve: {
+        locations: {
+          homePage: {select: {}, resolve: resolveProductionUrl},
+          aboutPage: {select: {}, resolve: resolveProductionUrl},
+          coachingPage: {select: {}, resolve: resolveProductionUrl},
+          donatePage: {select: {}, resolve: resolveProductionUrl},
+          volunteerPage: {select: {}, resolve: resolveProductionUrl},
+          partnerPage: {select: {}, resolve: resolveProductionUrl},
+          contactPage: {select: {}, resolve: resolveProductionUrl},
+          program: {select: {slug: 'slug.current'}, resolve: resolveProductionUrl},
+          event: {select: {slug: 'slug.current'}, resolve: resolveProductionUrl},
+          legalPage: {select: {slug: 'slug.current'}, resolve: resolveProductionUrl},
+          customPage: {select: {slug: 'slug.current'}, resolve: resolveProductionUrl},
+        },
+      },
+    }),
     visionTool(),
   ],
 
