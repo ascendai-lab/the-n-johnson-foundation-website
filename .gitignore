@@ -1,0 +1,24 @@
+# Local Netlify folder
+.netlify
+
+# macOS
+.DS_Store
+
+# Claude Code
+.claude/
+
+# Utility scripts
+blur_faces.py
+migrate-to-sanity.mjs
+njf-website/migrate-content.mjs
+njf-website/migrate-to-sanity.mjs
+njf-website/seo-content-update.mjs
+
+# Temp/working folders
+Events/
+extracted_images/
+photo-gallery/
+
+# Original/unoptimized images
+njf-website/public/images/gallery/originals/
+njf-website/public/images/logo-original.jpg
