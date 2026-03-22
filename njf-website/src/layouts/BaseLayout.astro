@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import { VisualEditing } from '@sanity/astro/visual-editing';
 
 Astro.response.headers.delete('X-Frame-Options');
-Astro.response.headers.set('Content-Security-Policy', "frame-ancestors 'self' https://njf-cms.sanity.studio");
+Astro.response.headers.set('Content-Security-Policy', "frame-ancestors 'self' https://njf-cms.sanity.studio https://*.sanity.studio https://*.sanity.io");
 
 const visualEditingEnabled = import.meta.env.PUBLIC_SANITY_VISUAL_EDITING_ENABLED === 'true';
 
