@@ -97,7 +97,7 @@ export default defineType({
       name: 'introBody',
       title: 'Intro Section Body',
       type: 'array',
-      of: [{type: 'block'}],
+      of: [{type: 'block'}, {type: 'videoEmbed'}],
       group: 'content',
     }),
     defineField({
@@ -158,7 +158,7 @@ export default defineType({
       name: 'belizeBody',
       title: 'Belize Section Body',
       type: 'array',
-      of: [{type: 'block'}],
+      of: [{type: 'block'}, {type: 'videoEmbed'}],
       group: 'content',
     }),
     defineField({

@@ -32,7 +32,7 @@ export default defineType({
     defineField({name: 'heroSubtitle', title: 'Hero Subtitle', type: 'text', group: 'content'}),
     defineField({name: 'introLabel', title: 'Intro Label', type: 'string', group: 'content'}),
     defineField({name: 'introTitle', title: 'Intro Title', type: 'string', group: 'content'}),
-    defineField({name: 'introBody', title: 'Intro Body', type: 'array', of: [{type: 'block'}], group: 'content'}),
+    defineField({name: 'introBody', title: 'Intro Body', type: 'array', of: [{type: 'block'}, {type: 'videoEmbed'}], group: 'content'}),
     defineField({
       name: 'highlights',
       title: 'Intro Highlights',

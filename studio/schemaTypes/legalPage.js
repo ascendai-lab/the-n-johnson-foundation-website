@@ -35,7 +35,7 @@ export default defineType({
       name: 'body',
       title: 'Page Content',
       type: 'array',
-      of: [{type: 'block'}],
+      of: [{type: 'block'}, {type: 'videoEmbed'}],
       group: 'content',
     }),
 

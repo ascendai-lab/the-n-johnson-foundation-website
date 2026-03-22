@@ -74,7 +74,7 @@ export default defineType({
           fields: [
             defineField({name: 'label', title: 'Section Label', type: 'string', description: 'Small text above the heading (optional)'}),
             defineField({name: 'heading', title: 'Heading', type: 'string', description: 'Supports <em> for emphasis'}),
-            defineField({name: 'body', title: 'Body', type: 'array', of: [{type: 'block'}]}),
+            defineField({name: 'body', title: 'Body', type: 'array', of: [{type: 'block'}, {type: 'videoEmbed'}]}),
           ],
           preview: {
             select: {title: 'heading', subtitle: 'label'},
@@ -295,11 +295,42 @@ export default defineType({
               name: 'content',
               title: 'Content',
               type: 'array',
-              of: [{type: 'block'}, {type: 'image', options: {hotspot: true}, fields: [defineField({name: 'alt', title: 'Alt Text', type: 'string'})]}],
+              of: [{type: 'block'}, {type: 'image', options: {hotspot: true}, fields: [defineField({name: 'alt', title: 'Alt Text', type: 'string'})]}, {type: 'videoEmbed'}],
             }),
           ],
           preview: {
             prepare: () => ({title: 'Rich Text Block', subtitle: 'Free-form content'}),
+          },
+        },
+
+        /* ── Video Embed ── */
+        {
+          type: 'object',
+          name: 'videoSection',
+          title: 'Video Embed',
+          icon: () => '🎬',
+          fields: [
+            defineField({name: 'label', title: 'Section Label', type: 'string', description: 'Small text above the heading (optional)'}),
+            defineField({name: 'heading', title: 'Heading', type: 'string', description: 'Optional heading above the video'}),
+            defineField({
+              name: 'url',
+              title: 'Video URL',
+              type: 'url',
+              description: 'YouTube or Vimeo link',
+              validation: (Rule) => Rule.required().uri({scheme: ['https', 'http']}),
+            }),
+            defineField({name: 'caption', title: 'Caption', type: 'string', description: 'Optional text below the video'}),
+            defineField({
+              name: 'aspectRatio',
+              title: 'Aspect Ratio',
+              type: 'string',
+              options: {list: ['16:9', '4:3']},
+              initialValue: '16:9',
+            }),
+          ],
+          preview: {
+            select: {title: 'heading', subtitle: 'url'},
+            prepare: ({title, subtitle}) => ({title: title || 'Video Embed', subtitle: subtitle || 'Video'}),
           },
         },
       ],

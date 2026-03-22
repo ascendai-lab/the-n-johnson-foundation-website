@@ -19,14 +19,46 @@ export async function sanityFetch<T = any>(query: string, params?: Record<string
 }
 
 /**
+ * Convert a video URL (YouTube or Vimeo) to an embeddable iframe URL.
+ */
+function getEmbedUrl(url: string): string | null {
+  if (!url) return null;
+
+  // YouTube: youtube.com/watch?v=ID, youtu.be/ID, youtube.com/embed/ID
+  const ytMatch = url.match(
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/
+  );
+  if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+
+  // Vimeo: vimeo.com/ID
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+
+  return null;
+}
+
+/**
  * Convert Sanity portable text blocks to simple HTML paragraphs.
- * Handles basic block types with spans (bold, italic, links).
+ * Handles basic block types with spans (bold, italic, links),
+ * and custom videoEmbed blocks.
  */
 export function toHtml(blocks: any[]): string {
   if (!blocks || !Array.isArray(blocks)) return '';
   return blocks
-    .filter((b) => b._type === 'block')
     .map((b) => {
+      // Handle video embed blocks
+      if (b._type === 'videoEmbed') {
+        const embedUrl = getEmbedUrl(b.url);
+        if (!embedUrl) return '';
+        const caption = b.caption
+          ? `<p class="video-caption">${b.caption}</p>`
+          : '';
+        return `<div class="video-embed"><iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy" title="${b.caption || 'Embedded video'}"></iframe>${caption}</div>`;
+      }
+
+      // Skip non-block types we don't handle
+      if (b._type !== 'block') return '';
+
       const rawText = (b.children || [])
         .map((child: any) => {
           // Convert soft line breaks (\n) to <br> tags

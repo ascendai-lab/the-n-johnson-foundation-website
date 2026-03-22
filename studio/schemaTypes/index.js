@@ -12,6 +12,7 @@ import customPage from './customPage'
 import program from './program'
 import event from './event'
 import teamMember from './teamMember'
+import videoEmbed from './videoEmbed'
 
 export const schemaTypes = [
   siteSettings,
@@ -28,4 +29,5 @@ export const schemaTypes = [
   program,
   event,
   teamMember,
+  videoEmbed,
 ]

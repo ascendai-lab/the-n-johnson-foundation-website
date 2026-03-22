@@ -68,14 +68,14 @@ export default defineType({
       name: 'detailHeading',
       title: 'Detail Section Heading',
       type: 'array',
-      of: [{type: 'block'}],
+      of: [{type: 'block'}, {type: 'videoEmbed'}],
       group: 'content',
     }),
     defineField({
       name: 'detailBody',
       title: 'Detail Section Body',
       type: 'array',
-      of: [{type: 'block'}],
+      of: [{type: 'block'}, {type: 'videoEmbed'}],
       group: 'content',
     }),
     defineField({

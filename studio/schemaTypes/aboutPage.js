@@ -32,7 +32,7 @@ export default defineType({
     defineField({name: 'heroSubtitle', title: 'Hero Subtitle', type: 'text', group: 'content'}),
     defineField({name: 'missionLabel', title: 'Mission Section Label', type: 'string', group: 'content'}),
     defineField({name: 'missionTitle', title: 'Mission Section Title', type: 'string', group: 'content'}),
-    defineField({name: 'missionBody', title: 'Mission Body', type: 'array', of: [{type: 'block'}], group: 'content'}),
+    defineField({name: 'missionBody', title: 'Mission Body', type: 'array', of: [{type: 'block'}, {type: 'videoEmbed'}], group: 'content'}),
     defineField({
       name: 'values',
       title: 'Core Values',
@@ -52,7 +52,7 @@ export default defineType({
     }),
     defineField({name: 'belizeLabel', title: 'Belize Section Label', type: 'string', group: 'content'}),
     defineField({name: 'belizeTitle', title: 'Belize Section Title', type: 'string', group: 'content'}),
-    defineField({name: 'belizeBody', title: 'Belize Body', type: 'array', of: [{type: 'block'}], group: 'content'}),
+    defineField({name: 'belizeBody', title: 'Belize Body', type: 'array', of: [{type: 'block'}, {type: 'videoEmbed'}], group: 'content'}),
     defineField({
       name: 'belizeStats',
       title: 'Belize Statistics',

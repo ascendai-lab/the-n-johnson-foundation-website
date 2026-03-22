@@ -368,6 +368,49 @@ body::before {
 }
 
 /* ─────────────────────────────────────────
+   VIDEO EMBEDS
+───────────────────────────────────────── */
+.video-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 2rem 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--sand);
+  box-shadow: 0 8px 32px rgba(44, 74, 90, 0.10);
+}
+
+.video-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-caption {
+  margin-top: 0.75rem;
+  font-size: 0.82rem;
+  color: var(--bark-light);
+  font-style: italic;
+  text-align: center;
+  line-height: 1.45;
+}
+
+/* When a video embed has a caption, shift layout */
+.video-embed:has(+ .video-caption) {
+  margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .video-embed {
+    border-radius: 12px;
+    margin: 1.5rem 0;
+  }
+}
+
+/* ─────────────────────────────────────────
    ZEFFY DONATION MODAL
 ───────────────────────────────────────── */
 .zeffy-overlay {
