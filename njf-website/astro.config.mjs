@@ -6,7 +6,7 @@ import react from '@astrojs/react';
 import netlify from '@astrojs/netlify';
 
 export default defineConfig({
-  site: 'https://njohnsonfoundation.org',
+  site: 'https://thenjohnsonfoundation.org',
   output: 'server',
   adapter: netlify(),
   integrations: [

@@ -128,7 +128,7 @@ export default defineConfig({
   plugins: [
     structureTool({structure}),
     presentationTool({
-      previewUrl: 'https://njohnsonfoundation.org',
+      previewUrl: 'https://thenjohnsonfoundation.org',
       resolve: {
         locations: {
           homePage: {select: {}, resolve: resolveProductionUrl},
